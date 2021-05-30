@@ -34,11 +34,20 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
+    /**
+     * 멤버 전체 조회
+     * @return 멤버 리스트
+     */
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
 
+    /**
+     * 멤버를 이름 기준으로 조회한다.
+     * @param name
+     * @return 멤버 객체
+     */
     public Member findByName(String name) {
         try {
             return em.createQuery("select m from Member m where m.name = :name", Member.class)
@@ -49,5 +58,4 @@ public class MemberRepository {
             return null;
         }
     }
-
 }

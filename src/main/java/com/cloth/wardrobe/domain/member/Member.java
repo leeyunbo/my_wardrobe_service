@@ -21,6 +21,7 @@ public class Member {
 
     private String name;
 
+    @Column(unique=true)
     private String account;
 
     private String password;
@@ -46,11 +47,27 @@ public class Member {
      * 로그인 체크 기능, 잠시 대기
      * @return
      */
-    private boolean loginCheck() {
+    public boolean loginCheck() {
         boolean check = false;
 
 
         return check;
+    }
+
+    /**
+     * 사용자 정보 변경
+     * @param name
+     * @param password
+     * @param city
+     * @param street
+     * @param zipcode
+     * @param memberAuthority
+     */
+    public void change(String name, String password, String city, String street, String zipcode, MemberAuthority memberAuthority) {
+        this.name = name;
+        this.password = password;
+        this.address = new Address(city, street, zipcode);
+        this.memberAuthority = memberAuthority;
     }
 
 }
