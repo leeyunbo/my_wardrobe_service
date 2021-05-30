@@ -3,13 +3,16 @@ package com.cloth.wardrobe.domain.member;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "members")
 @Getter @Setter
+@NoArgsConstructor
 public class Member {
     @Id
     @GeneratedValue
@@ -36,8 +39,16 @@ public class Member {
     private List<Comment> comments = new ArrayList<>();
 
     // 로그인 체크
-    private boolean loginCheck() {
 
+    /**
+     * 로그인 체크 기능, 잠시 대기
+     * @return
+     */
+    private boolean loginCheck() {
+        boolean check = false;
+
+
+        return check;
     }
 
 }

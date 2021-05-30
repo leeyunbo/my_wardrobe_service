@@ -1,14 +1,20 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "clothes")
 @Getter @Setter
+@NoArgsConstructor
 public class Cloth {
 
     @Id
@@ -24,6 +30,9 @@ public class Cloth {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "cloth")
+    private List<Record> records = new ArrayList<>();
+
     private String clothType;
 
     private LocalDateTime buyingDate;
@@ -34,5 +43,7 @@ public class Cloth {
 
     private String clothBrand;
 
-    private String imageS3Path;
+    @OneToMany
+    @JoinColumn(name = "image_id")
+    private List<Image> imagePath = new ArrayList<>();
 }
