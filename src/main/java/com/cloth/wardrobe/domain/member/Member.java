@@ -1,8 +1,12 @@
 package com.cloth.wardrobe.domain.member;
 
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.community.Comment;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -21,4 +25,19 @@ public class Member {
 
     @Embedded
     private Address address;
+
+    // 옷장
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wardrobe_id")
+    private Wardrobe wardrobe;
+
+    // 댓글
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
+
+    // 로그인 체크
+    private boolean loginCheck() {
+
+    }
+
 }

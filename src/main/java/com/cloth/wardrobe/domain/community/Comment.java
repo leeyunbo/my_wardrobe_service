@@ -1,5 +1,6 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.domain.community;
 
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +10,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-public class Cloth {
+public class Comment {
 
     @Id
     @GeneratedValue
-    @Column(name = "cloth_id")
+    @Column(name = "comment_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,15 +25,11 @@ public class Cloth {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String clothType;
+    private String subejct;
 
-    private LocalDateTime buyingDate;
+    private String content;
 
-    private String buying_way;
+    private LocalDateTime registDate;
 
-    private String clothColor;
-
-    private String clothBrand;
-
-    private String imageS3Path;
+    private LocalDateTime modifyDate;
 }
