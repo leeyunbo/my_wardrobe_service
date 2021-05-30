@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script>
+    </script>
+</head>
+<body style="text-align: center">
+<div class="top">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="jumbotron"> <h2>옷장만을 위한 ERP 서비스</h2>
+</div>
+<div class="container">
+        <p class="lead">옷장에서 옷 찾기 힘드시죠? 가끔 새로산 옷을 한참 후에나 기억해낸 적 많으시죠? <br>
+            옷장만을 위한 ERP 서비스를 이용해보세요! 옷장의 데이터를 한눈에 보여줌으로써 손쉽게 옷장을 관리할 수 있습니다!<br>
+            공짜니까~ 돈 안드니까~ 한번 이용해보세요!
+        </p>
+        <p>
+            <a class="btn btn-lg btn-info" href="/members/new">입장</a>
+        </p>
+    </div>
+
+    <div th:replace="fragments/footer :: footer" />
+
+</div> <!-- /container -->
+
+</body>
+</html>

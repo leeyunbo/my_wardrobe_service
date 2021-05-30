@@ -2,6 +2,7 @@ package com.cloth.wardrobe.domain.member;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,15 +20,18 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique=true)
+    @Column(unique=true, nullable = false)
     private String account;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberAuthority memberAuthority = MemberAuthority.COMMON;
+    private MemberAuthority memberAuthority;
 
     @Embedded
     private Address address;
@@ -40,19 +44,6 @@ public class Member {
     // 댓글
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
-
-    // 로그인 체크
-
-    /**
-     * 로그인 체크 기능, 잠시 대기
-     * @return
-     */
-    public boolean loginCheck() {
-        boolean check = false;
-
-
-        return check;
-    }
 
     /**
      * 사용자 정보 변경
