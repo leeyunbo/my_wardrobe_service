@@ -14,11 +14,9 @@ public class MemberDto {
 
     @NotEmpty(message = "별명을 입력해주세요.")
     private String name;
-    @NotEmpty(message = "아이디를 입력해주세요.")
     private String account;
-    @NotEmpty(message = "비밀번호를 입력해주세요.")
-    private String password;
     private MemberAuthority memberAuthority;
+    private String picture;
     private String city;
     private String street;
     private String zipcode;

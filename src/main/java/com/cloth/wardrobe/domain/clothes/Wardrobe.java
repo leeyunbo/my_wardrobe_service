@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "wardrobes")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Wardrobe {
 

@@ -2,7 +2,6 @@ package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.member.Address;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.member.MemberAuthority;
 import com.cloth.wardrobe.dto.member.MemberDto;
 import com.cloth.wardrobe.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/members")
-public class MemberController {
+public class MemberApiController {
 
     private final MemberService memberService;
 
@@ -26,25 +23,6 @@ public class MemberController {
     public String createForm(Model model) {
         model.addAttribute("member", new MemberDto());
         return "members/createMemberForm";
-    }
-
-    @PostMapping(value = "/new")
-    public String create(@Valid @ModelAttribute("member") MemberDto dto, BindingResult result) {
-        if(result.hasErrors()) {
-            return "members/createMemberForm";
-        }
-
-        Address address = new Address(dto.getCity(), dto.getStreet(), dto.getZipcode());
-
-        Member member = new Member();
-        member.setName(dto.getName());
-        member.setAccount(dto.getAccount());
-        member.setPassword(dto.getPassword());
-        member.setAddress(address);
-        member.setMemberAuthority(MemberAuthority.COMMON);
-
-        memberService.join(member);
-        return "redirect:/";
     }
 
     @GetMapping(value = "/{memberId}/edit")
@@ -55,14 +33,25 @@ public class MemberController {
         Address address = member.getAddress();
 
         memberDto.setId(memberId);
+        memberDto.setAccount(member.getAccount());
         memberDto.setName(member.getName());
+        memberDto.setPicture(member.getPicture());
         memberDto.setCity(address.getCity());
         memberDto.setStreet(address.getStreet());
         memberDto.setZipcode(address.getZipcode());
         memberDto.setMemberAuthority(member.getMemberAuthority());
-        memberDto.setAccount(member.getAccount());
 
         model.addAttribute("member", memberDto);
         return "members/updateMemberForm";
+    }
+
+    @PostMapping(value = "/{memberId}/edit")
+    public String updateMemberForm(@ModelAttribute("member") MemberDto memberDto, @PathVariable Long memberId, BindingResult result) {
+        if(result.hasErrors()) {
+            return "members/updateMemberForm";
+        }
+
+        memberService.updateMember(memberId, memberDto.getName(), memberDto.getPicture(), memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
+        return "redirect:/";
     }
 }

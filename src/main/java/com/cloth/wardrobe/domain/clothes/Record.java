@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "records")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Record {
 
