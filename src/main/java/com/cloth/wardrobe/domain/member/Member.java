@@ -25,7 +25,7 @@ public class Member {
     private String name;
 
     @Column(unique = true, nullable = false)
-    private String account;
+    private String email;
 
     @Column
     private String picture;
@@ -47,9 +47,9 @@ public class Member {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Member(String name, String account, String picture, MemberAuthority memberAuthority, Address address) {
+    public Member(String name, String email, String picture, MemberAuthority memberAuthority, Address address) {
         this.name = name;
-        this.account = account;
+        this.email = email;
         this.picture = picture;
         this.memberAuthority = memberAuthority;
         this.address = address;
