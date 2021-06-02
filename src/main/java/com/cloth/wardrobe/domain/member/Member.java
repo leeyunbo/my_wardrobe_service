@@ -58,15 +58,15 @@ public class Member {
     /**
      * 사용자 정보 변경
      * @param name
-     * @param city
-     * @param street
-     * @param zipcode
      */
-    public Member change(String name, String picture, String city, String street, String zipcode) {
+    public Member change(String name, String picture) {
         this.name = name;
         this.picture = picture;
-        this.address = new Address(city, street, zipcode);
         return this;
+    }
+
+    public String getAuthorityKey() {
+        return this.memberAuthority.getKey();
     }
 
 }

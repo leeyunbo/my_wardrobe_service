@@ -33,7 +33,7 @@ public class MemberApiController {
         Address address = member.getAddress();
 
         memberDto.setId(memberId);
-        memberDto.setAccount(member.getAccount());
+        memberDto.setAccount(member.getEmail());
         memberDto.setName(member.getName());
         memberDto.setPicture(member.getPicture());
         memberDto.setCity(address.getCity());
@@ -51,7 +51,7 @@ public class MemberApiController {
             return "members/updateMemberForm";
         }
 
-        memberService.updateMember(memberId, memberDto.getName(), memberDto.getPicture(), memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
+        memberService.updateMember(memberId, memberDto.getName(), memberDto.getPicture());
         return "redirect:/";
     }
 }

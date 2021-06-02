@@ -33,14 +33,11 @@ public class MemberService {
      * 멤버 정보 변경
      * @param memberId
      * @param name
-     * @param city
-     * @param street
-     * @param zipcode
      */
     @Transactional
-    public void updateMember(Long memberId, String name, String picture, String city, String street, String zipcode) {
+    public void updateMember(Long memberId, String name, String picture) {
         Optional<Member> findItem = memberRepository.findById(memberId);
-        findItem.get().change(name, picture, city, street, zipcode);
+        findItem.get().change(name, picture);
     }
 
     /**
