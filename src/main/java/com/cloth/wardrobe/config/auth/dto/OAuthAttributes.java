@@ -43,7 +43,7 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .memberAuthority(MemberAuthority.GUEST)
+                .memberAuthority(MemberAuthority.USER)
                 .build();
     }
 }
