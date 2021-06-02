@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.config.auth;
 
 import com.cloth.wardrobe.domain.member.MemberAuthority;
-import com.cloth.wardrobe.service.CustomOAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
