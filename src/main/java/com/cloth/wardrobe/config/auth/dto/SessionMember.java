@@ -2,9 +2,10 @@ package com.cloth.wardrobe.config.auth.dto;
 
 import com.cloth.wardrobe.domain.member.Member;
 import lombok.Getter;
+import java.io.Serializable;
 
 @Getter
-public class SessionMember {
+public class SessionMember implements Serializable {
     private String name;
     private String email;
     private String picture;
