@@ -3,6 +3,7 @@
 <head th:replace="fragments/header :: header">
     <title>Hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/bootstrap.css">
     <script>
     </script>
 </head>
@@ -17,7 +18,7 @@
             공짜니까~ 돈 안드니까~ 한번 이용해보세요!
         </p>
         <p>
-            <a class="btn btn-lg btn-info" href="/members/new">입장</a>
+            <a class="btn btn-lg btn-info" href="/oauth2/authorization/google">입장</a>
         </p>
     </div>
 
@@ -25,5 +26,7 @@
 
 </div> <!-- /container -->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 </body>
 </html>

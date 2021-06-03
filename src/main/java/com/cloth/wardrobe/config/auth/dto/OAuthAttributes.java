@@ -24,6 +24,13 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
+    /**
+     * OAuth2User에서 반환하는 사용자 정보는 Map 형태이기 때문에 값 하나하나를 변환해주는 메서드
+     * @param registrationId
+     * @param userNameAttributeName
+     * @param attributes
+     * @return
+     */
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         return ofGoogle(userNameAttributeName, attributes);
     }
@@ -38,6 +45,10 @@ public class OAuthAttributes {
                 .build();
     }
 
+    /**
+     * 빌더 패턴을 활용한 엔티티 생성 메서드
+     * @return
+     */
     public Member toEntity() {
         return Member.builder()
                 .name(name)

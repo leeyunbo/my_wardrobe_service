@@ -2,7 +2,6 @@ package com.cloth.wardrobe.domain.member;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
-import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +33,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberAuthority memberAuthority;
 
-    @Embedded
-    private Address address;
-
     // 옷장
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
@@ -47,12 +43,11 @@ public class Member {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Member(String name, String email, String picture, MemberAuthority memberAuthority, Address address) {
+    public Member(String name, String email, String picture, MemberAuthority memberAuthority) {
         this.name = name;
         this.email = email;
         this.picture = picture;
         this.memberAuthority = memberAuthority;
-        this.address = address;
     }
 
     /**

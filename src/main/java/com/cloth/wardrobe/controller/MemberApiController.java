@@ -1,6 +1,5 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.domain.member.Address;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.member.MemberDto;
 import com.cloth.wardrobe.service.MemberService;
@@ -30,15 +29,11 @@ public class MemberApiController {
         Member member = memberService.findOne(memberId);
 
         MemberDto memberDto = new MemberDto();
-        Address address = member.getAddress();
 
         memberDto.setId(memberId);
-        memberDto.setAccount(member.getEmail());
+        memberDto.setEmail(member.getEmail());
         memberDto.setName(member.getName());
         memberDto.setPicture(member.getPicture());
-        memberDto.setCity(address.getCity());
-        memberDto.setStreet(address.getStreet());
-        memberDto.setZipcode(address.getZipcode());
         memberDto.setMemberAuthority(member.getMemberAuthority());
 
         model.addAttribute("member", memberDto);
