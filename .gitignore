@@ -40,4 +40,4 @@ out/
 application-oauth.properties
 
 ### bootstrap ###
-bootstrap.*
+bootstrap*
