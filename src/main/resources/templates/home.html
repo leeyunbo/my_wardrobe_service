@@ -10,16 +10,6 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div th:if="${session.user == null}" class ="nav-tabs">
-        <a class="btn btn-lg btn-info" href="/oauth2/authorization/google">로그인</a>
-    </div>
-
-    <div th:if="${session.user != null}" class ="member-name-label">
-        <img th:src="${session.user.getPicture()}"> &nbsp;
-        <td th:text="${session.user.getName() + '님'}"></td>
-        <a class="btn btn-lg btn-info" href="">로그아웃</a>
-    </div>
-
     <div class="jumbotron"> <h2>쇼핑 서비스</h2>
         <p class="lead">옷 메뉴</p>
         <p>
@@ -32,10 +22,10 @@
             <a class="btn btn-lg btn-info" href="/items/new">나만의 통계 보기</a>
             <a class="btn btn-lg btn-info" href="/items/me">모두의 통계 보기</a>
         </p>
-        <p class="lead">통계 메뉴</p>
+        <p class="lead">커뮤니티 메뉴</p>
         <p>
-            <a class="btn btn-lg btn-info" href="/items/new">나만의 통계 보기</a>
-            <a class="btn btn-lg btn-info" href="/items/me">모두의 통계 보기</a>
+            <a class="btn btn-lg btn-info" href="/items/new">모두의 옷장 구경하기</a>
+            <a class="btn btn-lg btn-info" href="/items/me">모두의 코디 구경하기</a>
         </p>
     </div>
 
