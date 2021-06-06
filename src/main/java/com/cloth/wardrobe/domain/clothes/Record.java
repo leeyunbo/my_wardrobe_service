@@ -1,13 +1,10 @@
 package com.cloth.wardrobe.domain.clothes;
 
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
 @Table(name = "records")
 @Getter
 @NoArgsConstructor
-public class Record {
+public class Record extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -39,9 +36,4 @@ public class Record {
     private String subject;
 
     private String content;
-
-    private LocalDateTime registDate;
-
-    private LocalDateTime modifyDate;
-
 }

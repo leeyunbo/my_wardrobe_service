@@ -1,11 +1,10 @@
 package com.cloth.wardrobe.domain.clothes;
 
+import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 @Table(name = "clothes")
 @Getter
 @NoArgsConstructor
-public class Cloth {
+public class Cloth extends BaseTimeEntity {
 
     @Id
     @GeneratedValue

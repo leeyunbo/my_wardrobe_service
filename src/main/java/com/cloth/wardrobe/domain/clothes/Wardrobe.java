@@ -1,10 +1,11 @@
 package com.cloth.wardrobe.domain.clothes;
 
+import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "wardrobes")
 @Getter
 @NoArgsConstructor
-public class Wardrobe {
+public class Wardrobe extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -37,9 +38,53 @@ public class Wardrobe {
 
     private String name;
 
-    private int clothCount;
-
     private boolean isPublic;
 
     private int likeCnt;
+
+    @Builder
+    public Wardrobe(Member member, Image image, String name, boolean isPublic, int likeCnt) {
+        this.member = member;
+        this.image = image;
+        this.name = name;
+        this.isPublic = isPublic;
+        this.likeCnt = likeCnt;
+    }
+
+    /**
+     * 옷장에 옷 추가
+     * @param cloth
+     * @return
+     */
+    public Wardrobe addCloth(Cloth cloth) {
+        clothes.add(cloth);
+        return this;
+    }
+
+    /**
+     * Wardrobe 이름 변경
+     * @param name
+     */
+    public Wardrobe changeName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * 좋아요수 증가
+     */
+    public Wardrobe addLikeCnt() {
+        this.likeCnt++;
+        return this;
+    }
+
+    /**
+     * 이미지 변경
+     * @param image
+     * @return
+     */
+    public Wardrobe changeImage(Image image) {
+        this.image = image;
+        return this;
+    }
 }
