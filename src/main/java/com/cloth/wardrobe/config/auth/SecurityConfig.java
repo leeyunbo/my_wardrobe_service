@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                     .authorizeRequests() // URL별 권한 관리를 설정하는 옵션의 시작점
-                    .antMatchers("/", "/css/**", "/images/**", "/js/**").permitAll() // 전체 열람 권한
+                    .antMatchers("/", "/static/css/**", "/images/**", "/static/js/**").permitAll() // 전체 열람 권한
                     .antMatchers("/api/v1/**").hasRole(MemberAuthority.USER.name()) // USER 권한 사용자만 접근 가능하게 구현
                     .anyRequest().authenticated()  // 나머지 URL은 authenticate 즉, 로그인된 사용자만 접근 가능
                 .and()
