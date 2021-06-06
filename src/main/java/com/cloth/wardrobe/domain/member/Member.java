@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.domain.member;
 
+import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "members")
 @Getter @Setter
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
