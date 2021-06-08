@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
-import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
@@ -74,6 +73,15 @@ public class Wardrobe extends BaseTimeEntity {
         comments.add(comment);
         return this;
     }
+
+    /**
+     * 옷장 코멘트 제거
+     */
+    public Wardrobe deleteComment(Comment comment) {
+        comments.remove(comment);
+        return this;
+    }
+
 
     /**
      * 좋아요수 증가
