@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
@@ -36,6 +37,9 @@ public class Wardrobe extends BaseTimeEntity {
     @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
     private List<Cloth> clothes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
     private String name;
 
     private boolean isPublic;
@@ -58,6 +62,16 @@ public class Wardrobe extends BaseTimeEntity {
      */
     public Wardrobe addCloth(Cloth cloth) {
         clothes.add(cloth);
+        return this;
+    }
+
+    /**
+     * 옷장 코멘트 작성
+     * @param comment
+     * @return
+     */
+    public Wardrobe writeComment(Comment comment) {
+        comments.add(comment);
         return this;
     }
 
