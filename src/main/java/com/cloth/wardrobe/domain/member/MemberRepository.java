@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.repository;
+package com.cloth.wardrobe.domain.member;
 
 import com.cloth.wardrobe.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
