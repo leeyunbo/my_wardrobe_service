@@ -39,4 +39,13 @@ public class WardrobeService {
         return new WardrobeResponseRequestDto(wardrobe);
     }
 
+    @Transactional
+    public Long addLikeCnt(Long id) {
+        Wardrobe wardrobe = wardrobeRepository.findById(id)
+                .orElseThrow(() ->
+                    new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        return id;
+    }
+
 }
