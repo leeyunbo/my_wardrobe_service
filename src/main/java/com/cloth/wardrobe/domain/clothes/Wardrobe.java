@@ -23,7 +23,7 @@ public class Wardrobe extends BaseTimeEntity {
     private Long id;
 
     // 멤버
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -33,7 +33,7 @@ public class Wardrobe extends BaseTimeEntity {
     private Image image;
 
     // 옷
-    @OneToMany(mappedBy = "wardrobe")
+    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
     private List<Cloth> clothes = new ArrayList<>();
 
     private String name;
@@ -62,15 +62,6 @@ public class Wardrobe extends BaseTimeEntity {
     }
 
     /**
-     * Wardrobe 이름 변경
-     * @param name
-     */
-    public Wardrobe changeName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
      * 좋아요수 증가
      */
     public Wardrobe addLikeCnt() {
@@ -79,12 +70,15 @@ public class Wardrobe extends BaseTimeEntity {
     }
 
     /**
-     * 이미지 변경
-     * @param image
-     * @return
+     * 좋아요수 감소
      */
-    public Wardrobe changeImage(Image image) {
-        this.image = image;
+    public Wardrobe delLikeCnt() {
+        this.likeCnt--;
         return this;
     }
+
+
+    /**
+     *
+     */
 }
