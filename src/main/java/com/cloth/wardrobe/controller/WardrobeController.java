@@ -32,7 +32,11 @@ public class WardrobeController {
         return wardrobeService.findById(id);
     }
 
+    @PutMapping("/api/v1/wardrobe/{id}/likeCnt")
+    public Long addLikeCnt(@PathVariable Long id) {
+        return wardrobeService.addLikeCnt(id);
+    }
 
-
-
+    @PutMapping("/api/v1/wardrobe/{id}/comment")
+    public Long wrtieComment
 }
