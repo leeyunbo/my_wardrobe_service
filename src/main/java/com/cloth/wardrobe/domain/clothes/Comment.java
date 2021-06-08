@@ -1,7 +1,9 @@
-package com.cloth.wardrobe.domain.community;
+package com.cloth.wardrobe.domain.clothes;
 
+import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "comments")
 @Getter @Setter
 @NoArgsConstructor
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -28,11 +30,16 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String subejct;
+    private String subject;
 
     private String content;
 
-    private LocalDateTime registDate;
-
-    private LocalDateTime modifyDate;
+    @Builder
+    public Comment(Long id, Wardrobe wardrobe, Member member, String subject, String content) {
+        this.id = id;
+        this.wardrobe = wardrobe;
+        this.member = member;
+        this.subject = subject;
+        this.content = content;
+    }
 }
