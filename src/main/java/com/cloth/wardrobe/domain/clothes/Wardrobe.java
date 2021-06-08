@@ -79,6 +79,11 @@ public class Wardrobe extends BaseTimeEntity {
 
 
     /**
-     *
+     * 업데이트 화면을 통한 옷장 정보 업데이트
      */
+    public void update(Image image, String name, boolean isPublic) {
+        this.image = image;
+        this.name = name;
+        this.isPublic = isPublic;
+    }
 }
