@@ -3,7 +3,7 @@ package com.cloth.wardrobe.config.auth;
 import com.cloth.wardrobe.config.auth.dto.OAuthAttributes;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.repository.MemberRepository;
+import com.cloth.wardrobe.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
