@@ -48,6 +48,8 @@ public class WardrobeService {
                 .orElseThrow(() ->
                     new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
+        wardrobe.addLikeCnt();
+
         return id;
     }
 
