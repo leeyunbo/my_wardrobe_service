@@ -1,13 +1,13 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.domain.clothes.WardrobeResponseRequestDto;
-import com.cloth.wardrobe.domain.clothes.WardrobeUpdateRequestDto;
+import com.cloth.wardrobe.dto.clothes.CommentSaveRequestDto;
+import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
+import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -18,8 +18,8 @@ public class WardrobeController {
     private final WardrobeService wardrobeService;
 
     @PostMapping("/api/v1/wardrobe")
-    public Long save(@RequestBody WardrobeSaveRequestDto requestDto) {
-        return wardrobeService.save(requestDto);
+    public Long save(@RequestBody WardrobeSaveRequestDto wardrobeSaveRequestDto) {
+        return wardrobeService.save(wardrobeSaveRequestDto);
     }
 
     @PutMapping("/api/v1/wardrobe/{id}")
@@ -38,5 +38,7 @@ public class WardrobeController {
     }
 
     @PutMapping("/api/v1/wardrobe/{id}/comment")
-    public Long wrtieComment
+    public Long wrtieComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto) {
+        return wardrobeService.writeComment(id, commentSaveRequestDto);
+    }
 }
