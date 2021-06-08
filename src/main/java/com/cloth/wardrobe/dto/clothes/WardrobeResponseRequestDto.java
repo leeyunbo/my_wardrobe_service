@@ -1,6 +1,8 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.dto.clothes;
 
 
+import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
