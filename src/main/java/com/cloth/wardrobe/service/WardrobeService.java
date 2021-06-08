@@ -1,7 +1,9 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
-import com.cloth.wardrobe.repository.WardrobeRepository;
+import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,5 +18,18 @@ public class WardrobeService {
     public Long save(WardrobeSaveRequestDto requestDto) {
         return wardrobeRepository.save(requestDto.toEntity()).getId();
     }
+
+    @Transactional
+    public Long update(Long id, WardrobeUpdateRequestDto requestDto) {
+        Wardrobe wardrobe = wardrobeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.isPublic());
+
+        return id;
+    }
+
+
+    @Transactional
 
 }
