@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.domain.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
@@ -31,5 +32,11 @@ public class WardrobeService {
 
 
     @Transactional
+    public WardrobeResponseRequestDto findById(Long id) {
+        Wardrobe wardrobe = wardrobeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        return new WardrobeResponseRequestDto(wardrobe);
+    }
 
 }
