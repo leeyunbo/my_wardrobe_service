@@ -2,7 +2,7 @@ package com.cloth.wardrobe.domain.member;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.domain.clothes.Comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
