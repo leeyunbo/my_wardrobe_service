@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.domain.community;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
