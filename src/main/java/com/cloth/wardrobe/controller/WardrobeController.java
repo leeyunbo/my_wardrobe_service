@@ -32,13 +32,24 @@ public class WardrobeController {
         return wardrobeService.findById(id);
     }
 
-    @PutMapping("/api/v1/wardrobe/{id}/likeCnt")
+    @PutMapping("/api/v1/wardrobe/{id}/add_likecnt")
     public Long addLikeCnt(@PathVariable Long id) {
         return wardrobeService.addLikeCnt(id);
     }
 
+    @PutMapping("/api/v1/wardrobe/{id}/del_likecnt")
+    public Long delLikeCnt(@PathVariable Long id) {
+        return wardrobeService.delLikeCnt(id);
+    }
+
     @PutMapping("/api/v1/wardrobe/{id}/comment")
-    public Long wrtieComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto) {
+    public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto) {
         return wardrobeService.writeComment(id, commentSaveRequestDto);
     }
+
+    @DeleteMapping("/api/v1/wardrobe/{wardrobeId}/comment/{commentId}")
+    public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId) {
+        return wardrobeService.deleteComment(wardrobeId, commentId);
+    }
+
 }
