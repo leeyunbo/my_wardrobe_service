@@ -1,10 +1,13 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.dto.clothes.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
+import com.cloth.wardrobe.service.WardrobeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -39,6 +42,9 @@ public class WardrobeControllerTest {
 
     @Autowired
     WardrobeRepository wardrobeRepository;
+
+    @Autowired
+    WardrobeService wardrobeService;
 
     @Autowired
     private WebApplicationContext context;
@@ -105,6 +111,45 @@ public class WardrobeControllerTest {
         assertThat(wardrobe.getName()).isEqualTo(name);
         assertThat(wardrobe.getLikeCnt()).isEqualTo(0);
 
+    }
+
+    @Test
+    public void 옷장_댓글달기_댓글삭제() {
+
+        // given
+        String name = "테스트 옷장";
+        boolean isPublic = false;
+        int likeCnt = 0;
+        Member member = memberRepository.findById(1L).get();
+
+        Wardrobe wardrobe = wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+
+        CommentSaveRequestDto commentSaveRequestDto = CommentSaveRequestDto
+                .builder()
+                .member(member)
+                .subject("TEST 제목")
+                .content("TEST 내용")
+                .build();
+
+        wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
+
+        List<Comment> comments = wardrobeService.getComments(wardrobe.getId());
+        assertThat(comments.size()).isEqualTo(1);
+
+        wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
+
+        comments = wardrobe.getComments();
+        assertThat(comments.size()).isEqualTo(2);
+
+        wardrobeService.deleteComment(wardrobe.getId(), comments.get(0).getId());
+
+        comments = wardrobe.getComments();
+        assertThat(comments.size()).isEqualTo(1);
     }
 
 }
