@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
