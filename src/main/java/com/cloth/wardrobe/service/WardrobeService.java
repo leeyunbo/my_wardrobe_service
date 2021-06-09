@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class WardrobeService {
@@ -84,6 +86,18 @@ public class WardrobeService {
         return id;
     }
 
+    /**
+     * 댓글을 모두 가져온다.
+     */
+    @Transactional
+    public List<Comment> getComments(Long id) {
+        Wardrobe wardrobe = wardrobeRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
+
+        return wardrobe.getComments();
+    }
+
 
     /**
      * 댓글을 작성한다.
@@ -94,7 +108,9 @@ public class WardrobeService {
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        wardrobe.writeComment(commentSaveRequestDto.toEntity());
+        Comment comment = commentRepository.save(commentSaveRequestDto.toEntity());
+
+        wardrobe.writeComment(comment);
 
         return id;
     }

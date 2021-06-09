@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.dto.clothes.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
@@ -7,10 +8,11 @@ import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class WardrobeController {
@@ -40,6 +42,11 @@ public class WardrobeController {
     @PutMapping("/api/v1/wardrobe/{id}/del_likecnt")
     public Long delLikeCnt(@PathVariable Long id) {
         return wardrobeService.delLikeCnt(id);
+    }
+
+    @GetMapping("/api/v1/wardrobe/{id}/comment")
+    public List<Comment> getComments(@PathVariable Long id) {
+        return wardrobeService.getComments(id);
     }
 
     @PutMapping("/api/v1/wardrobe/{id}/comment")
