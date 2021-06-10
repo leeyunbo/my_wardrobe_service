@@ -1,7 +1,8 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.dto.clothes.CommentSaveRequestDto;
+import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
+import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
@@ -45,7 +46,7 @@ public class WardrobeController {
     }
 
     @GetMapping("/api/v1/wardrobe/{id}/comment")
-    public List<Comment> getComments(@PathVariable Long id) {
+    public List<CommentResponseRequestDto> getComments(@PathVariable Long id) {
         return wardrobeService.getComments(id);
     }
 
