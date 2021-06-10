@@ -5,11 +5,14 @@ import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
+import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
+import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -53,6 +56,7 @@ public class WardrobeService {
      * isPublic이 true인 옷장들의 리스트들을 좋아요 순으로 가져온다. (페이징 사용)
      */
 
+
     /**
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
@@ -90,12 +94,14 @@ public class WardrobeService {
      * 댓글을 모두 가져온다.
      */
     @Transactional
-    public List<Comment> getComments(Long id) {
+    public List<CommentResponseRequestDto> getComments(Long id) {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        return wardrobe.getComments();
+        return wardrobe.getComments().stream()
+                .map(CommentResponseRequestDto::new)
+                .collect(Collectors.toList());
     }
 
 
