@@ -3,7 +3,8 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.dto.clothes.CommentSaveRequestDto;
+import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
+import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
@@ -138,17 +139,17 @@ public class WardrobeControllerTest {
 
         wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
 
-        List<Comment> comments = wardrobeService.getComments(wardrobe.getId());
+        List<CommentResponseRequestDto> comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);
 
         wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
 
-        comments = wardrobe.getComments();
+        comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(2);
 
         wardrobeService.deleteComment(wardrobe.getId(), comments.get(0).getId());
 
-        comments = wardrobe.getComments();
+        comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);
     }
 
