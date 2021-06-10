@@ -3,6 +3,7 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
@@ -16,6 +17,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -90,7 +96,7 @@ public class WardrobeControllerTest {
     }
 
     @Test
-    public void 옷장저장_불러오기() {
+    public void 옷장저장_페이징_불러오기() {
         // given
         String name = "테스트 옷장";
         boolean isPublic = false;
@@ -98,19 +104,43 @@ public class WardrobeControllerTest {
         Member member = memberRepository.findById(1L).get();
 
         wardrobeRepository.save(Wardrobe.builder()
-                                .member(member)
-                                .isPublic(isPublic)
-                                .likeCnt(likeCnt)
-                                .name(name)
-                                .build());
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+        wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+        wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+        wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+        wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic(isPublic)
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
 
         // when
-        List<Wardrobe> wardrobes = wardrobeRepository.findAll();
+        Pageable pageable = PageRequest.of(0,2);
+        Page<Wardrobe> wardrobes = wardrobeRepository.findAll(pageable);
 
-        // then
-        Wardrobe wardrobe = wardrobes.get(0);
-        assertThat(wardrobe.getName()).isEqualTo(name);
-        assertThat(wardrobe.getLikeCnt()).isEqualTo(0);
+        assertThat(wardrobes.getSize()).isEqualTo(2);
+
+
 
     }
 
