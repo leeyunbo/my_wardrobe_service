@@ -8,9 +8,10 @@ import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,10 @@ public class WardrobeService {
     /**
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
+    @Transactional
+    public Page<Wardrobe> findAll(Pageable pageable) {
+        return wardrobeRepository.findAll(pageable);
+    }
 
 
     /**
