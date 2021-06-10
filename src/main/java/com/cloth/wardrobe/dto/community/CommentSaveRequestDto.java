@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.dto.clothes;
+package com.cloth.wardrobe.dto.community;
 
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
