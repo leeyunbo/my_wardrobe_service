@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
@@ -67,5 +66,4 @@ public class WardrobeController {
     public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId) {
         return wardrobeService.deleteComment(wardrobeId, commentId);
     }
-
 }

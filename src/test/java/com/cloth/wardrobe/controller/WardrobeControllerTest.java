@@ -1,9 +1,7 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
