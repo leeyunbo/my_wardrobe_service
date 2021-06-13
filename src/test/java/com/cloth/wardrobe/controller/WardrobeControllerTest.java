@@ -2,6 +2,7 @@ package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
@@ -9,6 +10,7 @@ import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import com.cloth.wardrobe.service.WardrobeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 // Spring이랑 엮어서 실행할래
+@Slf4j
 @Transactional
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -103,7 +106,7 @@ public class WardrobeControllerTest {
 
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
-                .isPublic(isPublic)
+                .isPublic(true)
                 .likeCnt(likeCnt)
                 .name(name)
                 .build());
@@ -132,14 +135,17 @@ public class WardrobeControllerTest {
                 .name(name)
                 .build());
 
-        // when
+        // when, Page는 무조건 size만큼 할당이 된다.
         Pageable pageable = PageRequest.of(0,2);
         Page<Wardrobe> wardrobes = wardrobeRepository.findAll(pageable);
 
-        assertThat(wardrobes.getSize()).isEqualTo(2);
-
-
-
+        assertThat(
+                wardrobes
+                .get()
+                .map(WardrobeResponseRequestDto::new)
+                .collect(Collectors.toList())
+                .size())
+                    .isEqualTo(1);
     }
 
     @Test
