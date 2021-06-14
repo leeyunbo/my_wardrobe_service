@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class HomeController {
+public class IndexController {
 
     @GetMapping("/")
     public String home() {
         return "home";
+    }
+
+    @GetMapping("/wardrobes/save")
+    public String wardrobesSave() {
+        return "wardrobe/wardrobes-save";
     }
 }
