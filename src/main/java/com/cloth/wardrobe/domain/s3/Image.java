@@ -3,6 +3,7 @@ package com.cloth.wardrobe.domain.s3;
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,4 +22,9 @@ public class Image extends BaseTimeEntity {
     private Long id;
 
     private String imageS3Path;
+
+    @Builder
+    public Image(String imageS3Path) {
+        this.imageS3Path = imageS3Path;
+    }
 }
