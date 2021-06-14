@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="col-md-12">
+        <form>
+            <div class="form-group">
+                <label for="name">옷장 이름</label>
+                <input type="text" class="form-control" id="name" placeholder="옷장 이름을 입력하세요">
+            </div>
+
+            <div class="form-group">
+                <label for="image">옷장 사진</label>
+                <img src="http://localhost:8080/image/example_image.jpeg" class="form-control" style="height: 400px; ">
+                <input type="image" value="image/example_image.jpeg" class="form-control" id="image" hidden>
+            </div>
+
+            <div class="form-group">
+                <label for="isPublic">사람들에게 나만의 옷장을 공개하세요!</label>
+                <select name="isPublic" id="isPublic" class="form-control">
+                    <option value=""></option>
+                    <option value="true">공개 할래요!</option>
+                    <option value="false">공개 안할래요..</option>
+                </select>
+            </div>
+        </form>
+
+        <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+    </div>
+
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
