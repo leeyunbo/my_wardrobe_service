@@ -3,6 +3,8 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
+import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.s3.ImageRepository;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
@@ -21,10 +23,17 @@ public class WardrobeService {
 
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public Long save(WardrobeSaveRequestDto requestDto) {
-        return wardrobeRepository.save(requestDto.toEntity()).getId();
+        Image image = Image
+                .builder()
+                .imageS3Path(requestDto.getImage())
+                .build();
+        imageRepository.save(image);
+
+        return wardrobeRepository.save(requestDto.toEntity(image)).getId();
     }
 
     @Transactional
