@@ -42,7 +42,7 @@ public class Cloth extends BaseTimeEntity {
 
     private String clothBrand;
 
-    @OneToMany
-    @JoinColumn(name = "image_id")
-    private List<Image> imagePath = new ArrayList<>();
+    //@OneToMany
+    //@JoinColumn(name = "image_id")
+    //private List<Image> imagePath = new ArrayList<>();
 }
