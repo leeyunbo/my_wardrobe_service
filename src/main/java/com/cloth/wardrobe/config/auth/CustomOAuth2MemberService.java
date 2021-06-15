@@ -22,7 +22,7 @@ import java.util.Collections;
  */
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2MemberService implements OAuth2UserService {
+public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
@@ -49,7 +49,7 @@ public class CustomOAuth2MemberService implements OAuth2UserService {
         httpSession.setAttribute("user", new SessionMember(member)); // 세션 DTO
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getAuthorityKey())),
+                Collections.singleton(new SimpleGrantedAuthority(member.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
