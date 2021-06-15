@@ -1,7 +1,7 @@
 package com.cloth.wardrobe.config.auth.dto;
 
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.member.MemberAuthority;
+import com.cloth.wardrobe.domain.member.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -54,7 +54,7 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .memberAuthority(MemberAuthority.USER)
+                .role(Role.USER)
                 .build();
     }
 }
