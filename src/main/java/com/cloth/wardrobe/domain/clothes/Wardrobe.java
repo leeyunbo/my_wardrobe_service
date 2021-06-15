@@ -29,7 +29,7 @@ public class Wardrobe extends BaseTimeEntity {
     private Member member;
 
     // 이미지
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "image_id")
     private Image image;
 
@@ -42,12 +42,12 @@ public class Wardrobe extends BaseTimeEntity {
 
     private String name;
 
-    private boolean isPublic;
+    private String isPublic;
 
     private int likeCnt;
 
     @Builder
-    public Wardrobe(Member member, Image image, String name, boolean isPublic, int likeCnt) {
+    public Wardrobe(Member member, Image image, String name, String isPublic, int likeCnt) {
         this.member = member;
         this.image = image;
         this.name = name;
@@ -104,7 +104,7 @@ public class Wardrobe extends BaseTimeEntity {
     /**
      * 업데이트 화면을 통한 옷장 정보 업데이트
      */
-    public void update(Image image, String name, boolean isPublic) {
+    public void update(Image image, String name, String isPublic) {
         this.image = image;
         this.name = name;
         this.isPublic = isPublic;

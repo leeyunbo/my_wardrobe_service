@@ -2,6 +2,8 @@ package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.s3.ImageRepository;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
@@ -52,7 +54,11 @@ public class WardrobeControllerTest {
     WardrobeRepository wardrobeRepository;
 
     @Autowired
+    ImageRepository imageRepository;
+
+    @Autowired
     WardrobeService wardrobeService;
+
 
     @Autowired
     private WebApplicationContext context;
@@ -79,7 +85,7 @@ public class WardrobeControllerTest {
                 .builder()
                 .name("name")
                 .member(memberRepository.findById(1L).get())
-                .isPublic(false)
+                .isPublic("false")
                 .build();
         String url = "http://localhost:8080/api/v1/wardrobe";
 
@@ -100,13 +106,13 @@ public class WardrobeControllerTest {
     public void 옷장저장_페이징_불러오기() {
         // given
         String name = "테스트 옷장";
-        boolean isPublic = false;
+        String isPublic = "false";
         int likeCnt = 0;
         Member member = memberRepository.findById(1L).get();
 
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
-                .isPublic(true)
+                .isPublic("true")
                 .likeCnt(likeCnt)
                 .name(name)
                 .build());
@@ -153,7 +159,7 @@ public class WardrobeControllerTest {
 
         // given
         String name = "테스트 옷장";
-        boolean isPublic = false;
+        String isPublic = "false";
         int likeCnt = 0;
         Member member = memberRepository.findById(1L).get();
 
@@ -185,6 +191,17 @@ public class WardrobeControllerTest {
 
         comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void 이미지_저장_테스트() {
+        Image image = imageRepository.save(
+                Image
+                        .builder()
+                        .imageS3Path("test/image/path")
+                        .build());
+
+        assertThat(image.getImageS3Path()).isEqualTo("test/image/path");
     }
 
 }

@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.member;
 
-import com.cloth.wardrobe.domain.member.MemberAuthority;
+import com.cloth.wardrobe.domain.member.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +11,6 @@ public class MemberDto {
     private Long id;
     private String name;
     private String email;
-    private MemberAuthority memberAuthority;
+    private Role role;
     private String picture;
 }

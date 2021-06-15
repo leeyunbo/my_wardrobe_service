@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,9 @@ public class WardrobeController {
     private final WardrobeService wardrobeService;
 
     @PostMapping("/api/v1/wardrobes")
-    public Long save(@RequestBody WardrobeSaveRequestDto wardrobeSaveRequestDto) {
-        return wardrobeService.save(wardrobeSaveRequestDto);
+    public Long save(@RequestBody WardrobeSaveRequestDto wardrobeSaveRequestDto, HttpSession httpSession) {
+        log.info("--------------------------------------save()-----------------------------------");
+        return wardrobeService.save(wardrobeSaveRequestDto, httpSession);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}")

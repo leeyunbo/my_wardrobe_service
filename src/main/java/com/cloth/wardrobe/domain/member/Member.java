@@ -32,7 +32,7 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberAuthority memberAuthority;
+    private Role role;
 
     // 옷장
     @OneToOne(fetch = FetchType.LAZY)
@@ -44,11 +44,11 @@ public class Member extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Member(String name, String email, String picture, MemberAuthority memberAuthority) {
+    public Member(String name, String email, String picture, Role role) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.memberAuthority = memberAuthority;
+        this.role = role;
     }
 
     /**
@@ -61,8 +61,7 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public String getAuthorityKey() {
-        return this.memberAuthority.getKey();
+    public String getRoleKey() {
+        return this.role.getKey();
     }
-
 }
