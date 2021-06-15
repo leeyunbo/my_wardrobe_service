@@ -15,10 +15,10 @@ public class WardrobeSaveRequestDto {
     private Member member;
     private String image;
     private int likeCnt;
-    private boolean isPublic;
+    private String isPublic;
 
     @Builder
-    public WardrobeSaveRequestDto(String name, Member member, String image, Boolean isPublic) {
+    public WardrobeSaveRequestDto(String name, Member member, String image, String isPublic) {
         this.name = name;
         this.member = member;
         this.image = image;
@@ -26,7 +26,7 @@ public class WardrobeSaveRequestDto {
         this.likeCnt = 0;
     }
 
-    public Wardrobe toEntity(Image image) {
+    public Wardrobe toEntity(Image image, Member member) {
         return Wardrobe.builder()
                 .name(name)
                 .member(member)

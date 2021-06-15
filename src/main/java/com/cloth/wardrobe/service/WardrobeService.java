@@ -1,8 +1,11 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
+import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.domain.s3.ImageRepository;
 import com.cloth.wardrobe.dto.clothes.*;
@@ -10,30 +13,42 @@ import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class WardrobeService {
 
+    private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
 
     @Transactional
-    public Long save(WardrobeSaveRequestDto requestDto) {
-        Image image = Image
+    public Long save(WardrobeSaveRequestDto requestDto, HttpSession httpSession) {
+        log.info("--------------------------------------save()-----------------------------------");
+
+        Image image = imageRepository.save(
+                Image
                 .builder()
                 .imageS3Path(requestDto.getImage())
-                .build();
-        imageRepository.save(image);
+                .build());
 
-        return wardrobeRepository.save(requestDto.toEntity(image)).getId();
+        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
+        Member member = memberRepository.findByEmail(sessionMember.getEmail())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("회원 정보가 잘못되었습니다."));
+
+        return wardrobeRepository.save(requestDto.toEntity(image, member)).getId();
     }
 
     @Transactional
@@ -42,7 +57,7 @@ public class WardrobeService {
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.isPublic());
+        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
 
         return id;
     }
