@@ -16,7 +16,7 @@ public class WardrobeResponseRequestDto {
     private Image image;
     private List<Cloth> clothes;
     private String name;
-    private boolean isPublic;
+    private String isPublic;
     private int likeCnt;
 
     @Builder
@@ -26,7 +26,7 @@ public class WardrobeResponseRequestDto {
         this.image = wardrobe.getImage();
         this.clothes = wardrobe.getClothes();
         this.name = wardrobe.getName();
-        this.isPublic = wardrobe.isPublic();
+        this.isPublic = wardrobe.getIsPublic();
         this.likeCnt = wardrobe.getLikeCnt();
     }
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WardrobeRepository extends JpaRepository<Wardrobe, Long> {
 
-    @Query("SELECT w FROM Wardrobe w WHERE w.isPublic = true ORDER BY w.likeCnt DESC")
+    @Query("SELECT w FROM Wardrobe w WHERE w.isPublic = 'true' ORDER BY w.likeCnt DESC")
     Page<Wardrobe> findAll(Pageable pageable);
 
 }
