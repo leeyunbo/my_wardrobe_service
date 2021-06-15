@@ -9,10 +9,10 @@ public class WardrobeUpdateRequestDto {
 
     private Image image;
     private String name;
-    private boolean isPublic;
+    private String isPublic;
 
     @Builder
-    public WardrobeUpdateRequestDto(Image image, String name, boolean isPublic) {
+    public WardrobeUpdateRequestDto(Image image, String name, String isPublic) {
         this.image = image;
         this.name = name;
         this.isPublic = isPublic;
