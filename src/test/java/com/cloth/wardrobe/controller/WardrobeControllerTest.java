@@ -201,7 +201,7 @@ public class WardrobeControllerTest {
                         .imageS3Path("test/image/path")
                         .build());
 
-        assertThat(image.getImageS3Path()).isEqualTo("test/image/path");
+        assertThat(imageRepository.findById(1L).get().getImageS3Path()).isEqualTo("test/image/path");
     }
 
 }
