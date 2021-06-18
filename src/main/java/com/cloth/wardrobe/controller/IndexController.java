@@ -19,4 +19,9 @@ public class IndexController {
     public String wardrobesSave() {
         return "wardrobe/wardrobes-save";
     }
+
+    @GetMapping("/wardrobes")
+    public String wardrobes() {
+        return "wardrobe/wardrobes-list";
+    }
 }
