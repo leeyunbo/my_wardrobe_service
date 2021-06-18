@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
@@ -35,7 +36,7 @@ public class WardrobeController {
     }
 
     @GetMapping("/api/v1/wardrobes/{id}")
-    public WardrobeResponseRequestDto findById (@PathVariable Long id) {
+    public WardrobeGetRequestDto findById (@PathVariable Long id) {
         return wardrobeService.findById(id);
     }
 

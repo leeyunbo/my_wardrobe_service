@@ -35,8 +35,6 @@ public class WardrobeService {
 
     @Transactional
     public Long save(WardrobeSaveRequestDto requestDto, HttpSession httpSession) {
-        log.info("--------------------------------------save()-----------------------------------");
-
         Image image = imageRepository.save(
                 Image
                 .builder()
@@ -69,12 +67,12 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public WardrobeResponseRequestDto findById(Long id) {
+    public WardrobeGetRequestDto findById(Long id) {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        return new WardrobeResponseRequestDto(wardrobe);
+        return new WardrobeGetRequestDto(wardrobe);
     }
 
     /**
