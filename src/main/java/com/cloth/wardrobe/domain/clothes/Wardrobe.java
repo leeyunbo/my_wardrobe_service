@@ -33,7 +33,7 @@ public class Wardrobe extends BaseTimeEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
-    // 옷
+    // 옷장
     @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
     private List<Cloth> clothes = new ArrayList<>();
 
@@ -45,6 +45,10 @@ public class Wardrobe extends BaseTimeEntity {
     private String isPublic;
 
     private int likeCnt;
+
+    /* 옷장 내 옷 카운트 필드 추가 예정 */
+    // private int clothCnt;
+
 
     @Builder
     public Wardrobe(Member member, Image image, String name, String isPublic, int likeCnt) {
