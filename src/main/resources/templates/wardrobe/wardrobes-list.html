@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"> <head th:replace="fragments/header :: header" /> <body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>옷장 이름</th>
+                <th>걸려있는 옷</th>
+                <th>좋아요</th>
+                <th>옷장 주인</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="wardrobe : ${wardrobes}">
+                <td>
+                    <a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>
+                </td>
+                <td th:text="${wardrobe.clothes.size()}"></td>
+                <td th:text="${wardrobe.likeCnt}"></td>
+                <td th:text="${wardrobe.member.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+
+</body>
+<script>
+
+</script>
+</html>
