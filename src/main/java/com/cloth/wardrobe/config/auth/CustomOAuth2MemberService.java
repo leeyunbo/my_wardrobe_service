@@ -69,4 +69,15 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
 
         return memberRepository.save(member);
     }
+
+    /**
+     * Session 정보를 이용하여 회원 ID 정보를 가져온다.
+     * @param sessionMember
+     * @return
+     */
+    public Long getIdBySession(SessionMember sessionMember) {
+        return memberRepository.findByEmail(sessionMember.getEmail())
+                .get()
+                .getId();
+    }
 }
