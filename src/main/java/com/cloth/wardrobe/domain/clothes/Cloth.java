@@ -21,7 +21,7 @@ public class Cloth extends BaseTimeEntity {
     @Column(name = "cloth_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
@@ -29,7 +29,7 @@ public class Cloth extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "cloth")
+    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
     private String clothType;
@@ -42,7 +42,7 @@ public class Cloth extends BaseTimeEntity {
 
     private String clothBrand;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private List<Image> imagePath = new ArrayList<>();
+    //@OneToMany(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "image_id")
+    //private List<Image> imagePath = new ArrayList<>();
 }

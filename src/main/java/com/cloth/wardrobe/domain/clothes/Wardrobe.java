@@ -34,10 +34,10 @@ public class Wardrobe extends BaseTimeEntity {
     private Image image;
 
     // 옷장
-    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL)
     private List<Cloth> clothes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     private String name;

@@ -22,15 +22,13 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    private String subject;
 
     private String content;
 
@@ -39,7 +37,6 @@ public class Comment extends BaseTimeEntity {
         this.id = id;
         this.wardrobe = wardrobe;
         this.member = member;
-        this.subject = subject;
         this.content = content;
     }
 }
