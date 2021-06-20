@@ -29,15 +29,15 @@ public class Wardrobe extends BaseTimeEntity {
     private Member member;
 
     // 이미지
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image;
 
     // 옷장
-    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Cloth> clothes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wardrobe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     private String name;

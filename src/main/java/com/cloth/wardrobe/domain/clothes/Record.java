@@ -28,10 +28,9 @@ public class Record extends BaseTimeEntity {
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
-    // 이미지
-    //@OneToMany
-    //@JoinColumn(name = "image_id")
-    //private List<Image> imageS3Path = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private List<Image> imageS3Path = new ArrayList<>();
 
     private String subject;
 

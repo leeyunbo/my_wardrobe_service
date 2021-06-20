@@ -7,7 +7,6 @@ import com.cloth.wardrobe.domain.community.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.s3.Image;
-import com.cloth.wardrobe.domain.s3.ImageRepository;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
@@ -31,15 +30,13 @@ public class WardrobeService {
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
-    private final ImageRepository imageRepository;
 
     @Transactional
     public Long save(WardrobeSaveRequestDto requestDto, HttpSession httpSession) {
-        Image image = imageRepository.save(
-                Image
+        Image image = Image
                 .builder()
                 .imageS3Path(requestDto.getImage())
-                .build());
+                .build();
 
         SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
         Member member = memberRepository.findByEmail(sessionMember.getEmail())
@@ -141,9 +138,7 @@ public class WardrobeService {
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        Comment comment = commentRepository.save(commentSaveRequestDto.toEntity());
-
-        wardrobe.writeComment(comment);
+        wardrobe.writeComment(commentSaveRequestDto.toEntity());
 
         return id;
     }
