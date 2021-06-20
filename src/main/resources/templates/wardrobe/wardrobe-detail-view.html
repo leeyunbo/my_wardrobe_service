@@ -27,10 +27,17 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="comment-content" placeholder="댓글을 입력하세요.">
+            <button type="button" class="btn btn-primary" id="btn-comment-save">등록</button>
+        </div>
     </form>
 
     <br/>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
+
+<input type="hidden" id="wardrobe_id" th:value="${wardrobe.id}">
 </body>
 </html>
