@@ -42,7 +42,9 @@ public class WardrobeService {
                 .orElseThrow(() ->
                         new IllegalArgumentException("회원 정보가 잘못되었습니다."));
 
-        return wardrobeRepository.save(requestDto.toEntity(image, member)).getId();
+        requestDto.setMember(member);
+
+        return wardrobeRepository.save(requestDto.toEntity(image)).getId();
     }
 
     @Transactional
@@ -131,6 +133,12 @@ public class WardrobeService {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 멤버가 존재하지 않습니다. id=" + memberId));
+
+        commentSaveRequestDto.setMember(member);
 
         wardrobe.writeComment(commentSaveRequestDto.toEntity());
 

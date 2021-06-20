@@ -172,8 +172,6 @@ public class WardrobeControllerTest {
 
         CommentSaveRequestDto commentSaveRequestDto = CommentSaveRequestDto
                 .builder()
-                .member(member)
-                .subject("TEST 제목")
                 .content("TEST 내용")
                 .build();
 

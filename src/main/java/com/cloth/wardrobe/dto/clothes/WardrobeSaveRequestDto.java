@@ -6,12 +6,14 @@ import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 public class WardrobeSaveRequestDto {
 
     private String name;
+    @Setter
     private Member member;
     private String image;
     private int likeCnt;
@@ -26,7 +28,7 @@ public class WardrobeSaveRequestDto {
         this.likeCnt = 0;
     }
 
-    public Wardrobe toEntity(Image image, Member member) {
+    public Wardrobe toEntity(Image image) {
         return Wardrobe.builder()
                 .name(name)
                 .member(member)

@@ -59,11 +59,6 @@ public class WardrobeController {
         return wardrobeService.delLikeCnt(id);
     }
 
-    @GetMapping("/api/v1/wardrobes/{id}/comment")
-    public List<CommentResponseRequestDto> getComments(@PathVariable Long id) {
-        return wardrobeService.getComments(id);
-    }
-
     @PutMapping("/api/v1/wardrobes/{id}/comment")
     public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, HttpSession httpSession) {
         SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
