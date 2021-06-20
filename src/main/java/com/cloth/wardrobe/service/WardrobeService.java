@@ -32,14 +32,13 @@ public class WardrobeService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public Long save(WardrobeSaveRequestDto requestDto, HttpSession httpSession) {
+    public Long save(WardrobeSaveRequestDto requestDto, Long memberId) {
         Image image = Image
                 .builder()
                 .imageS3Path(requestDto.getImage())
                 .build();
 
-        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
-        Member member = memberRepository.findByEmail(sessionMember.getEmail())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("회원 정보가 잘못되었습니다."));
 
@@ -71,11 +70,6 @@ public class WardrobeService {
 
         return new WardrobeGetRequestDto(wardrobe);
     }
-
-    /**
-     * isPublic이 true인 옷장들의 리스트들을 좋아요 순으로 가져온다. (페이징 사용)
-     */
-
 
     /**
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
@@ -133,7 +127,7 @@ public class WardrobeService {
      * 댓글을 작성한다.
      */
     @Transactional
-    public Long writeComment(Long id, CommentSaveRequestDto commentSaveRequestDto) {
+    public Long writeComment(Long id, Long memberId, CommentSaveRequestDto commentSaveRequestDto) {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));

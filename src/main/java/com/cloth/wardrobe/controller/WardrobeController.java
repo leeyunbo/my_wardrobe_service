@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
@@ -23,11 +25,13 @@ import java.util.List;
 public class WardrobeController {
 
     private final WardrobeService wardrobeService;
+    private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @PostMapping("/api/v1/wardrobes")
     public Long save(@RequestBody WardrobeSaveRequestDto wardrobeSaveRequestDto, HttpSession httpSession) {
         log.info("--------------------------------------save()-----------------------------------");
-        return wardrobeService.save(wardrobeSaveRequestDto, httpSession);
+        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
+        return wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getIdBySession(sessionMember));
     }
 
     @PutMapping("/api/v1/wardrobes/{id}")
@@ -61,8 +65,9 @@ public class WardrobeController {
     }
 
     @PutMapping("/api/v1/wardrobes/{id}/comment")
-    public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto) {
-        return wardrobeService.writeComment(id, commentSaveRequestDto);
+    public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, HttpSession httpSession) {
+        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
+        return wardrobeService.writeComment(id, customOAuth2MemberService.getIdBySession(sessionMember), commentSaveRequestDto);
     }
 
     @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/comment/{commentId}")

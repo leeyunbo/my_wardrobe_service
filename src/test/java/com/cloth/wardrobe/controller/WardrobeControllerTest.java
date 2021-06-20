@@ -177,12 +177,12 @@ public class WardrobeControllerTest {
                 .content("TEST 내용")
                 .build();
 
-        wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
+        wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
 
         List<CommentResponseRequestDto> comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);
 
-        wardrobeService.writeComment(wardrobe.getId(), commentSaveRequestDto);
+        wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
 
         comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(2);
