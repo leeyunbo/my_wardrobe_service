@@ -71,6 +71,15 @@ public class Wardrobe extends BaseTimeEntity {
     }
 
     /**
+     * 옷장에 옷 제거
+     */
+    public Wardrobe deleteCloth(Cloth cloth) {
+        this.clothes.remove(cloth);
+        cloth.setWardrobe(null);
+        return this;
+    }
+
+    /**
      * 옷장 코멘트 작성
      * @param comment
      * @return
