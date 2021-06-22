@@ -5,6 +5,8 @@ import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class Cloth extends BaseTimeEntity {
     @Column(name = "cloth_id")
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
@@ -31,6 +34,9 @@ public class Cloth extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     private String clothType;
 

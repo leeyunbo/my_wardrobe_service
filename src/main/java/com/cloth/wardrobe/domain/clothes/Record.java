@@ -28,9 +28,8 @@ public class Record extends BaseTimeEntity {
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private List<Image> imageS3Path = new ArrayList<>();
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     private String subject;
 
