@@ -1,11 +1,13 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
+import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.matcher.FilterableList;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,6 +39,9 @@ public class Cloth extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 
     private String clothType;
 
