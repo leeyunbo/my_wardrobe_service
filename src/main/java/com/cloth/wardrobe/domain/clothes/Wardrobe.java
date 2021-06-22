@@ -37,7 +37,7 @@ public class Wardrobe extends BaseTimeEntity {
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL)
     private List<Cloth> clothes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     private String name;
@@ -65,7 +65,8 @@ public class Wardrobe extends BaseTimeEntity {
      * @return
      */
     public Wardrobe addCloth(Cloth cloth) {
-        clothes.add(cloth);
+        this.clothes.add(cloth);
+        cloth.setWardrobe(this);
         return this;
     }
 
@@ -75,7 +76,8 @@ public class Wardrobe extends BaseTimeEntity {
      * @return
      */
     public Wardrobe writeComment(Comment comment) {
-        comments.add(comment);
+        this.comments.add(comment);
+        comment.setWardrobe(this);
         return this;
     }
 
@@ -83,7 +85,8 @@ public class Wardrobe extends BaseTimeEntity {
      * 옷장 코멘트 제거
      */
     public Wardrobe deleteComment(Comment comment) {
-        comments.remove(comment);
+        this.comments.remove(comment);
+        comment.setWardrobe(null);
         return this;
     }
 

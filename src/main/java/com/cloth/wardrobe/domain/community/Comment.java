@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
 
@@ -22,10 +22,12 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -33,7 +35,7 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @Builder
-    public Comment(Long id, Wardrobe wardrobe, Member member, String subject, String content) {
+    public Comment(Long id, Wardrobe wardrobe, Member member, String content) {
         this.id = id;
         this.wardrobe = wardrobe;
         this.member = member;

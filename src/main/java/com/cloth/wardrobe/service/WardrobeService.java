@@ -1,6 +1,5 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
@@ -17,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -141,6 +138,7 @@ public class WardrobeService {
         commentSaveRequestDto.setMember(member);
 
         wardrobe.writeComment(commentSaveRequestDto.toEntity());
+
 
         return id;
     }
