@@ -2,11 +2,13 @@ package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.matcher.FilterableList;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,6 +41,9 @@ public class Wardrobe extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>();
 
     private String name;
 
@@ -103,16 +108,20 @@ public class Wardrobe extends BaseTimeEntity {
     /**
      * 좋아요수 증가
      */
-    public Wardrobe addLikeCnt() {
+    public Wardrobe addLikeCnt(Like like) {
         this.likeCnt++;
+        this.likes.add(like);
+        like.setWardrobe(this);
         return this;
     }
 
     /**
      * 좋아요수 감소
      */
-    public Wardrobe delLikeCnt() {
+    public Wardrobe delLikeCnt(Like like) {
         this.likeCnt--;
+        this.likes.remove(like);
+        like.setWardrobe(null);
         return this;
     }
 

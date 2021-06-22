@@ -3,6 +3,8 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
+import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.domain.community.LikeRepository;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.s3.Image;
@@ -27,6 +29,7 @@ public class WardrobeService {
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public Long save(WardrobeSaveRequestDto requestDto, Long memberId) {
@@ -83,12 +86,21 @@ public class WardrobeService {
      * 좋아요 수를 증가시킨다.
      */
     @Transactional
-    public Long addLikeCnt(Long id) {
+    public Long addLikeCnt(Long id, Long memberId) {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        wardrobe.addLikeCnt();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 멤버가 존재하지 않습니다. id=" + id));
+
+        Like like = Like.builder()
+                .member(member)
+                .wardrobe(wardrobe)
+                .build();
+
+        wardrobe.addLikeCnt(like);
 
         return id;
     }
@@ -97,12 +109,16 @@ public class WardrobeService {
      * 좋아요 수를 감소시킨다.
      */
     @Transactional
-    public Long delLikeCnt(Long id) {
+    public Long delLikeCnt(Long id, Long memberId) {
         Wardrobe wardrobe = wardrobeRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + id));
 
-        wardrobe.delLikeCnt();
+        Like like = likeRepository.findByMember_Id(memberId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("좋아요 오류"));
+
+        wardrobe.delLikeCnt(like);
 
         return id;
     }

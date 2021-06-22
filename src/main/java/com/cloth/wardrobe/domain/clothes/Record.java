@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
+import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class Record extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 
     private String subject;
 

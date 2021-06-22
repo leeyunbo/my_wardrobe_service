@@ -3,6 +3,7 @@ package com.cloth.wardrobe.domain.member;
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.domain.community.Like;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,9 @@ public class Member extends BaseTimeEntity {
     // 댓글
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Like> likes = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, String picture, Role role) {
