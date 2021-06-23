@@ -52,8 +52,4 @@ public class Cloth extends BaseTimeEntity {
     private String clothColor;
 
     private String clothBrand;
-
-    //@OneToMany(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "image_id")
-    //private List<Image> imagePath = new ArrayList<>();
 }
