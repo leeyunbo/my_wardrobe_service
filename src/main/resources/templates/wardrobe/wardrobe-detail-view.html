@@ -15,7 +15,13 @@
             <img th:src="${wardrobe.image.imageS3Path}" class="form-control" style="height: 400px; ">
         </div>
 
-        <br/> <br/>
+        <br/>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="btn-likecnt-change">좋아요</button>
+        </div>
+
+        <br/>
 
         <table class="table table-striped">
             <tbody>
@@ -39,5 +45,7 @@
 </div> <!-- /container -->
 
 <input type="hidden" id="wardrobe_id" th:value="${wardrobe.id}">
+<input type="hidden" id="is_like_user" th:value="${wardrobe.likeUser}">
+
 </body>
 </html>
