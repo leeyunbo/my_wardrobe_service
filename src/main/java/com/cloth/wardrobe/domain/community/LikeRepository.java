@@ -11,5 +11,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
      * @param memberId
      * @return Like 객체
      */
-    Optional<Like> findByMember_Id(Long memberId);
+    Optional<Like> findByMember_IdAndWardrobe_Id(Long memberId, Long wardrobeId);
 }
