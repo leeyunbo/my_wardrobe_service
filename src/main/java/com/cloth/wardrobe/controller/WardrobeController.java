@@ -52,13 +52,7 @@ public class WardrobeController {
     @PutMapping("/api/v1/wardrobes/{id}/like_cnt")
     public Long addLikeCnt(@PathVariable Long id, HttpSession httpSession) {
         SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
-        return wardrobeService.addLikeCnt(id, customOAuth2MemberService.getIdBySession(sessionMember));
-    }
-
-    @DeleteMapping("/api/v1/wardrobes/{id}/like_cnt")
-    public Long delLikeCnt(@PathVariable Long id, HttpSession httpSession) {
-        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
-        return wardrobeService.delLikeCnt(id, customOAuth2MemberService.getIdBySession(sessionMember));
+        return wardrobeService.changeLikeCnt(id, customOAuth2MemberService.getIdBySession(sessionMember));
     }
 
     @PutMapping("/api/v1/wardrobes/{id}/comment")
