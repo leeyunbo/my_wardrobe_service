@@ -106,25 +106,21 @@ public class Wardrobe extends BaseTimeEntity {
 
 
     /**
-     * 좋아요수 증가
+     * 좋아요수 변경
      */
-    public Wardrobe addLikeCnt(Like like) {
-        this.likeCnt++;
-        this.likes.add(like);
-        like.setWardrobe(this);
+    public Wardrobe changeLikeCnt(Like like, String method) {
+        if(method.equals("ADD")) {
+            this.likeCnt++;
+            this.likes.add(like);
+            like.setWardrobe(this);
+        }
+        else if(method.equals("DELETE")) {
+            this.likeCnt--;
+            this.likes.remove(like);
+            like.setWardrobe(null);
+        }
         return this;
     }
-
-    /**
-     * 좋아요수 감소
-     */
-    public Wardrobe delLikeCnt(Like like) {
-        this.likeCnt--;
-        this.likes.remove(like);
-        like.setWardrobe(null);
-        return this;
-    }
-
 
     /**
      * 업데이트 화면을 통한 옷장 정보 업데이트
