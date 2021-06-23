@@ -23,22 +23,18 @@ public class Like {
     private Long id;
 
     @ManyToOne
-    @Column(nullable = false)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
-    @Column(nullable = false)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
     @ManyToOne
-    @Column(nullable = false)
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
     @ManyToOne
-    @Column(nullable = false)
     @JoinColumn(name = "record_id")
     private Record record;
 
