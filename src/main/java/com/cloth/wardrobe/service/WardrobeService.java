@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.domain.clothes.MethodType;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.CommentRepository;
@@ -85,7 +86,7 @@ public class WardrobeService {
 
         try {
             Like like = findLikeByMemberIdAndWardrobeId(memberId, wardrobeId);
-            wardrobe.changeLikeCnt(like, "DELETE");
+            wardrobe.changeLikeCnt(like, MethodType.DELETE);
         }
         catch (IllegalArgumentException e){
             Like like =
@@ -93,7 +94,7 @@ public class WardrobeService {
                             .member(member)
                             .wardrobe(wardrobe)
                             .build();
-            wardrobe.changeLikeCnt(like, "ADD");
+            wardrobe.changeLikeCnt(like, MethodType.ADD);
         }
 
         return wardrobeId;

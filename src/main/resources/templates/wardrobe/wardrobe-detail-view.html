@@ -12,13 +12,14 @@
 
         <div class="form-group">
             <label th:for="image">옷장 내부</label>
-            <img th:src="${wardrobe.image.imageS3Path}" class="form-control" style="height: 400px; ">
+            <img th:src="${wardrobe.image.imageS3Path}" class="form-control" style="height: 400px;">
         </div>
 
         <br/>
 
         <div class="form-group">
-            <button type="button" class="btn btn-primary" id="btn-likecnt-change">좋아요</button>
+            <input type="button" class="btn btn-primary" id="btn-likecnt-change"
+                   th:value="${wardrobe.likeUser}==true ? '좋아요 취소 ' + ${wardrobe.likeCnt} : '좋아요 ' + ${wardrobe.likeCnt}"/>
         </div>
 
         <br/>
@@ -36,7 +37,7 @@
 
         <div class="form-group">
             <input type="text" class="form-control" id="comment-content" placeholder="댓글을 입력하세요.">
-            <button type="button" class="btn btn-primary" id="btn-comment-save">등록</button>
+            <input type="button" class="btn btn-primary" id="btn-comment-save" value="등록" style="float: right; margin-top:2px;"/>
         </div>
     </form>
 
@@ -45,7 +46,5 @@
 </div> <!-- /container -->
 
 <input type="hidden" id="wardrobe_id" th:value="${wardrobe.id}">
-<input type="hidden" id="is_like_user" th:value="${wardrobe.likeUser}">
-
 </body>
 </html>

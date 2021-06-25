@@ -108,13 +108,13 @@ public class Wardrobe extends BaseTimeEntity {
     /**
      * 좋아요수 변경
      */
-    public Wardrobe changeLikeCnt(Like like, String method) {
-        if(method.equals("ADD")) {
+    public Wardrobe changeLikeCnt(Like like, MethodType type) {
+        if(type.equals(MethodType.ADD)) {
             this.likeCnt++;
             this.likes.add(like);
             like.setWardrobe(this);
         }
-        else if(method.equals("DELETE")) {
+        else if(type.equals(MethodType.DELETE)) {
             this.likeCnt--;
             this.likes.remove(like);
             like.setWardrobe(null);
