@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
+import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.service.WardrobeService;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +24,11 @@ public class IndexController {
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @GetMapping("/")
-    public String home() {
+    public String home(Model model, @LoginUser SessionMember sessionMember) {
+        if(sessionMember != null) {
+            model.addAttribute("user", sessionMember);
+        }
+
         return "home";
     }
 
@@ -42,9 +45,8 @@ public class IndexController {
     }
 
     @GetMapping("/wardrobes/{id}")
-    public String wardrobeById(Model model, @PathVariable(name = "id") Long id, HttpSession httpSession) {
-        SessionMember sessionMember = (SessionMember) httpSession.getAttribute("user");
-        Long memberId = customOAuth2MemberService.getIdBySession(sessionMember);
+    public String wardrobeById(Model model, @PathVariable(name = "id") Long id, @LoginUser SessionMember sessionMember) {
+        Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = wardrobeService.isLikeUsers(memberId, id);
 
         WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(id);
@@ -52,5 +54,17 @@ public class IndexController {
 
         model.addAttribute("wardrobe", wardrobeGetRequestDto);
         return "wardrobe/wardrobe-detail-view";
+    }
+
+    @GetMapping("/member/wardrobe")
+    public String wardrobeByMember(Model model, @LoginUser SessionMember sessionMember) {
+        if(sessionMember != null) {
+            WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findByMember(sessionMember);
+            model.addAttribute("wardrobe", wardrobeGetRequestDto);
+            return "wardrobe/wardrobe-detail-view";
+        }
+        else {
+            return "home";
+        }
     }
 }
