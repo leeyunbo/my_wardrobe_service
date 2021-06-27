@@ -12,6 +12,10 @@ var main = {
         $('#btn-likecnt-change').on('click', function () {
             _this.change_likecnt();
         });
+
+        $('input[name=btn-comment-delete]').on('click', function () {
+            _this.delete_comment($(this).attr("id").replace('btn-comment-delete', ''));
+        })
     },
 
     save : function () {
@@ -54,6 +58,19 @@ var main = {
         })
     },
 
+    delete_comment : function (id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/wardrobes/'+ $('#wardrobe_id').val() +'/comment/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+        }).done(function() {
+            window.location.href = '/wardrobes/' + $('#wardrobe_id').val();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        })
+    },
+
     change_likecnt : function () {
         var likecnt_button_text = $('#btn-likecnt-change').val();
         $.ajax({
@@ -66,7 +83,7 @@ var main = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         })
-    },
+    }
 };
 
 main.init();

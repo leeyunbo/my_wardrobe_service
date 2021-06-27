@@ -8,13 +8,13 @@
 
     <div class="navbar-dark">
         <div th:if="${session.user == null}" class ="nav-tabs">
-            <a class="btn btn-lg btn-info" href="/oauth2/authorization/google">로그인</a>
+            <a class="btn btn-dark" href="/oauth2/authorization/google">로그인</a>
         </div>
 
         <div th:if="${session.user != null}" class ="member-name-label">
             <img class="figure-img" th:src="${session.user.getPicture()}"> &nbsp;
             <td class="member-summary" th:text="${session.user.getName() + '님'}"></td>
-            <a class="btn btn-lg btn-info" href="">로그아웃</a>
+            <a class="btn btn-dark" href="">로그아웃</a>
         </div>
     </div>
 </div>
