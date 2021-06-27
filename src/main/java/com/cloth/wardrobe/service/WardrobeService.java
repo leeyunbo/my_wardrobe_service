@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.MethodType;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WardrobeService {
 
+    private final CustomOAuth2MemberService customOAuth2MemberService;
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
@@ -63,6 +66,22 @@ public class WardrobeService {
     @Transactional
     public WardrobeGetRequestDto findById(Long wardrobeId) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
+
+        return new WardrobeGetRequestDto(wardrobe);
+    }
+
+    /**
+     * 로그인한 유저의 옷장 정보를 가져온다.
+     * @param sessionMember
+     * @return
+     */
+    @Transactional
+    public WardrobeGetRequestDto findByMember(SessionMember sessionMember) {
+        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
+
+        Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
 
         return new WardrobeGetRequestDto(wardrobe);
     }
