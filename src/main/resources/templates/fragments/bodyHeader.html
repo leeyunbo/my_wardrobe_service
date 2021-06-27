@@ -12,7 +12,7 @@
         </div>
 
         <div th:if="${session.user != null}" class ="member-name-label">
-            <img class="figure-img" th:src="${session.user.getPicture()}"> &nbsp;
+            <img class="img-thumbnail" th:src="${session.user.getPicture()}"> &nbsp;
             <td class="member-summary" th:text="${session.user.getName() + '님'}"></td>
             <a class="btn btn-dark" href="">로그아웃</a>
         </div>
