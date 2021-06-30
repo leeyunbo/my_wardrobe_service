@@ -103,7 +103,7 @@ public class WardrobeService {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
         Member member = findMemberById(memberId);
 
-        if(wardrobe.getMember().getId() == member.getId()) {
+        if(wardrobe.getMember().getId().equals(member.getId())) {
             return wardrobeId;
         }
 
