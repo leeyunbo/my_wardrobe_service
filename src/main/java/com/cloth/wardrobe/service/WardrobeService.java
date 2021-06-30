@@ -103,6 +103,10 @@ public class WardrobeService {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
         Member member = findMemberById(memberId);
 
+        if(wardrobe.getMember().getId() == member.getId()) {
+            return wardrobeId;
+        }
+
         try {
             Like like = findLikeByMemberIdAndWardrobeId(memberId, wardrobeId);
             wardrobe.changeLikeCnt(like, MethodType.DELETE);
