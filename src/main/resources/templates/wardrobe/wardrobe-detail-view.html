@@ -18,8 +18,8 @@
         <br/>
 
         <div class="form-group">
-            <input type="button" class="btn btn-dark" id="btn-likecnt-change"
-                   th:value="${wardrobe.likeUser}==true ? '좋아요 취소 ' + ${wardrobe.likeCnt} : '좋아요 ' + ${wardrobe.likeCnt}"/>
+            <input type="button" class="btn btn-dark" id="btn-likecnt-change" th:disabled="${session.user.email == wardrobe.member.email} ? true : false"
+                   th:value="${wardrobe.likeUser==true} ? '좋아요 취소 ' + ${wardrobe.likeCnt} : '좋아요 ' + ${wardrobe.likeCnt}"/>
         </div>
 
         <br/>
