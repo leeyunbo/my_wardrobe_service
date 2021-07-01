@@ -1,10 +1,11 @@
 package com.cloth.wardrobe.domain.clothes;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "records")
 @Getter
 @NoArgsConstructor
-public class Record extends BaseTimeEntity {
+public class Record extends Post {
 
     @Id
     @GeneratedValue
@@ -38,4 +39,16 @@ public class Record extends BaseTimeEntity {
     private String subject;
 
     private String content;
+
+    public Record(Cloth cloth, String subject, String content) {
+        this.cloth = cloth;
+        this.subject = subject;
+        this.content = content;
+    }
+
+
+    @Override
+    public Post changeLikeCnt(Like like, MethodType type) {
+        return null;
+    }
 }

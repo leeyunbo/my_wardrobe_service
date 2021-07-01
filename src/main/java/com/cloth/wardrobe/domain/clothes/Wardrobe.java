@@ -1,15 +1,13 @@
 package com.cloth.wardrobe.domain.clothes;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.matcher.FilterableList;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +16,12 @@ import java.util.List;
 @Table(name = "wardrobes")
 @Getter
 @NoArgsConstructor
-public class Wardrobe extends BaseTimeEntity {
+public class Wardrobe extends Post {
 
     @Id
     @GeneratedValue
     @Column(name = "wardrobe_id")
     private Long id;
-
-    // 멤버
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     // 이미지
     @OneToOne(cascade = CascadeType.ALL)
@@ -57,12 +50,13 @@ public class Wardrobe extends BaseTimeEntity {
 
     @Builder
     public Wardrobe(Member member, Image image, String name, String isPublic, int likeCnt) {
-        this.member = member;
+        super.setMember(member);
         this.image = image;
         this.name = name;
         this.isPublic = isPublic;
         this.likeCnt = likeCnt;
     }
+
 
     /**
      * 옷장에 옷 추가

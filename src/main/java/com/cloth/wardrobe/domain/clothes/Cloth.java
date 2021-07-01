@@ -1,13 +1,12 @@
 package com.cloth.wardrobe.domain.clothes;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.community.Like;
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.s3.Image;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.bytebuddy.matcher.FilterableList;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.util.List;
 @Table(name = "clothes")
 @Getter
 @NoArgsConstructor
-public class Cloth extends BaseTimeEntity {
+public class Cloth extends Post {
 
     @Id
     @GeneratedValue
@@ -29,10 +28,6 @@ public class Cloth extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
@@ -52,4 +47,19 @@ public class Cloth extends BaseTimeEntity {
     private String clothColor;
 
     private String clothBrand;
+
+    @Builder
+    public Cloth(Wardrobe wardrobe, String clothType, LocalDateTime buyingDate, String buying_way, String clothColor, String clothBrand) {
+        this.wardrobe = wardrobe;
+        this.clothType = clothType;
+        this.buyingDate = buyingDate;
+        this.buying_way = buying_way;
+        this.clothColor = clothColor;
+        this.clothBrand = clothBrand;
+    }
+
+    @Override
+    public Post changeLikeCnt(Like like, MethodType type) {
+        return null;
+    }
 }
