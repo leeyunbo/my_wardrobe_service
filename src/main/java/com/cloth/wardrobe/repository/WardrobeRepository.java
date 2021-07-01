@@ -1,5 +1,6 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.repository;
 
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

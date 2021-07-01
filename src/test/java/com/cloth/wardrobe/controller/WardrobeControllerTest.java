@@ -3,13 +3,13 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
-import com.cloth.wardrobe.domain.s3.ImageRepository;
+import com.cloth.wardrobe.repository.ImageRepository;
 import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.domain.member.MemberRepository;
-import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
+import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.service.WardrobeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;

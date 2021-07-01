@@ -1,7 +1,6 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.repository;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.cloth.wardrobe.domain.clothes.Cloth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
