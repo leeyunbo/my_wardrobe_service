@@ -4,10 +4,12 @@ import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
+import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class WardrobeController {
 
+    private final CommunityService communityService;
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
@@ -46,8 +49,9 @@ public class WardrobeController {
 
     @PutMapping("/api/v1/wardrobes/{id}/like_cnt")
     public Long addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember).getId());
+        return communityService.changeLikeCnt(id,
+                customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
+                PostType.Wardrobe);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}/comment")
