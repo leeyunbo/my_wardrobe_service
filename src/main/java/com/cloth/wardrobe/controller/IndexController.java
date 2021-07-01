@@ -3,7 +3,9 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
+import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class IndexController {
 
+    private final CommunityService communityService;
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
@@ -45,11 +48,11 @@ public class IndexController {
     }
 
     @GetMapping("/wardrobes/{id}")
-    public String wardrobeById(Model model, @PathVariable(name = "id") Long id, @LoginUser SessionMember sessionMember) {
+    public String wardrobeById(Model model, @PathVariable(name = "id") Long postId, @LoginUser SessionMember sessionMember) {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
-        boolean isLikeUser = wardrobeService.isLikeUsers(memberId, id);
+        boolean isLikeUser = communityService.isLikeUsers(postId, memberId, PostType.Wardrobe);
 
-        WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(id);
+        WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(postId);
         wardrobeGetRequestDto.setLikeUser(isLikeUser);
 
         model.addAttribute("wardrobe", wardrobeGetRequestDto);
@@ -58,13 +61,18 @@ public class IndexController {
 
     @GetMapping("/member/wardrobe")
     public String wardrobeByMember(Model model, @LoginUser SessionMember sessionMember) {
-        if(sessionMember != null) {
-            WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findByMember(sessionMember);
-            model.addAttribute("wardrobe", wardrobeGetRequestDto);
-            return "wardrobe/wardrobe-detail-view";
+        try {
+            if (sessionMember != null) {
+                WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findByMember(sessionMember);
+                model.addAttribute("wardrobe", wardrobeGetRequestDto);
+                return "wardrobe/wardrobe-detail-view";
+            } else {
+                return "home";
+            }
         }
-        else {
-            return "home";
+        catch (IllegalArgumentException e) {
+            return "wardrobe/wardrobes-save";
+
         }
     }
 }
