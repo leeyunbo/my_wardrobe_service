@@ -1,15 +1,16 @@
-package com.cloth.wardrobe.domain.community;
+package com.cloth.wardrobe.repository;
 
+import com.cloth.wardrobe.domain.community.Like;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    /**
-     * 소셜 로그인으로 반환되는 email을 통해 이미 생성된 사용자인지 판단하기 위한 메서드
-     * @param memberId
-     * @return Like 객체
-     */
     Optional<Like> findByMember_IdAndWardrobe_Id(Long memberId, Long wardrobeId);
+
+    Optional<Like> findByMember_IdAndCloth_Id(Long memberId, Long clothId);
+
+    Optional<Like> findByMember_IdAndRecord_Id(Long memberId, Long recordId);
+
 }

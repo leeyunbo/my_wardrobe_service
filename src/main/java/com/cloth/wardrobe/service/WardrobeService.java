@@ -2,17 +2,14 @@ package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.clothes.MethodType;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.community.CommentRepository;
-import com.cloth.wardrobe.domain.community.Like;
-import com.cloth.wardrobe.domain.community.LikeRepository;
+import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.dto.clothes.*;
-import com.cloth.wardrobe.domain.clothes.WardrobeRepository;
+import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +30,6 @@ public class WardrobeService {
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
 
     @Transactional
     public Long save(WardrobeSaveRequestDto requestDto, Long memberId) {
@@ -94,47 +90,6 @@ public class WardrobeService {
         return wardrobeRepository.findAll(pageable);
     }
 
-
-    /**
-     * 좋아요 수를 증가시키거나 감소시킨다.
-     */
-    @Transactional
-    public Long changeLikeCnt(Long wardrobeId, Long memberId) {
-        Wardrobe wardrobe = findWardrobeById(wardrobeId);
-        Member member = findMemberById(memberId);
-
-        if(wardrobe.getMember().getId().equals(member.getId())) {
-            return wardrobeId;
-        }
-
-        try {
-            Like like = findLikeByMemberIdAndWardrobeId(memberId, wardrobeId);
-            wardrobe.changeLikeCnt(like, MethodType.DELETE);
-        }
-        catch (IllegalArgumentException e){
-            Like like =
-                    Like.builder()
-                            .member(member)
-                            .wardrobe(wardrobe)
-                            .build();
-            wardrobe.changeLikeCnt(like, MethodType.ADD);
-        }
-
-        return wardrobeId;
-    }
-
-    @Transactional
-    public boolean isLikeUsers(Long wardrobeId, Long memberId) {
-        try {
-            findLikeByMemberIdAndWardrobeId(memberId, wardrobeId);
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * 댓글을 모두 가져온다.
      */
@@ -191,11 +146,5 @@ public class WardrobeService {
         return commentRepository.findById(commentId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("댓글이 존재하지 않습니다. id=" + commentId));
-    }
-
-    private Like findLikeByMemberIdAndWardrobeId(Long memberId, Long wardrobeId) {
-        return likeRepository.findByMember_IdAndWardrobe_Id(memberId, wardrobeId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("좋아요를 누르지 않았습니다. id=" + memberId));
     }
 }
