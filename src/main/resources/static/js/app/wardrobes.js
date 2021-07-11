@@ -21,7 +21,9 @@ var main = {
     save : function () {
         var data = {
             name: $('#name').val(),
-            image: $('#image').val(),
+            image : {
+                imagePath: $('#image').val()
+            },
             content: $('#content').val(),
             isPublic: $('#isPublic').val()
         };
@@ -46,7 +48,7 @@ var main = {
         };
 
         $.ajax({
-            type: 'PUT',
+            type: 'POST',
             url: '/api/v1/wardrobes/'+ $('#wardrobe_id').val() +'/comment',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',

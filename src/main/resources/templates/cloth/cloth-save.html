@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="col-md-12">
+        <form>
+            <div class="form-group">
+                <label for="cloth_name">이름을 지어주세요.</label>
+                <input type="text" class="form-control" id="cloth_name" placeholder="옷 이름을 입력하세요.">
+            </div>
+
+            <div class="form-group">
+                <label for="image">대표할 사진을 선택해주세요.</label>
+                <img src="http://localhost:8080/image/example_image.jpeg" class="form-control" style="height: 400px; ">
+                <input type="image" value="image/example_image.jpeg" class="form-control" id="image" hidden>
+            </div>
+
+            <div class="form-group">
+                <label for="cloth_type">종류를 선택해주세요.</label>
+                <select name="clothType" id="cloth_type" class="form-control">
+                    <option value="티셔츠">티셔츠</option>
+                    <option value="셔츠">셔츠</option>
+                    <option value="바지">바지</option>
+                    <option value="겉옷">겉옷</option>
+                    <option value="신발">신발</option>
+                    <option value="악세서리">악세서리</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="buying_way">구매 방법을 입력해주세요.</label>
+                <input type="text" class="form-control" id="buying_way" placeholder="구매 방법을 입력하세요.">
+            </div>
+
+            <div class="form-group">
+                <label for="buying_date">구매한 날짜를 입력해주세요.</label>
+                <input type="date" class="form-control" id="buying_date" placeholder="구매한 날짜를 입력해주세요.">
+            </div>
+
+            <div class="form-group">
+                <label for="cloth_color">종류를 선택해주세요.</label>
+                <select name="cloth_color" id="cloth_color" class="form-control">
+                    <option value="블루">블루</option>
+                    <option value="네이비">네이비</option>
+                    <option value="옐로우">옐로우</option>
+                    <option value="화이트">화이트</option>
+                    <option value="블랙">블랙</option>
+                    <option value="베이지">베이지</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cloth_brand">브랜드를 입력해주세요.</label>
+                <input type="text" class="form-control" id="cloth_brand" placeholder="브랜드를 입력해주세요.">
+            </div>
+        </form>
+
+        <button type="button" class="btn btn-primary" id="btn-cloth-save">등록</button>
+    </div>
+
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<input type="hidden" id="wardrobe_id" th:value="${wardrobe.id}">
+
+</body>
+</html>
