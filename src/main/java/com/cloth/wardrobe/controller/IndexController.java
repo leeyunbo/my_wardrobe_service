@@ -72,7 +72,20 @@ public class IndexController {
         }
         catch (IllegalArgumentException e) {
             return "wardrobe/wardrobes-save";
-
         }
+    }
+
+    @GetMapping("/wardrobe/{id}/clothes")
+    public String clothesByWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
+        WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(wardrobeId);
+        model.addAttribute("wardrobe", wardrobeGetRequestDto);
+        return "cloth/cloth-list";
+    }
+
+    @GetMapping("/wardrobe/{id}/clothes/add")
+    public String addClothOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
+        WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(wardrobeId);
+        model.addAttribute("wardrobe", wardrobeGetRequestDto);
+        return "cloth/cloth-save";
     }
 }
