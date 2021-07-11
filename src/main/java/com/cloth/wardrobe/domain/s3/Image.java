@@ -22,24 +22,26 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue
     @Column(name = "image_id")
     private Long id;
+    private String imagePath;
 
-    private String imageS3Path;
 
-
+    @Setter
     @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     private Record record;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
     @Builder
-    public Image(String imageS3Path) {
-        this.imageS3Path = imageS3Path;
+    public Image(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
