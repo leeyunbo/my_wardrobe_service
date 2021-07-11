@@ -30,12 +30,11 @@ public class CommunityService {
      * 좋아요 수를 증가시키거나 감소시킨다.
      */
     @Transactional
-    public Long changeLikeCnt(Long postId, Long memberId, PostType type) {
-        Member member = findMemberById(memberId);
+    public Long changeLikeCnt(Long postId, Member member, PostType type) {
         Post post = findPostById(postId, type);
 
         try {
-            Like like = findLikeByMemberIdAndPostId(postId, memberId, type);
+            Like like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
             post.changeLikeCnt(like, MethodType.DELETE);
         }
         catch (IllegalArgumentException e){
