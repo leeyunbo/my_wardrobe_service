@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.dto.clothes;
 
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
@@ -15,12 +16,12 @@ public class WardrobeSaveRequestDto {
     private String name;
     @Setter
     private Member member;
-    private String image;
+    private Image image;
     private int likeCnt;
     private String isPublic;
 
     @Builder
-    public WardrobeSaveRequestDto(String name, Member member, String image, String isPublic) {
+    public WardrobeSaveRequestDto(String name, Member member, Image image, String isPublic) {
         this.name = name;
         this.member = member;
         this.image = image;
@@ -28,7 +29,7 @@ public class WardrobeSaveRequestDto {
         this.likeCnt = 0;
     }
 
-    public Wardrobe toEntity(Image image) {
+    public Post toEntity() {
         return Wardrobe.builder()
                 .name(name)
                 .member(member)

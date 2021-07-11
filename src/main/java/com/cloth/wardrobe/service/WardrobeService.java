@@ -2,6 +2,7 @@ package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.repository.CommentRepository;
@@ -32,16 +33,12 @@ public class WardrobeService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public Long save(WardrobeSaveRequestDto requestDto, Long memberId) {
-        Image image = Image
-                .builder()
-                .imageS3Path(requestDto.getImage())
-                .build();
+    public Long save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Long memberId) {
         Member member = findMemberById(memberId);
 
-        requestDto.setMember(member);
+        wardrobeSaveRequestDto.setMember(member);
 
-        return wardrobeRepository.save(requestDto.toEntity(image)).getId();
+        return wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
     }
 
     @Transactional
@@ -126,6 +123,16 @@ public class WardrobeService {
         Comment comment = findCommentById(commentId);
 
         wardrobe.deleteComment(comment);
+
+        return wardrobeId;
+    }
+
+    public Long addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
+        clothSaveRequestDto.setMember(member);
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        wardrobe.addCloth(
+                (Cloth) clothSaveRequestDto.toEntity()
+        );
 
         return wardrobeId;
     }
