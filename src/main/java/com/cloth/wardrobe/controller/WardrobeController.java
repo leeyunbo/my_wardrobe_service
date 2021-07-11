@@ -5,6 +5,7 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.dto.clothes.ClothSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
@@ -50,11 +51,11 @@ public class WardrobeController {
     @PutMapping("/api/v1/wardrobes/{id}/like_cnt")
     public Long addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return communityService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
+                customOAuth2MemberService.getMemberBySession(sessionMember),
                 PostType.Wardrobe);
     }
 
-    @PutMapping("/api/v1/wardrobes/{id}/comment")
+    @PostMapping("/api/v1/wardrobes/{id}/comment")
     public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
         return wardrobeService.writeComment(id,
                 customOAuth2MemberService.getMemberBySession(sessionMember).getId(), commentSaveRequestDto);
@@ -64,4 +65,10 @@ public class WardrobeController {
     public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId) {
         return wardrobeService.deleteComment(wardrobeId, commentId);
     }
+
+    @PostMapping("/api/v1/wardrobes/{id}/cloth")
+    public Long addCloth(@PathVariable Long wardrobeId, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
+        return wardrobeService.addCloth(wardrobeId, clothSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember));
+    }
+
 }
