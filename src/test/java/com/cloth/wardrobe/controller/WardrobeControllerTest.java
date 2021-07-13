@@ -223,7 +223,8 @@ public class WardrobeControllerTest {
         Cloth cloth = new Cloth();
         wardrobe.addCloth(cloth);
 
-        assertThat(clothService.findAll().size()).isEqualTo(1);
+        Pageable pageable = PageRequest.of(0,2);
+        assertThat(clothService.findAll(pageable).getTotalElements()).isEqualTo(1);
 
     }
 
