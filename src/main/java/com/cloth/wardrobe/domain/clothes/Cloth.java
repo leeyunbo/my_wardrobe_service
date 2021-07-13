@@ -2,6 +2,7 @@ package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class Cloth extends Post {
     private Long id;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
@@ -42,7 +43,7 @@ public class Cloth extends Post {
 
     private String clothType;
 
-    private LocalDateTime buyingDate;
+    private String buyingDate;
 
     private String buyingWay;
 
@@ -53,7 +54,7 @@ public class Cloth extends Post {
     private int likeCnt;
 
     @Builder
-    public Cloth(Wardrobe wardrobe, List<Image> images, String clothName, String clothType, LocalDateTime buyingDate, String buyingWay, String clothColor, String clothBrand) {
+    public Cloth(Wardrobe wardrobe, List<Image> images, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
         this.wardrobe = wardrobe;
         this.images = images;
         this.clothName = clothName;
