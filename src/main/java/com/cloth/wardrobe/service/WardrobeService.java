@@ -8,7 +8,6 @@ import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
-import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
@@ -32,6 +31,12 @@ public class WardrobeService {
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
 
+    /**
+     * 옷장의 정보를 저장한다.
+     * @param wardrobeSaveRequestDto
+     * @param memberId
+     * @return
+     */
     @Transactional
     public Long save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Long memberId) {
         Member member = findMemberById(memberId);
@@ -41,6 +46,12 @@ public class WardrobeService {
         return wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
     }
 
+    /**
+     * 옷장의 정보를 수정한다.
+     * @param wardrobeId
+     * @param requestDto
+     * @return
+     */
     @Transactional
     public Long update(Long wardrobeId, WardrobeUpdateRequestDto requestDto) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
@@ -127,12 +138,11 @@ public class WardrobeService {
         return wardrobeId;
     }
 
+    @Transactional
     public Long addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
-        clothSaveRequestDto.setMember(member);
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
-        wardrobe.addCloth(
-                (Cloth) clothSaveRequestDto.toEntity()
-        );
+
+        wardrobe.addCloth(clothSaveRequestDto.toEntity());
 
         return wardrobeId;
     }

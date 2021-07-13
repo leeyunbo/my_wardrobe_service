@@ -67,8 +67,8 @@ public class WardrobeController {
     }
 
     @PostMapping("/api/v1/wardrobes/{id}/cloth")
-    public Long addCloth(@PathVariable Long wardrobeId, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.addCloth(wardrobeId, clothSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember));
+    public Long addCloth(@PathVariable Long id, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
+        return wardrobeService.addCloth(id, clothSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
 }

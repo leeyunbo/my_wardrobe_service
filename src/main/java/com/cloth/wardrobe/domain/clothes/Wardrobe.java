@@ -8,10 +8,13 @@ import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Entity
 @Table(name = "wardrobes")
 @Getter
@@ -29,7 +32,7 @@ public class Wardrobe extends Post {
     private Image image;
 
     // 옷장
-    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cloth> clothes = new ArrayList<>();
 
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -66,6 +69,9 @@ public class Wardrobe extends Post {
     public Wardrobe addCloth(Cloth cloth) {
         this.clothes.add(cloth);
         cloth.setWardrobe(this);
+        for(Image image : cloth.getImages()) {
+            image.setCloth(cloth);
+        }
         return this;
     }
 
@@ -75,6 +81,9 @@ public class Wardrobe extends Post {
     public Wardrobe deleteCloth(Cloth cloth) {
         this.clothes.remove(cloth);
         cloth.setWardrobe(null);
+        for(Image image : cloth.getImages()) {
+            image.setCloth(null);
+        }
         return this;
     }
 

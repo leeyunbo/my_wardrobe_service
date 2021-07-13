@@ -29,7 +29,7 @@ public class WardrobeSaveRequestDto {
         this.likeCnt = 0;
     }
 
-    public Post toEntity() {
+    public Wardrobe toEntity() {
         return Wardrobe.builder()
                 .name(name)
                 .member(member)
