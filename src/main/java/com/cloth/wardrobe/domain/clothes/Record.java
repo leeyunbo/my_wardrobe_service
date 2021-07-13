@@ -3,8 +3,10 @@ package com.cloth.wardrobe.domain.clothes;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.s3.Image;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,20 +28,24 @@ public class Record extends Post {
      *  ManyToOne에서 사용된다.
      *  반대는 EAGER
      */
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
-    private List<Image> images = new ArrayList<>();
+    private final List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
-    private List<Like> likes = new ArrayList<>();
+    private final List<Like> likes = new ArrayList<>();
 
     private String subject;
 
     private String content;
 
+    private int likeCnt;
+
+    @Builder
     public Record(Cloth cloth, String subject, String content) {
         this.cloth = cloth;
         this.subject = subject;
@@ -49,6 +55,18 @@ public class Record extends Post {
 
     @Override
     public Post changeLikeCnt(Like like, MethodType type) {
-        return null;
+        switch (type) {
+            case ADD:
+                this.likeCnt++;
+                this.likes.add(like);
+                like.setRecord(this);
+                break;
+            case DELETE:
+                this.likeCnt--;
+                this.likes.remove(like);
+                like.setRecord(null);
+                break;
+        }
+        return this;
     }
 }

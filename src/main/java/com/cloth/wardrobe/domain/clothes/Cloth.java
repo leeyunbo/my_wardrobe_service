@@ -31,13 +31,13 @@ public class Cloth extends Post {
     private Wardrobe wardrobe;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Record> records = new ArrayList<>();
+    private final List<Record> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Like> likes = new ArrayList<>();
+    private final List<Like> likes = new ArrayList<>();
 
     public String clothName;
 
@@ -67,22 +67,31 @@ public class Cloth extends Post {
 
     @Override
     public Post changeLikeCnt(Like like, MethodType type) {
-        if(type.equals(MethodType.ADD)) {
-            this.likeCnt++;
-            this.likes.add(like);
-            like.setCloth(this);
+        switch (type) {
+            case ADD:
+                this.likeCnt++;
+                this.likes.add(like);
+                like.setCloth(this);
+                break;
+            case DELETE:
+                this.likeCnt--;
+                this.likes.remove(like);
+                like.setCloth(null);
+                break;
         }
-        else if(type.equals(MethodType.DELETE)) {
-            this.likeCnt--;
-            this.likes.remove(like);
-            like.setCloth(null);
-        }
+
         return this;
     }
 
     public Cloth addImage(Image image) {
         images.add(image);
         image.setCloth(this);
+        return this;
+    }
+
+    public Cloth addRecord(Record record) {
+        records.add(record);
+        record.setCloth(this);
         return this;
     }
 }
