@@ -16,6 +16,10 @@ var main = {
         $('input[name=btn-comment-delete]').on('click', function () {
             _this.delete_comment($(this).attr("id").replace('btn-comment-delete', ''));
         })
+
+        $('#wardrobe_image_view').on('click', function () {
+            _this.move_clothes();
+        })
     },
 
     save : function () {
@@ -85,6 +89,10 @@ var main = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         })
+    },
+
+    move_clothes : function () {
+        window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes';
     }
 };
 
