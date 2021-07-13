@@ -33,13 +33,14 @@ public class CommunityService {
     public Long changeLikeCnt(Long postId, Member member, PostType type) {
         Post post = findPostById(postId, type);
 
-        try {
-            Like like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
-            post.changeLikeCnt(like, MethodType.DELETE);
-        }
-        catch (IllegalArgumentException e){
-            Like like = createLikeByPostType(type, member, post);
-            post.changeLikeCnt(like, MethodType.ADD);
+        if(post != null) {
+            try {
+                Like like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
+                post.changeLikeCnt(like, MethodType.DELETE);
+            } catch (IllegalArgumentException e) {
+                Like like = createLikeByPostType(type, member, post);
+                post.changeLikeCnt(like, MethodType.ADD);
+            }
         }
 
         return postId;

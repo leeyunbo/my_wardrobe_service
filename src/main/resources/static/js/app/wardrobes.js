@@ -10,7 +10,7 @@ var main = {
         });
 
         $('#btn-likecnt-change').on('click', function () {
-            _this.change_likecnt();
+            _this.change_like();
         });
 
         $('input[name=btn-comment-delete]').on('click', function () {
@@ -77,8 +77,7 @@ var main = {
         })
     },
 
-    change_likecnt : function () {
-        var likecnt_button_text = $('#btn-likecnt-change').val();
+    change_like : function () {
         $.ajax({
             type: 'PUT',
             url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() + '/like_cnt',

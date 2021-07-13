@@ -86,7 +86,9 @@ public class IndexController {
     public String findClothById(Model model, @PathVariable(name = "id") Long id, @LoginUser SessionMember sessionMember) {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = communityService.isLikeUsers(id, memberId, PostType.Wardrobe);
+
         ClothGetResponseDto clothGetResponseDto = clothService.findById(id);
+        clothGetResponseDto.setLikeUser(isLikeUser);
 
         model.addAttribute("cloth", clothGetResponseDto);
         return "cloth/cloth-detail-view";
