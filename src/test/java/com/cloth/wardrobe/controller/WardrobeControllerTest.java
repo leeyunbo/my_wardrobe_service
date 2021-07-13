@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
@@ -10,6 +11,7 @@ import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.repository.WardrobeRepository;
+import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.WardrobeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,9 @@ public class WardrobeControllerTest {
 
     @Autowired
     WardrobeService wardrobeService;
+
+    @Autowired
+    ClothService clothService;
 
 
     @Autowired
@@ -195,10 +200,31 @@ public class WardrobeControllerTest {
         Image image = imageRepository.save(
                 Image
                         .builder()
-                        .imageS3Path("test/image/path")
+                        .imagePath("test/image/path")
                         .build());
 
-        assertThat(imageRepository.findById(1L).get().getImageS3Path()).isEqualTo("test/image/path");
+        assertThat(imageRepository.findById(1L).get().getImagePath()).isEqualTo("test/image/path");
+    }
+
+    @Test
+    public void 옷_저장_테스트() {
+        String name = "테스트 옷장";
+        String isPublic = "false";
+        int likeCnt = 0;
+        Member member = memberRepository.findById(1L).get();
+
+        Wardrobe wardrobe = wardrobeRepository.save(Wardrobe.builder()
+                .member(member)
+                .isPublic("true")
+                .likeCnt(likeCnt)
+                .name(name)
+                .build());
+
+        Cloth cloth = new Cloth();
+        wardrobe.addCloth(cloth);
+
+        assertThat(clothService.findAll().size()).isEqualTo(1);
+
     }
 
 }
