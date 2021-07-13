@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+    <form th:object="${cloth}">
+        <div class="form-group">
+            <label th:for="clothName">별명</label>
+            <span th:text="${cloth.clothName}" class="form-control"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:for="clothType">종류</label>
+            <span th:text="${cloth.clothType}" class="form-control"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:for="clothColor">색상</label>
+            <span th:text="${cloth.clothColor}" class="form-control"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:for="clothBrand">브랜드</label>
+            <span th:text="${cloth.clothBrand}" class="form-control"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:for="buyingWay">구매 방법</label>
+            <span th:text="${cloth.buyingWay}" class="form-control"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:for="buyingDate">구매 날짜</label>
+            <span th:text="${cloth.buyingDate}" class="form-control"></span>
+        </div>
+
+        <br/>
+
+        <div class="form-group">
+            <input type="button" class="btn btn-dark" id="btn-record-likecnt-change"
+                   th:value="${cloth.likeUser==true} ? '좋아요 취소 ' + ${cloth.likeCnt} : '좋아요 ' + ${cloth.likeCnt}"/>
+        </div>
+
+        <br/>
+
+        <table class="table table-striped">
+            <tbody>
+            <label>기록</label>
+            <tr th:each="record : *{records}" >
+                <td th:text="${record.getSubject()}"></td>
+                <td th:text="${record.getContent()}"></td>
+                <td th:text="${record.getCreatedDate()}"></td>
+<!--                <td><input type="button" th:if="${comment.member.email == session.user.email}" class="btn btn-dark" name="btn-comment-delete" th:id="'btn-comment-delete' + ${comment.id}" value="삭제"/></td>-->
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="record-subject" placeholder="제목을 입력하세요.">
+            <input type="text" class="form-control" id="record-content" placeholder="내용을 입력하세요.">
+            <input type="button" class="btn btn-dark" id="btn-record-save" value="등록" style="float: right; margin-top:2px;"/>
+        </div>
+    </form>
+
+    <br/>
+    <div th:replace="fragments/footer :: footer"></div>
+</div> <!-- /container -->
+
+<input type="hidden" class="form-control" id="cloth_id" th:value="${cloth.id}">
+
+</body>
+</html>
