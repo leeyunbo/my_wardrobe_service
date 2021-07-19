@@ -1,17 +1,21 @@
 package com.cloth.wardrobe.dto.records;
 
-import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class RecordSaveRequestDto {
+
+    @Setter
+    private Member member;
     private List<Image> images;
     private String subject;
     private String content;
@@ -25,6 +29,7 @@ public class RecordSaveRequestDto {
 
     public Record toEntity() {
         return Record.builder()
+                .member(member)
                 .images(images)
                 .subject(subject)
                 .content(content)

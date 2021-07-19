@@ -26,6 +26,11 @@ public class Wardrobe extends Post {
     @Column(name = "wardrobe_id")
     private Long id;
 
+    // 멤버
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    public Member member;
+
     // 이미지
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
@@ -53,7 +58,7 @@ public class Wardrobe extends Post {
 
     @Builder
     public Wardrobe(Member member, Image image, String name, String isPublic, int likeCnt) {
-        super.setMember(member);
+        this.member = member;
         this.image = image;
         this.name = name;
         this.isPublic = isPublic;

@@ -38,13 +38,14 @@ public class ClothService {
     public Long addRecord(Long clothId, Member member, RecordSaveRequestDto recordSaveRequestDto) {
         Cloth cloth = findClothById(clothId);
 
+        recordSaveRequestDto.setMember(member);
         cloth.addRecord(recordSaveRequestDto.toEntity());
 
         return clothId;
     }
 
     @Transactional
-    public Long deleteRecord(Long clothId, Long recordId) {
+    public Long deleteRecord(Long clothId, Long recordId, Member member) {
         Cloth cloth = findClothById(clothId);
 
         Record record = recordRepository.findById(recordId)
