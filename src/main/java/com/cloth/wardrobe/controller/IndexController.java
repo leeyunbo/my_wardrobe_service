@@ -5,7 +5,6 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
-import com.cloth.wardrobe.dto.clothes.ClothSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
@@ -82,10 +81,10 @@ public class IndexController {
     }
 
     //== Cloth 관련 ==//
-    @GetMapping("/cloth/{id}")
+    @GetMapping("/clothes/{id}")
     public String findClothById(Model model, @PathVariable(name = "id") Long id, @LoginUser SessionMember sessionMember) {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
-        boolean isLikeUser = communityService.isLikeUsers(id, memberId, PostType.Wardrobe);
+        boolean isLikeUser = communityService.isLikeUsers(id, memberId, PostType.Cloth);
 
         ClothGetResponseDto clothGetResponseDto = clothService.findById(id);
         clothGetResponseDto.setLikeUser(isLikeUser);
@@ -95,8 +94,9 @@ public class IndexController {
     }
 
     @GetMapping("/wardrobe/{id}/clothes")
-    public String clothesByWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
+    public String clothesOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
         WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(wardrobeId);
+
         model.addAttribute("wardrobe", wardrobeGetRequestDto);
         return "cloth/cloth-list";
     }

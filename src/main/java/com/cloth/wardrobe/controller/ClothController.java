@@ -37,7 +37,7 @@ public class ClothController {
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
-    public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, RecordSaveRequestDto recordSaveRequestDto) {
+    public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RecordSaveRequestDto recordSaveRequestDto) {
         Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
         return clothService.addRecord(clothId, member, recordSaveRequestDto);
     }
