@@ -1,16 +1,21 @@
 package com.cloth.wardrobe.dto.clothes;
 
 import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class ClothSaveRequestDto {
 
+    @Setter
+    private Member member;
     private List<Image> images;
     private String clothName;
     private String clothType;
@@ -32,6 +37,7 @@ public class ClothSaveRequestDto {
 
     public Cloth toEntity() {
         return Cloth.builder()
+                .member(member)
                 .clothName(clothName)
                 .clothBrand(clothBrand)
                 .clothColor(clothColor)

@@ -5,6 +5,8 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +33,16 @@ public class ClothController {
     }
 
     @PutMapping("/api/v1/clothes/{id}/like_cnt")
-    public Long addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
+    public Long changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return communityService.changeLikeCnt(id,
                 customOAuth2MemberService.getMemberBySession(sessionMember),
                 PostType.Cloth);
     }
+
+    @PostMapping("/api/v1/clothes/{clothId}/records")
+    public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, RecordSaveRequestDto recordSaveRequestDto) {
+        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
+        return clothService.addRecord(clothId, member, recordSaveRequestDto);
+    }
 }
+

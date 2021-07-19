@@ -1,8 +1,12 @@
 package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.clothes.Record;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
+import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
 import com.cloth.wardrobe.repository.ClothRepository;
+import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,14 +19,12 @@ import javax.transaction.Transactional;
 @Slf4j
 public class ClothService {
 
+    private final RecordRepository recordRepository;
     private final ClothRepository clothRepository;
 
     @Transactional
     public ClothGetResponseDto findById(Long clothId) {
-        Cloth cloth =
-                clothRepository.findById(clothId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("해당 멤버가 존재하지 않습니다. id=" + clothId));
+        Cloth cloth = findClothById(clothId);
 
         return new ClothGetResponseDto(cloth);
     }
@@ -30,5 +32,33 @@ public class ClothService {
     @Transactional
     public Page<Cloth> findAll(Pageable pageable) {
         return clothRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Long addRecord(Long clothId, Member member, RecordSaveRequestDto recordSaveRequestDto) {
+        Cloth cloth = findClothById(clothId);
+
+        cloth.addRecord(recordSaveRequestDto.toEntity());
+
+        return clothId;
+    }
+
+    @Transactional
+    public Long deleteRecord(Long clothId, Long recordId) {
+        Cloth cloth = findClothById(clothId);
+
+        Record record = recordRepository.findById(recordId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 기록이 존재하지 않습니다. id=" + recordId));
+
+        cloth.deleteRecord(record);
+
+        return clothId;
+    }
+
+    private Cloth findClothById(Long clothId) {
+        return clothRepository.findById(clothId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 품목이 존재하지 않습니다. id=" + clothId));
     }
 }
