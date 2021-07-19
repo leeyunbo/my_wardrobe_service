@@ -34,7 +34,7 @@ public class Record extends Post {
     private Cloth cloth;
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
-    private final List<Image> images = new ArrayList<>();
+    private List<Image> images;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private final List<Like> likes = new ArrayList<>();
@@ -46,7 +46,8 @@ public class Record extends Post {
     private int likeCnt;
 
     @Builder
-    public Record(Cloth cloth, String subject, String content) {
+    public Record(List<Image> images, Cloth cloth, String subject, String content) {
+        this.images = images;
         this.cloth = cloth;
         this.subject = subject;
         this.content = content;
