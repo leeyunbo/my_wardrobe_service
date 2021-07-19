@@ -5,6 +5,7 @@ import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
@@ -30,6 +31,7 @@ public class WardrobeService {
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
+    private final ClothRepository clothRepository;
 
     /**
      * 옷장의 정보를 저장한다.
@@ -138,11 +140,28 @@ public class WardrobeService {
         return wardrobeId;
     }
 
+    /**
+     * 옷을 추가한다.
+     */
     @Transactional
     public Long addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
 
+        clothSaveRequestDto.setMember(member);
         wardrobe.addCloth(clothSaveRequestDto.toEntity());
+
+        return wardrobeId;
+    }
+
+    /**
+     * 옷을 삭제한다.
+     */
+    @Transactional
+    public Long deleteCloth(Long wardrobeId, Long clothId, Member member) {
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        Cloth cloth = findClothById(clothId);
+
+        wardrobe.deleteCloth(cloth);
 
         return wardrobeId;
     }
@@ -163,5 +182,11 @@ public class WardrobeService {
         return commentRepository.findById(commentId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("댓글이 존재하지 않습니다. id=" + commentId));
+    }
+
+    private Cloth findClothById(Long clothId) {
+        return clothRepository.findById(clothId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("해당 품목이 존재하지 않습니다. id=" + clothId));
     }
 }
