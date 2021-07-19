@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +40,12 @@ public class ClothController {
     public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, RecordSaveRequestDto recordSaveRequestDto) {
         Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
         return clothService.addRecord(clothId, member, recordSaveRequestDto);
+    }
+
+    @DeleteMapping("/api/v1/clothes/{clothId}/records/{recordId}")
+    public Long deleteRecordOfCloth(@PathVariable Long clothId, @PathVariable Long recordId, @LoginUser SessionMember sessionMember) {
+        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
+        return clothService.deleteRecord(clothId, recordId, member);
     }
 }
 
