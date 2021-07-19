@@ -2,6 +2,7 @@ package com.cloth.wardrobe.domain.clothes;
 
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,11 @@ public class Record extends Post {
     @GeneratedValue
     @Column(name = "record_id")
     private Long id;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     /**
      *  LAZY : 프록시 객체를 우선으로 만들어놓고 할당해 놓은 후, 실제로 호출될 때 쿼리가 날라간다.
@@ -46,7 +52,8 @@ public class Record extends Post {
     private int likeCnt;
 
     @Builder
-    public Record(List<Image> images, Cloth cloth, String subject, String content) {
+    public Record(Member member, List<Image> images, Cloth cloth, String subject, String content) {
+        this.member = member;
         this.images = images;
         this.cloth = cloth;
         this.subject = subject;

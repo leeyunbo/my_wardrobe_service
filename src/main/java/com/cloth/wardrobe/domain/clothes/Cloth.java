@@ -30,6 +30,11 @@ public class Cloth extends Post {
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Record> records = new ArrayList<>();
 
@@ -54,7 +59,8 @@ public class Cloth extends Post {
     private int likeCnt;
 
     @Builder
-    public Cloth(Wardrobe wardrobe, List<Image> images, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+    public Cloth(Member member, Wardrobe wardrobe, List<Image> images, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+        this.member = member;
         this.wardrobe = wardrobe;
         this.images = images;
         this.clothName = clothName;
@@ -92,6 +98,12 @@ public class Cloth extends Post {
     public Cloth addRecord(Record record) {
         records.add(record);
         record.setCloth(this);
+        return this;
+    }
+
+    public Cloth deleteRecord(Record record) {
+        records.remove(record);
+        record.setCloth(null);
         return this;
     }
 }

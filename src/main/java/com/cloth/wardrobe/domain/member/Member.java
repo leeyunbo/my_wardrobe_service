@@ -2,6 +2,7 @@ package com.cloth.wardrobe.domain.member;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
@@ -41,8 +42,14 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Record> records = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Cloth> clothes = new ArrayList<>();
+
     // 댓글
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
