@@ -16,7 +16,7 @@
             <tbody>
             <tr th:each="cloth : ${wardrobe.clothes}">
                 <td>
-                    <a th:href="@{/cloth/{id} (id=${cloth.id})}">
+                    <a th:href="@{/clothes/{id} (id=${cloth.id})}">
                         <img src="http://localhost:8080/image/example_image.jpeg" style="height:100px;">
                     </a>
 <!--                    <a href="#" th:text="${cloth.images.get(0)}"></a>-->
