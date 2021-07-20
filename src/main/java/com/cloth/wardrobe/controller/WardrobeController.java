@@ -57,18 +57,34 @@ public class WardrobeController {
 
     @PostMapping("/api/v1/wardrobes/{id}/comment")
     public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.writeComment(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember).getId(), commentSaveRequestDto);
+        return wardrobeService.writeComment(
+                id,
+                customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
+                commentSaveRequestDto);
     }
 
     @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/comment/{commentId}")
-    public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId) {
-        return wardrobeService.deleteComment(wardrobeId, commentId);
+    public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
+        return wardrobeService.deleteComment(
+                wardrobeId,
+                commentId,
+                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
-    @PostMapping("/api/v1/wardrobes/{id}/cloth")
+    @PostMapping("/api/v1/wardrobes/{id}/clothes")
     public Long addCloth(@PathVariable Long id, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.addCloth(id, clothSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember));
+        return wardrobeService.addCloth(
+                id,
+                clothSaveRequestDto,
+                customOAuth2MemberService.getMemberBySession(sessionMember));
+    }
+
+    @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/clothes/{clothId}")
+    public Long deleteCloth(@PathVariable Long wardrobeId, @PathVariable Long clothId, @LoginUser SessionMember sessionMember) {
+        return wardrobeService.deleteCloth(
+                wardrobeId,
+                clothId,
+                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
 }

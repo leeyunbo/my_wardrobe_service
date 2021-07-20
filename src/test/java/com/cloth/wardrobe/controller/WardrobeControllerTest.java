@@ -189,7 +189,7 @@ public class WardrobeControllerTest {
         comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(2);
 
-        wardrobeService.deleteComment(wardrobe.getId(), comments.get(0).getId());
+        wardrobeService.deleteComment(wardrobe.getId(), comments.get(0).getId(), member);
 
         comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);

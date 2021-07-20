@@ -26,11 +26,13 @@
 
         <table class="table table-striped">
             <tbody>
-            <label>코디 기록</label>
+            <label>옷장에 대한 감상평을 남겨주세요! :)</label>
             <tr th:each="comment : *{comments}" >
                 <td th:text="${comment.member.name}"></td>
                 <td th:text="${comment.content}"></td>
-                <td th:text="${comment.createdDate}"></td>
+                <td th:text="${comment.getCreatedDate().getYear()} + '년 '
+                + ${comment.getCreatedDate().getMonthValue()} + '월 '
+                + ${comment.getCreatedDate().getDayOfMonth()} + '일'"></td>
                 <td><input type="button" th:if="${comment.member.email == session.user.email}" class="btn btn-dark" name="btn-comment-delete" th:id="'btn-comment-delete' + ${comment.id}" value="삭제"/></td>
             </tr>
             </tbody>
