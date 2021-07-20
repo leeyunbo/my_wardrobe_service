@@ -3,6 +3,7 @@ package com.cloth.wardrobe.dto.clothes;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class ClothGetResponseDto {
     private List<Like> likes;
     private List<Image> images;
     private List<Record> records;
+    private Member member;
     private Long id;
     private String clothName;
     private String clothType;
@@ -43,5 +45,6 @@ public class ClothGetResponseDto {
         this.clothBrand = cloth.getClothBrand();
         this.likes = cloth.getLikes();
         this.likeCnt = cloth.getLikeCnt();
+        this.member = cloth.getMember();
     }
 }
