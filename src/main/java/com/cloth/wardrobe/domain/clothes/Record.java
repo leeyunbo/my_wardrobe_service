@@ -35,7 +35,7 @@ public class Record extends Post {
      *  반대는 EAGER
      */
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
