@@ -8,6 +8,7 @@ import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
+import com.cloth.wardrobe.service.RecordService;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class IndexController {
 
+    private final RecordService recordService;
     private final CommunityService communityService;
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
@@ -106,6 +108,13 @@ public class IndexController {
         WardrobeGetRequestDto wardrobeGetRequestDto = wardrobeService.findById(wardrobeId);
         model.addAttribute("wardrobe", wardrobeGetRequestDto);
         return "cloth/cloth-save";
+    }
+
+    @GetMapping("/records")
+    public String findRecords(Model model) {
+        Pageable pageable = PageRequest.of(0,10);
+        model.addAttribute("records",recordService.findAll(pageable));
+        return "cloth/record-list";
     }
 
 }
