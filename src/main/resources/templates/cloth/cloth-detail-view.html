@@ -46,7 +46,7 @@
 
         <table class="table table-striped">
             <tbody>
-            <label>기록</label>
+            <label th:text="${cloth.member.name} + '님 만의 코디를 구경해보세요!'"></label>
             <tr th:each="record : *{records}" >
                 <td></td>
                 <td th:text="${record.getSubject()}"></td>
@@ -63,11 +63,11 @@
 
         <br/>
 
-        <div class="form-group">
+        <div class="form-group" th:if="${cloth.member.email == session.user.email}">
             <label for="record-image">해당 품목에 대한 나만의 코디를 보여주세요 :)</label>
             <img src="http://localhost:8080/image/example_image.jpeg" class="form-control" style="height: 150px; width:150px">
             <input type="image" value="image/example_image.jpeg" class="form-control" id="record-image" hidden>
-            <input type="text" class="form-control" id="record-subject" placeholder="제목을 입력하세요.">
+            <input type="text" class="form-control" id="record-subject" placeholder="제목을 입력하세요."> <br/>
             <textarea class="form-control" id="record-content" placeholder="내용을 입력하세요."></textarea>
             <input type="button" class="btn btn-dark" id="btn-record-save" value="등록" style="float: right; margin-top:2px;">
         </div>
