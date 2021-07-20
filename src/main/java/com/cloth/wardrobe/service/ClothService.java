@@ -38,6 +38,10 @@ public class ClothService {
     public Long addRecord(Long clothId, Member member, RecordSaveRequestDto recordSaveRequestDto) {
         Cloth cloth = findClothById(clothId);
 
+        if(!cloth.getMember().getEmail().equals(member.getEmail())) {
+            return -1L;
+        }
+
         recordSaveRequestDto.setMember(member);
         cloth.addRecord(recordSaveRequestDto.toEntity());
 
@@ -47,6 +51,10 @@ public class ClothService {
     @Transactional
     public Long deleteRecord(Long clothId, Long recordId, Member member) {
         Cloth cloth = findClothById(clothId);
+
+        if(!cloth.getMember().getEmail().equals(member.getEmail())) {
+            return -1L;
+        }
 
         Record record = recordRepository.findById(recordId)
                 .orElseThrow(() ->

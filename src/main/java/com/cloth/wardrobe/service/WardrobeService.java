@@ -131,9 +131,13 @@ public class WardrobeService {
      * 댓글을 삭제한다.
      */
     @Transactional
-    public Long deleteComment(Long wardrobeId, Long commentId) {
+    public Long deleteComment(Long wardrobeId, Long commentId, Member member) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
         Comment comment = findCommentById(commentId);
+
+        if(!comment.getMember().getEmail().equals(member.getEmail())) {
+            return -1L;
+        }
 
         wardrobe.deleteComment(comment);
 
@@ -146,6 +150,10 @@ public class WardrobeService {
     @Transactional
     public Long addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
+
+        if(!wardrobe.getMember().getEmail().equals(member.getEmail())) {
+            return -1L;
+        }
 
         clothSaveRequestDto.setMember(member);
         wardrobe.addCloth(clothSaveRequestDto.toEntity());
@@ -160,6 +168,10 @@ public class WardrobeService {
     public Long deleteCloth(Long wardrobeId, Long clothId, Member member) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
         Cloth cloth = findClothById(clothId);
+
+        if(!wardrobe.getMember().getEmail().equals(member.getEmail())) {
+            return -1L;
+        }
 
         wardrobe.deleteCloth(cloth);
 
