@@ -38,14 +38,18 @@ public class ClothController {
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
     public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RecordSaveRequestDto recordSaveRequestDto) {
-        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
-        return clothService.addRecord(clothId, member, recordSaveRequestDto);
+        return clothService.addRecord(
+                clothId,
+                customOAuth2MemberService.getMemberBySession(sessionMember),
+                recordSaveRequestDto);
     }
 
     @DeleteMapping("/api/v1/clothes/{clothId}/records/{recordId}")
     public Long deleteRecordOfCloth(@PathVariable Long clothId, @PathVariable Long recordId, @LoginUser SessionMember sessionMember) {
-        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
-        return clothService.deleteRecord(clothId, recordId, member);
+        return clothService.deleteRecord(
+                clothId,
+                recordId,
+                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 }
 
