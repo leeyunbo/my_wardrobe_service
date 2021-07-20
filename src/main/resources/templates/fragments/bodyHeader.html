@@ -12,9 +12,9 @@
         </div>
 
         <div th:if="${session.user != null}" class ="member-name-label">
-            <img class="img-thumbnail" th:src="${session.user.getPicture()}"> &nbsp;
-            <td class="member-summary" th:text="${session.user.getName() + '님'}"></td>
-            <a class="btn btn-dark" href="">로그아웃</a>
+            <img class="img-thumbnail" th:src="${session.user.getPicture()}" style="width:70px; height:70px"> &nbsp;
+            <td class="member-summary" th:text="${session.user.getName() + '님 안녕하세요 :)'}"></td>
+            <a class="btn btn-dark" href="" style="width: 90px;">로그아웃</a> <br/>
         </div>
     </div>
 </div>
