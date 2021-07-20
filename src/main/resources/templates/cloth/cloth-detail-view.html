@@ -64,7 +64,7 @@
         <br/>
 
         <div class="form-group" th:if="${cloth.member.email == session.user.email}">
-            <label for="record-image">해당 품목에 대한 나만의 코디를 보여주세요 :)</label>
+            <label for="record-image" th:text="'해당 품목에 대한 ' + ${cloth.member.name} + '님만의 코디를 보여주세요 :)'"></label>
             <img src="http://localhost:8080/image/example_image.jpeg" class="form-control" style="height: 150px; width:150px">
             <input type="image" value="image/example_image.jpeg" class="form-control" id="record-image" hidden>
             <input type="text" class="form-control" id="record-subject" placeholder="제목을 입력하세요."> <br/>
