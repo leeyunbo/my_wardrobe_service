@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClothRepository extends JpaRepository<Cloth, Long> {
 
-    @Query("SELECT c FROM Cloth c ORDER BY c.likeCnt ASC")
+    @Query("SELECT c FROM Cloth c ORDER BY c.likeCnt DESC")
     Page<Cloth> findAll(Pageable pageable);
 }
