@@ -13,8 +13,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="wardrobe : ${wardrobes}">
+            <tr th:each="wardrobe, idx : ${wardrobes}">
                 <td>
+                    <span th:if="${idx.index == 0}" style="font-size:30px;">👑경</span>
                     <a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>
                 </td>
                 <td th:text="${wardrobe.clothes.size()}"></td>
