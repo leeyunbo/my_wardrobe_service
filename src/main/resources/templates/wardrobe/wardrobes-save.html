@@ -13,20 +13,20 @@
     <div class="col-md-12">
         <form>
             <div class="form-group">
-                <label for="name">옷장 이름</label>
+                <label for="name">옷장 이름을 지어주세요.</label>
                 <input type="text" class="form-control" id="name" placeholder="옷장 이름을 입력하세요">
             </div>
 
             <div class="form-group">
-                <label for="image">옷장 사진</label>
-                <img src="http://localhost:8080/image/example_image.jpeg" class="form-control" style="height: 400px; ">
-                <input type="image" value="image/example_image.jpeg" class="form-control" id="image" hidden>
+                <label for="upload-image-form">옷장을 대표할 사진을 등록해주세요.</label>
+                <form method="POST" enctype="multipart/form-data" id="upload-image-form" class="custom-file-input">
+                    <input type="file" class="form-control" name="file" id="file">
+                </form>
             </div>
 
             <div class="form-group">
                 <label for="isPublic">사람들에게 나만의 옷장을 공개하세요!</label>
                 <select name="isPublic" id="isPublic" class="form-control">
-                    <option value=""></option>
                     <option value="true">공개 할래요!</option>
                     <option value="false">공개 안할래요..</option>
                 </select>

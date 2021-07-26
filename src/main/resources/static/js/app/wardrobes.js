@@ -25,19 +25,20 @@ var main = {
     save : function () {
         var data = {
             name: $('#name').val(),
-            image : {
-                imagePath: $('#image').val()
-            },
             content: $('#content').val(),
             isPublic: $('#isPublic').val()
         };
 
+        var formData = new FormData();
+        formData.append('file', $('#upload-image-form')[0]);
+        formData.append('wardrobeSaveRequestDto', new Blob([JSON.stringify(data)], {type: "application/json"}));
+
         $.ajax({
             type: 'POST',
             url: '/api/v1/wardrobes',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: formData,
+            processData: false,
+            contentType: false
         }).done(function() {
             alert('옷장을 만들었어요.');
             window.location.href = '/';
