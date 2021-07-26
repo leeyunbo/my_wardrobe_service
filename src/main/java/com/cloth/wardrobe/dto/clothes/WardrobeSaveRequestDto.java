@@ -16,6 +16,7 @@ public class WardrobeSaveRequestDto {
     private String name;
     @Setter
     private Member member;
+    @Setter
     private Image image;
     private int likeCnt;
     private String isPublic;

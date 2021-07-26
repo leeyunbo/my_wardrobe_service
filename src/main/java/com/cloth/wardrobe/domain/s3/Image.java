@@ -5,14 +5,22 @@ import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
+import com.cloth.wardrobe.dto.common.FileSaveRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
+import java.io.*;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Entity
 @Table(name = "images")
 @Getter
@@ -22,6 +30,7 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue
     @Column(name = "image_id")
     private Long id;
+
     private String imagePath;
 
 
@@ -43,5 +52,14 @@ public class Image extends BaseTimeEntity {
     @Builder
     public Image(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Image fileUpload(FileSaveRequestDto fileSaveRequestDto) throws IOException {
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(fileSaveRequestDto.getFilePath())));
+        stream.write(fileSaveRequestDto.getUploadFile().getBytes());
+        stream.close();
+        this.imagePath = fileSaveRequestDto.getFilePath();
+
+        return this;
     }
 }
