@@ -5,6 +5,10 @@ var main = {
             _this.save();
         });
 
+        $('#btn-file-save').on('click', function () {
+            _this.file_save();
+        });
+
         $('#btn-comment-save').on('click', function () {
             _this.save_comment();
         });
@@ -30,7 +34,7 @@ var main = {
         };
 
         var formData = new FormData();
-        formData.append('file', $('#upload-image-form')[0]);
+        formData.append('file', $('#file')[0].files[0]);
         formData.append('wardrobeSaveRequestDto', new Blob([JSON.stringify(data)], {type: "application/json"}));
 
         $.ajax({
@@ -42,6 +46,25 @@ var main = {
         }).done(function() {
             alert('옷장을 만들었어요.');
             window.location.href = '/';
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+
+    file_save : async function () {
+        var formData = new FormData();
+        formData.append("file", $('#file')[0].files[0]);
+
+        $.ajax({
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            url: '/api/v1/file',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+        }).done(function() {
+            alert('이미지를 업로드 했어요.');
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
