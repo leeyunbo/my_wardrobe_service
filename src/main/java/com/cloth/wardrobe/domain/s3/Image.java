@@ -4,21 +4,16 @@ import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
-import com.cloth.wardrobe.dto.common.FileSaveRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.*;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Entity
@@ -31,8 +26,11 @@ public class Image extends BaseTimeEntity {
     @Column(name = "image_id")
     private Long id;
 
-    private String imagePath;
+    private String imageLocalPath;
 
+    private String imageServerPath;
+
+    private String fileName;
 
     @Setter
     @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
@@ -50,16 +48,21 @@ public class Image extends BaseTimeEntity {
     private Cloth cloth;
 
     @Builder
-    public Image(String imagePath) {
-        this.imagePath = imagePath;
+    public Image(String imageLocalPath, String imageServerPath, String fileName) {
+        this.imageLocalPath = imageLocalPath;
+        this.imageServerPath = imageServerPath;
+        this.fileName = fileName;
     }
 
-    public Image fileUpload(FileSaveRequestDto fileSaveRequestDto) throws IOException {
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(fileSaveRequestDto.getFilePath())));
-        stream.write(fileSaveRequestDto.getUploadFile().getBytes());
-        stream.close();
-        this.imagePath = fileSaveRequestDto.getFilePath();
+    public Image fileUpload(MultipartFile file, String email) throws IOException {
+        StringBuilder realPathOfFile = new StringBuilder();
+        this.fileName = "UUID.randomUUID() + \"_\" + email + \"_\" + file.getOriginalFilename()";
+        this.imageLocalPath = "/Users/iyunbog/Downloads/Study/wardrobe_image/" + fileName;
+        this.imageServerPath = "/image/" + fileName;
 
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(imageLocalPath)));
+        stream.write(file.getBytes());
+        stream.close();
         return this;
     }
 }
