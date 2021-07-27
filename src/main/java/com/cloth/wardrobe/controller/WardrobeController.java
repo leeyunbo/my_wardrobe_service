@@ -5,6 +5,7 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.dto.clothes.ClothSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
@@ -16,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,9 +32,22 @@ public class WardrobeController {
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @PostMapping("/api/v1/wardrobes")
-    public Long save(@RequestBody WardrobeSaveRequestDto wardrobeSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.save(wardrobeSaveRequestDto,
-                customOAuth2MemberService.getMemberBySession(sessionMember).getId());
+    public ResponseEntity<?> save(@RequestPart(value="wardrobeSaveRequestDto") WardrobeSaveRequestDto wardrobeSaveRequestDto,
+                                  @RequestPart(value="file", required = true) MultipartFile file,
+                                  @LoginUser SessionMember sessionMember) {
+        if(file != null) {
+            try {
+                Image image = new Image().fileUpload(file, sessionMember.getEmail());
+                wardrobeSaveRequestDto.setImage(image);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember).getId());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}")
