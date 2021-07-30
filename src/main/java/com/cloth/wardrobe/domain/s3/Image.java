@@ -56,7 +56,7 @@ public class Image extends BaseTimeEntity {
 
     public Image fileUpload(MultipartFile file, String email) throws IOException {
         StringBuilder realPathOfFile = new StringBuilder();
-        this.fileName = "UUID.randomUUID() + \"_\" + email + \"_\" + file.getOriginalFilename()";
+        this.fileName = UUID.randomUUID() + "_" + email + "_" + file.getOriginalFilename();
         this.imageLocalPath = "/Users/iyunbog/Downloads/Study/wardrobe_image/" + fileName;
         this.imageServerPath = "/image/" + fileName;
 
