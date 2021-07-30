@@ -35,33 +35,23 @@ public class WardrobeController {
     public ResponseEntity<?> save(@RequestPart(value="wardrobeSaveRequestDto") WardrobeSaveRequestDto wardrobeSaveRequestDto,
                                   @RequestPart(value="file", required = true) MultipartFile file,
                                   @LoginUser SessionMember sessionMember) {
-        if(file != null) {
-            try {
-                Image image = new Image().fileUpload(file, sessionMember.getEmail());
-                wardrobeSaveRequestDto.setImage(image);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember).getId());
+        wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember), file);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}")
-    public Long update(@PathVariable Long id, @RequestBody WardrobeUpdateRequestDto wardrobeUpdateRequestDto) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody WardrobeUpdateRequestDto wardrobeUpdateRequestDto) {
         return wardrobeService.update(id, wardrobeUpdateRequestDto);
     }
 
     @GetMapping("/api/v1/wardrobes/{id}")
-    public WardrobeGetRequestDto findById (@PathVariable Long id) {
+    public ResponseEntity<?> findById (@PathVariable Long id) {
         return wardrobeService.findById(id);
     }
 
     @GetMapping("/api/v1/wardrobes")
-    public Page<Wardrobe> findAll(Pageable pageable) {
+    public ResponseEntity<?> findAll(Pageable pageable) {
         return wardrobeService.findAll(pageable);
     }
 

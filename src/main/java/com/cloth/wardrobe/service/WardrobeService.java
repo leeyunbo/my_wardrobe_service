@@ -5,6 +5,7 @@ import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
@@ -17,8 +18,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WardrobeService {
 
-    private final CustomOAuth2MemberService customOAuth2MemberService;
     private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
@@ -36,16 +40,32 @@ public class WardrobeService {
     /**
      * 옷장의 정보를 저장한다.
      * @param wardrobeSaveRequestDto
-     * @param memberId
      * @return
      */
     @Transactional
-    public Long save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Long memberId) {
-        Member member = findMemberById(memberId);
+    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) {
+        if(file != null) {
+            try {
+                Image image = new Image().fileUpload(file, member.getEmail());
+                wardrobeSaveRequestDto.setImage(image);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
 
-        wardrobeSaveRequestDto.setMember(member);
+        try {
+            wardrobeSaveRequestDto.setMember(member);
+            wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -55,12 +75,20 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public Long update(Long wardrobeId, WardrobeUpdateRequestDto requestDto) {
-        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+    public ResponseEntity<?> update(Long wardrobeId, WardrobeUpdateRequestDto requestDto) {
+        try {
+            Wardrobe wardrobe = findWardrobeById(wardrobeId);
 
-        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
+            wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return wardrobeId;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -70,21 +98,29 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public WardrobeGetRequestDto findById(Long wardrobeId) {
-        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+    public ResponseEntity<?> findById(Long wardrobeId) {
+        Wardrobe wardrobe;
 
-        return new WardrobeGetRequestDto(wardrobe);
+        try {
+            wardrobe = findWardrobeById(wardrobeId);
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(new WardrobeGetRequestDto(wardrobe), HttpStatus.OK);
     }
 
     /**
      * 로그인한 유저의 옷장 정보를 가져온다.
-     * @param sessionMember
+     * @param member
      * @return
      */
     @Transactional
-    public WardrobeGetRequestDto findByMember(SessionMember sessionMember) {
-        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
-
+    public WardrobeGetRequestDto findByMember(Member member) {
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
@@ -96,8 +132,20 @@ public class WardrobeService {
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
     @Transactional
-    public Page<Wardrobe> findAll(Pageable pageable) {
-        return wardrobeRepository.findAll(pageable);
+    public ResponseEntity<?> findAll(Pageable pageable) {
+        Page<Wardrobe> wardrobes;
+
+        try {
+            wardrobes = wardrobeRepository.findAll(pageable);
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(wardrobes, HttpStatus.OK);
     }
 
     /**
