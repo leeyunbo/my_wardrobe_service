@@ -197,13 +197,6 @@ public class WardrobeControllerTest {
 
     @Test
     public void 이미지_저장_테스트() {
-        Image image = imageRepository.save(
-                Image
-                        .builder()
-                        .imagePath("test/image/path")
-                        .build());
-
-        assertThat(imageRepository.findById(1L).get().getImagePath()).isEqualTo("test/image/path");
     }
 
     @Test
