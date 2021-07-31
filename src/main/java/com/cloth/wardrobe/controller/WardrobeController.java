@@ -35,9 +35,7 @@ public class WardrobeController {
     public ResponseEntity<?> save(@RequestPart(value="wardrobeSaveRequestDto") WardrobeSaveRequestDto wardrobeSaveRequestDto,
                                   @RequestPart(value="file", required = true) MultipartFile file,
                                   @LoginUser SessionMember sessionMember) {
-        wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember), file);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember), file);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}")
@@ -56,14 +54,14 @@ public class WardrobeController {
     }
 
     @PutMapping("/api/v1/wardrobes/{id}/like_cnt")
-    public Long addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return communityService.changeLikeCnt(id,
                 customOAuth2MemberService.getMemberBySession(sessionMember),
                 PostType.Wardrobe);
     }
 
     @PostMapping("/api/v1/wardrobes/{id}/comment")
-    public Long writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
         return wardrobeService.writeComment(
                 id,
                 customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
@@ -71,7 +69,7 @@ public class WardrobeController {
     }
 
     @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/comment/{commentId}")
-    public Long deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
         return wardrobeService.deleteComment(
                 wardrobeId,
                 commentId,
@@ -79,7 +77,7 @@ public class WardrobeController {
     }
 
     @PostMapping("/api/v1/wardrobes/{id}/clothes")
-    public Long addCloth(@PathVariable Long id, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> addCloth(@PathVariable Long id, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
         return wardrobeService.addCloth(
                 id,
                 clothSaveRequestDto,
@@ -87,7 +85,7 @@ public class WardrobeController {
     }
 
     @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/clothes/{clothId}")
-    public Long deleteCloth(@PathVariable Long wardrobeId, @PathVariable Long clothId, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> deleteCloth(@PathVariable Long wardrobeId, @PathVariable Long clothId, @LoginUser SessionMember sessionMember) {
         return wardrobeService.deleteCloth(
                 wardrobeId,
                 clothId,
