@@ -11,6 +11,8 @@ import com.cloth.wardrobe.repository.RecordRepository;
 import com.cloth.wardrobe.repository.WardrobeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +32,15 @@ public class CommunityService {
      * 좋아요 수를 증가시키거나 감소시킨다.
      */
     @Transactional
-    public Long changeLikeCnt(Long postId, Member member, PostType type) {
-        Post post = findPostById(postId, type);
+    public ResponseEntity<?> changeLikeCnt(Long postId, Member member, PostType type) {
+        Post post = null;
+
+        try {
+            post = findPostById(postId, type);
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
         if(post != null) {
             try {
@@ -40,10 +49,12 @@ public class CommunityService {
             } catch (IllegalArgumentException e) {
                 Like like = createLikeByPostType(type, member, post);
                 post.changeLikeCnt(like, MethodType.ADD);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
 
-        return postId;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
