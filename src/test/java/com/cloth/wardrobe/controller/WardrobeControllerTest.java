@@ -217,7 +217,8 @@ public class WardrobeControllerTest {
         wardrobe.addCloth(cloth);
 
         Pageable pageable = PageRequest.of(0,2);
-        assertThat(clothService.findAll(pageable).getTotalElements()).isEqualTo(1);
+        Page<Cloth> cloths = (Page<Cloth>) clothService.findAll(pageable).getBody();
+        assertThat(cloths.getTotalElements()).isEqualTo(1);
 
     }
 
