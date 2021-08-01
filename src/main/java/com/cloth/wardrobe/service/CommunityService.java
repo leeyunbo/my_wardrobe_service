@@ -115,6 +115,7 @@ public class CommunityService {
                     .orElseThrow(() ->
                             new IllegalArgumentException("해당 기록이 존재하지 않습니다. id=" + postId));
         }
+
         else return null;
     }
 
