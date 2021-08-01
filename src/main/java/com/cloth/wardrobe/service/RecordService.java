@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,12 @@ public class RecordService {
     private final RecordRepository recordRepository;
 
     @Transactional
-    public Page<Record> findAll(Pageable pageable) {
-        return recordRepository.findAll(pageable);
+    public ResponseEntity<?> findAll(Pageable pageable) {
+        try {
+            Page<Record> records = recordRepository.findAll(pageable);
+            return new ResponseEntity<>(records, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
