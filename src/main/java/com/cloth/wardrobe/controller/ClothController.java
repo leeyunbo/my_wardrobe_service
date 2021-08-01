@@ -3,15 +3,12 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.community.PostType;
-import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +23,7 @@ public class ClothController {
     private final CommunityService communityService;
 
     @PostMapping("/api/v1/clothes")
-    public Page<Cloth> findAll(Pageable pageable) {
+    public ResponseEntity<?> findAll(Pageable pageable) {
         return clothService.findAll(pageable);
     }
 
@@ -38,7 +35,7 @@ public class ClothController {
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
-    public Long addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RecordSaveRequestDto recordSaveRequestDto) {
+    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RecordSaveRequestDto recordSaveRequestDto) {
         return clothService.addRecord(
                 clothId,
                 customOAuth2MemberService.getMemberBySession(sessionMember),
@@ -46,7 +43,7 @@ public class ClothController {
     }
 
     @DeleteMapping("/api/v1/clothes/{clothId}/records/{recordId}")
-    public Long deleteRecordOfCloth(@PathVariable Long clothId, @PathVariable Long recordId, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable Long clothId, @PathVariable Long recordId, @LoginUser SessionMember sessionMember) {
         return clothService.deleteRecord(
                 clothId,
                 recordId,
