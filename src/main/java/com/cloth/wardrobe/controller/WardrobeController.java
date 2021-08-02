@@ -3,11 +3,8 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.PostType;
-import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.dto.clothes.ClothSaveRequestDto;
-import com.cloth.wardrobe.dto.clothes.WardrobeGetRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeUpdateRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
@@ -15,12 +12,13 @@ import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +32,7 @@ public class WardrobeController {
     @PostMapping("/api/v1/wardrobes")
     public ResponseEntity<?> save(@RequestPart(value="wardrobeSaveRequestDto") WardrobeSaveRequestDto wardrobeSaveRequestDto,
                                   @RequestPart(value="file", required = true) MultipartFile file,
-                                  @LoginUser SessionMember sessionMember) {
+                                  @LoginUser SessionMember sessionMember) throws IOException {
         return wardrobeService.save(wardrobeSaveRequestDto, customOAuth2MemberService.getMemberBySession(sessionMember), file);
     }
 
@@ -91,5 +89,4 @@ public class WardrobeController {
                 clothId,
                 customOAuth2MemberService.getMemberBySession(sessionMember));
     }
-
 }
