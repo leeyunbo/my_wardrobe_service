@@ -5,6 +5,7 @@ import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
 import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,53 +34,35 @@ public class ClothService {
 
     @Transactional
     public ResponseEntity<?> findAll(Pageable pageable) {
-        try {
-            Page<Cloth> cloths = clothRepository.findAll(pageable);
-            return new ResponseEntity<>(cloths, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Page<Cloth> cloths = clothRepository.findAll(pageable);
+        return new ResponseEntity<>(cloths, HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> addRecord(Long clothId, Member member, RecordSaveRequestDto recordSaveRequestDto) {
-        try {
-            Cloth cloth = findClothById(clothId);
+        Cloth cloth = findClothById(clothId);
 
-            if (!cloth.getMember().getEmail().equals(member.getEmail())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        if (!cloth.getMember().getEmail().equals(member.getEmail()))
+            throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            recordSaveRequestDto.setMember(member);
-            cloth.addRecord(recordSaveRequestDto.toEntity());
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        recordSaveRequestDto.setMember(member);
+        cloth.addRecord(recordSaveRequestDto.toEntity());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> deleteRecord(Long clothId, Long recordId, Member member) {
-        try {
-            Cloth cloth = findClothById(clothId);
+        Cloth cloth = findClothById(clothId);
 
-            if (!cloth.getMember().getEmail().equals(member.getEmail())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        if (!cloth.getMember().getEmail().equals(member.getEmail()))
+            throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            Record record = recordRepository.findById(recordId)
+        Record record = recordRepository.findById(recordId)
                     .orElseThrow(() ->
                             new IllegalArgumentException("해당 기록이 존재하지 않습니다. id=" + recordId));
 
-            cloth.deleteRecord(record);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        cloth.deleteRecord(record);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
