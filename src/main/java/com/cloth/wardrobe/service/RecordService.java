@@ -21,11 +21,7 @@ public class RecordService {
 
     @Transactional
     public ResponseEntity<?> findAll(Pageable pageable) {
-        try {
-            Page<Record> records = recordRepository.findAll(pageable);
-            return new ResponseEntity<>(records, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Page<Record> records = recordRepository.findAll(pageable);
+        return new ResponseEntity<>(records, HttpStatus.OK);
     }
 }
