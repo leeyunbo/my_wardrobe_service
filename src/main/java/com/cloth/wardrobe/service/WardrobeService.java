@@ -1,11 +1,10 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,27 +43,11 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) {
-        if(file != null) {
-            try {
-                Image image = new Image().fileUpload(file, member.getEmail());
-                wardrobeSaveRequestDto.setImage(image);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        try {
-            wardrobeSaveRequestDto.setMember(member);
-            wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) throws IOException {
+        Image image = new Image().fileUpload(file, member.getEmail());
+        wardrobeSaveRequestDto.setImage(image);
+        wardrobeSaveRequestDto.setMember(member);
+        wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -76,18 +60,8 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> update(Long wardrobeId, WardrobeUpdateRequestDto requestDto) {
-        try {
-            Wardrobe wardrobe = findWardrobeById(wardrobeId);
-
-            wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -99,18 +73,7 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> findById(Long wardrobeId) {
-        Wardrobe wardrobe;
-
-        try {
-            wardrobe = findWardrobeById(wardrobeId);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
         return new ResponseEntity<>(new WardrobeGetRequestDto(wardrobe), HttpStatus.OK);
     }
 
@@ -133,17 +96,7 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> findAll(Pageable pageable) {
-        Page<Wardrobe> wardrobes;
-
-        try {
-            wardrobes = wardrobeRepository.findAll(pageable);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Page<Wardrobe> wardrobes = wardrobeRepository.findAll(pageable);
 
         return new ResponseEntity<>(wardrobes, HttpStatus.OK);
     }
@@ -166,19 +119,11 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> writeComment(Long wardrobeId, Long memberId, CommentSaveRequestDto commentSaveRequestDto) {
-        try {
-            Wardrobe wardrobe = findWardrobeById(wardrobeId);
-            Member member = findMemberById(memberId);
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        Member member = findMemberById(memberId);
 
-            commentSaveRequestDto.setMember(member);
-            wardrobe.writeComment(commentSaveRequestDto.toEntity());
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        commentSaveRequestDto.setMember(member);
+        wardrobe.writeComment(commentSaveRequestDto.toEntity());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -188,20 +133,13 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> deleteComment(Long wardrobeId, Long commentId, Member member) {
-        try {
-            Wardrobe wardrobe = findWardrobeById(wardrobeId);
-            Comment comment = findCommentById(commentId);
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        Comment comment = findCommentById(commentId);
 
-            if (!comment.getMember().getEmail().equals(member.getEmail())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        if (!comment.getMember().getEmail().equals(member.getEmail()))
+            throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            wardrobe.deleteComment(comment);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        wardrobe.deleteComment(comment);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -211,21 +149,13 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
-        try {
-            Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
 
-            if (!wardrobe.getMember().getEmail().equals(member.getEmail())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        if (!wardrobe.getMember().getEmail().equals(member.getEmail()))
+            throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            clothSaveRequestDto.setMember(member);
-            wardrobe.addCloth(clothSaveRequestDto.toEntity());
-        } catch (IllegalArgumentException e) {
-            return  new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        clothSaveRequestDto.setMember(member);
+        wardrobe.addCloth(clothSaveRequestDto.toEntity());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -235,19 +165,13 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> deleteCloth(Long wardrobeId, Long clothId, Member member) {
-        try {
-            Wardrobe wardrobe = findWardrobeById(wardrobeId);
-            Cloth cloth = findClothById(clothId);
+        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+        Cloth cloth = findClothById(clothId);
 
-            if(!wardrobe.getMember().getEmail().equals(member.getEmail()))
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(!wardrobe.getMember().getEmail().equals(member.getEmail()))
+            throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            wardrobe.deleteCloth(cloth);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        wardrobe.deleteCloth(cloth);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
