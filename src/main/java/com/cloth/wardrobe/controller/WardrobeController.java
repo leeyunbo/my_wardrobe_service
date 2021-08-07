@@ -74,11 +74,15 @@ public class WardrobeController {
     }
 
     @PostMapping("/api/v1/wardrobes/{id}/clothes")
-    public ResponseEntity<?> addCloth(@PathVariable Long id, @RequestBody ClothSaveRequestDto clothSaveRequestDto, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> addCloth(@PathVariable Long id,
+                                      @RequestPart(value="clothSaveRequestDto") ClothSaveRequestDto clothSaveRequestDto,
+                                      @RequestPart(value="file") MultipartFile file,
+                                      @LoginUser SessionMember sessionMember) {
         return wardrobeService.addCloth(
                 id,
                 clothSaveRequestDto,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
+                customOAuth2MemberService.getMemberBySession(sessionMember)
+                ,file);
     }
 
     @DeleteMapping("/api/v1/wardrobes/{wardrobeId}/clothes/{clothId}")

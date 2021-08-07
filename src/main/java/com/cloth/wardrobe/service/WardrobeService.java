@@ -43,11 +43,15 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) throws IOException {
-        Image image = new Image().fileUpload(file, member.getEmail());
-        wardrobeSaveRequestDto.setImage(image);
-        wardrobeSaveRequestDto.setMember(member);
-        wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
+    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) {
+        try {
+            Image image = new Image().fileUpload(file, member.getEmail());
+            wardrobeSaveRequestDto.setImage(image);
+            wardrobeSaveRequestDto.setMember(member);
+            wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
+        } catch (IOException e) {
+            throw new BadRequestException("파일이 손상되었습니다.");
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -148,14 +152,21 @@ public class WardrobeService {
      * 옷을 추가한다.
      */
     @Transactional
-    public ResponseEntity<?> addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member) {
-        Wardrobe wardrobe = findWardrobeById(wardrobeId);
+    public ResponseEntity<?> addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member, MultipartFile file) {
+        try {
+            Wardrobe wardrobe = findWardrobeById(wardrobeId);
+            Image image = new Image().fileUpload(file, member.getEmail());
 
-        if (!wardrobe.getMember().getEmail().equals(member.getEmail()))
-            throw new BadRequestException("올바르지 않은 접근입니다.");
+            if (!wardrobe.getMember().getEmail().equals(member.getEmail()))
+                throw new BadRequestException("올바르지 않은 접근입니다.");
 
-        clothSaveRequestDto.setMember(member);
-        wardrobe.addCloth(clothSaveRequestDto.toEntity());
+            clothSaveRequestDto.setMember(member);
+            clothSaveRequestDto.setImage(image);
+            wardrobe.addCloth(clothSaveRequestDto.toEntity());
+        }
+        catch (IOException e) {
+            throw new BadRequestException("파일이 손상되었습니다.");
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

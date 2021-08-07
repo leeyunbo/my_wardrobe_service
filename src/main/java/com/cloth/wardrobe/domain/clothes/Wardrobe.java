@@ -74,9 +74,7 @@ public class Wardrobe extends Post {
     public Wardrobe addCloth(Cloth cloth) {
         this.clothes.add(cloth);
         cloth.setWardrobe(this);
-        for(Image image : cloth.getImages()) {
-            image.setCloth(cloth);
-        }
+        image.setCloth(cloth);
         return this;
     }
 
@@ -86,9 +84,7 @@ public class Wardrobe extends Post {
     public Wardrobe deleteCloth(Cloth cloth) {
         this.clothes.remove(cloth);
         cloth.setWardrobe(null);
-        for(Image image : cloth.getImages()) {
-            image.setCloth(null);
-        }
+        image.setCloth(null);
         return this;
     }
 
