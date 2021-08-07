@@ -43,7 +43,7 @@ public class Image extends BaseTimeEntity {
     private Record record;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 

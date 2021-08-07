@@ -14,9 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ClothSaveRequestDto {
 
-    @Setter
-    private Member member;
-    private List<Image> images;
+    @Setter private Member member;
+    @Setter private Image image;
     private String clothName;
     private String clothType;
     private String buyingDate;
@@ -25,8 +24,8 @@ public class ClothSaveRequestDto {
     private String clothBrand;
 
     @Builder
-    public ClothSaveRequestDto(List<Image> images, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
-        this.images = images;
+    public ClothSaveRequestDto(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+        this.image = image;
         this.clothName = clothName;
         this.clothType = clothType;
         this.buyingDate = buyingDate;
@@ -44,7 +43,7 @@ public class ClothSaveRequestDto {
                 .clothType(clothType)
                 .buyingWay(buyingWay)
                 .buyingDate(buyingDate)
-                .images(images)
+                .image(image)
                 .build();
     }
 }

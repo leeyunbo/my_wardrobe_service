@@ -38,8 +38,9 @@ public class Cloth extends Post {
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Record> records = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
-    private List<Image> images;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Like> likes = new ArrayList<>();
@@ -59,10 +60,10 @@ public class Cloth extends Post {
     private int likeCnt;
 
     @Builder
-    public Cloth(Member member, Wardrobe wardrobe, List<Image> images, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+    public Cloth(Member member, Wardrobe wardrobe, Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
         this.member = member;
         this.wardrobe = wardrobe;
-        this.images = images;
+        this.image = image;
         this.clothName = clothName;
         this.clothType = clothType;
         this.buyingDate = buyingDate;
@@ -86,12 +87,6 @@ public class Cloth extends Post {
                 break;
         }
 
-        return this;
-    }
-
-    public Cloth addImage(Image image) {
-        images.add(image);
-        image.setCloth(this);
         return this;
     }
 
