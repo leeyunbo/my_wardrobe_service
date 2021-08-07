@@ -11,6 +11,11 @@
         </div>
 
         <div class="form-group">
+            <label th:for="image">사진</label>
+            <img th:src="${cloth.image == null ? 'http://localhost:8080/image/no_image.png' : cloth.image.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 400px;">
+        </div>
+
+        <div class="form-group">
             <label th:for="clothType">종류</label>
             <span th:text="${cloth.clothType}" class="form-control"></span>
         </div>

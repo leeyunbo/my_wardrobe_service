@@ -18,8 +18,8 @@ import java.util.List;
 public class ClothGetResponseDto {
 
     private List<Like> likes;
-    private List<Image> images;
     private List<Record> records;
+    private Image image;
     private Member member;
     private Long id;
     private String clothName;
@@ -35,7 +35,7 @@ public class ClothGetResponseDto {
     @Builder
     public ClothGetResponseDto(Cloth cloth) {
         this.id = cloth.getId();
-        this.images = cloth.getImages();
+        this.image = cloth.getImage();
         this.records = cloth.getRecords();
         this.clothName = cloth.getClothName();
         this.clothType = cloth.getClothType();
