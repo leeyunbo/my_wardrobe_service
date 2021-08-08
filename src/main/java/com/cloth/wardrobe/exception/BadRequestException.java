@@ -14,7 +14,11 @@ public class BadRequestException extends RuntimeException {
         super(message, cause);
     }
 
-    public BadRequestException() {
+    public BadRequestException(Throwable cause) {
+        super(cause);
+    }
 
+    public BadRequestException() {
+        super();
     }
 }
