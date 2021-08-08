@@ -17,9 +17,8 @@
             <tr th:each="cloth : ${wardrobe.clothes}">
                 <td>
                     <a th:href="@{/clothes/{id} (id=${cloth.id})}">
-                        <img src="http://localhost:8080/image/example_image.jpeg" style="height:100px;">
+                        <img th:src="${cloth.image == null ? 'http://localhost:8080/image/no_image.png' : cloth.image.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 200px; width: 200px">
                     </a>
-<!--                    <a href="#" th:text="${cloth.images.get(0)}"></a>-->
                 </td>
                 <td th:text="${cloth.clothName}"></td>
                 <td th:text="${cloth.clothType}"></td>
