@@ -42,8 +42,7 @@ var main = {
             url: '/api/v1/wardrobes',
             data: formData,
             processData: false,
-            contentType: false,
-            timeout: 60000
+            contentType: false
         }).done(function() {
             alert('옷장을 만들었어요.');
             window.location.href = '/';
