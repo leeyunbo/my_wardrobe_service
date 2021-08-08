@@ -38,11 +38,18 @@ public class Like {
     @JoinColumn(name = "record_id")
     private Record record;
 
-    @Builder
-    public Like(Member member, Wardrobe wardrobe, Cloth cloth, Record record) {
+    public Like(Member member, Wardrobe wardrobe) {
         this.member = member;
         this.wardrobe = wardrobe;
+    }
+
+    public Like(Member member, Cloth cloth) {
+        this.member = member;
         this.cloth = cloth;
+    }
+
+    public Like(Member member, Record record) {
+        this.member = member;
         this.record = record;
     }
 }
