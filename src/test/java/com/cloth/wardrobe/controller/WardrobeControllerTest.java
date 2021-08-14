@@ -3,9 +3,8 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.dto.clothes.WardrobeGetResponseDto;
 import com.cloth.wardrobe.repository.ImageRepository;
-import com.cloth.wardrobe.dto.clothes.WardrobeResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
@@ -32,7 +31,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +45,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-// Spring이랑 엮어서 실행할래
 @Slf4j
 @Transactional
 @RunWith(SpringRunner.class)
@@ -152,7 +155,7 @@ public class WardrobeControllerTest {
         assertThat(
                 wardrobes
                 .get()
-                .map(WardrobeResponseRequestDto::new)
+                .map(WardrobeGetResponseDto::new)
                 .collect(Collectors.toList())
                 .size())
                     .isEqualTo(1);
@@ -202,7 +205,6 @@ public class WardrobeControllerTest {
     @Test
     public void 옷_저장_테스트() {
         String name = "테스트 옷장";
-        String isPublic = "false";
         int likeCnt = 0;
         Member member = memberRepository.findById(1L).get();
 
@@ -219,7 +221,19 @@ public class WardrobeControllerTest {
         Pageable pageable = PageRequest.of(0,2);
         Page<Cloth> cloths = (Page<Cloth>) clothService.findAll(pageable).getBody();
         assertThat(cloths.getTotalElements()).isEqualTo(1);
+    }
 
+    @Test
+    public void beanValidaiton() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
+        WardrobeSaveRequestDto wardrobeSaveRequestDto = new WardrobeSaveRequestDto("", null, null, "true");
+
+        Set<ConstraintViolation<WardrobeSaveRequestDto>> violationSet = validator.validate(wardrobeSaveRequestDto);
+        for (ConstraintViolation<WardrobeSaveRequestDto> wardrobeSaveRequestDtoConstraintViolation : violationSet) {
+            System.out.println("wardrobeSaveRequestDtoConstraintViolation = " + wardrobeSaveRequestDtoConstraintViolation);
+            System.out.println("wardrobeSaveRequestDtoConstraintViolation.getMessage() = " + wardrobeSaveRequestDtoConstraintViolation.getMessage());
+        }
     }
 
 }
