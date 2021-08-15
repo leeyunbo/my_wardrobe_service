@@ -8,17 +8,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class RecordSaveRequestDto {
 
-    @Setter
-    private Member member;
-    private List<Image> images;
-    private String subject;
-    private String content;
+    @Setter private Member member;
+    @Setter private List<Image> images;
+    @NotBlank private String subject;
+    @NotNull private String content;
 
     @Builder
     public RecordSaveRequestDto(List<Image> images, String subject, String content) {

@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @NoArgsConstructor
 public class CommentSaveRequestDto {
 
-    @Setter
-    private Member member;
-    private String content;
+    @Setter private Member member;
+    @NotBlank private String content;
 
     @Builder
     public CommentSaveRequestDto(String content) {

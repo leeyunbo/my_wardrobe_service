@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -16,11 +18,11 @@ public class ClothSaveRequestDto {
 
     @Setter private Member member;
     @Setter private Image image;
-    private String clothName;
-    private String clothType;
+    @NotBlank private String clothName;
+    @NotBlank private String clothType;
     private String buyingDate;
     private String buyingWay;
-    private String clothColor;
+    @NotBlank private String clothColor;
     private String clothBrand;
 
     @Builder
