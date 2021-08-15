@@ -39,8 +39,6 @@ public class WardrobeService {
 
     /**
      * 옷장의 정보를 저장한다.
-     * @param wardrobeSaveRequestDto
-     * @return
      */
     @Transactional
     public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) {
@@ -48,7 +46,7 @@ public class WardrobeService {
             Image image = new Image().fileUpload(file, member.getEmail());
             wardrobeSaveRequestDto.setImage(image);
             wardrobeSaveRequestDto.setMember(member);
-            wardrobeRepository.save((Wardrobe) wardrobeSaveRequestDto.toEntity()).getId();
+            wardrobeRepository.save(wardrobeSaveRequestDto.toEntity());
         } catch (IOException e) {
             throw new BadRequestException("파일이 손상되었습니다.");
         }
@@ -78,7 +76,7 @@ public class WardrobeService {
     @Transactional
     public ResponseEntity<?> findById(Long wardrobeId) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
-        return new ResponseEntity<>(new WardrobeGetRequestDto(wardrobe), HttpStatus.OK);
+        return new ResponseEntity<>(new WardrobeGetResponseDto(wardrobe), HttpStatus.OK);
     }
 
     /**
@@ -87,12 +85,12 @@ public class WardrobeService {
      * @return
      */
     @Transactional
-    public WardrobeGetRequestDto findByMember(Member member) {
+    public WardrobeGetResponseDto findByMember(Member member) {
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
 
-        return new WardrobeGetRequestDto(wardrobe);
+        return new WardrobeGetResponseDto(wardrobe);
     }
 
     /**
