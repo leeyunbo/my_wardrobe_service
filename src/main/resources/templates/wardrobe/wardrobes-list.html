@@ -18,9 +18,9 @@
                     <span th:if="${idx.index == 0}" style="font-size:30px;">👑</span>
                     <a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>
                 </td>
-                <td th:text="${wardrobe.clothes.size()}"></td>
+                <td th:text="${wardrobe.clothesCnt}"></td>
                 <td th:text="${wardrobe.likeCnt}"></td>
-                <td th:text="${wardrobe.member.name}"></td>
+                <td th:text="${wardrobe.memberName}"></td>
             </tr>
             </tbody>
         </table>
