@@ -9,7 +9,6 @@ import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +22,8 @@ public class ClothController {
     private final CommunityService communityService;
 
     @PostMapping("/api/v1/clothes")
-    public ResponseEntity<?> findAll(Pageable pageable) {
-        return clothService.findAll(pageable);
+    public ResponseEntity<?> findAll() {
+        return clothService.findAll();
     }
 
     @PutMapping("/api/v1/clothes/{id}/like_cnt")

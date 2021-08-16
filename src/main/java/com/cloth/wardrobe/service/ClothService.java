@@ -3,19 +3,18 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
+import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,15 +25,15 @@ public class ClothService {
     private final ClothRepository clothRepository;
 
     @Transactional
-    public ClothGetResponseDto findById(Long clothId) {
+    public ResponseForCloth findById(Long clothId) {
         Cloth cloth = findClothById(clothId);
 
-        return new ClothGetResponseDto(cloth);
+        return new ResponseForCloth(cloth);
     }
 
     @Transactional
-    public ResponseEntity<?> findAll(Pageable pageable) {
-        Page<Cloth> cloths = clothRepository.findAll(pageable);
+    public ResponseEntity<?> findAll() {
+        List<Cloth> cloths = clothRepository.findAll();
         return new ResponseEntity<>(cloths, HttpStatus.OK);
     }
 

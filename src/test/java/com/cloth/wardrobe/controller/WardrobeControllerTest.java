@@ -3,11 +3,11 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.dto.clothes.WardrobeGetResponseDto;
+import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.repository.ImageRepository;
 import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
-import com.cloth.wardrobe.dto.clothes.WardrobeSaveRequestDto;
+import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.service.ClothService;
@@ -88,7 +88,7 @@ public class WardrobeControllerTest {
     @Test
     @WithMockUser(roles="USER") //인증된 모의 사용자 생성, ROLE_USER 권한을 가진 사용자가 요청하는 것과 동일한 효과를 가지게 됨
     public void Post_Wardrobe_테스트() throws Exception {
-        WardrobeSaveRequestDto requestDto = WardrobeSaveRequestDto
+        RequestForWardrobeSave requestDto = RequestForWardrobeSave
                 .builder()
                 .name("name")
                 .member(memberRepository.findById(1L).get())
@@ -155,7 +155,7 @@ public class WardrobeControllerTest {
         assertThat(
                 wardrobes
                 .get()
-                .map(WardrobeGetResponseDto::new)
+                .map(ResponseForWardrobe::new)
                 .collect(Collectors.toList())
                 .size())
                     .isEqualTo(1);
@@ -218,19 +218,18 @@ public class WardrobeControllerTest {
         Cloth cloth = new Cloth();
         wardrobe.addCloth(cloth);
 
-        Pageable pageable = PageRequest.of(0,2);
-        Page<Cloth> cloths = (Page<Cloth>) clothService.findAll(pageable).getBody();
-        assertThat(cloths.getTotalElements()).isEqualTo(1);
+        List<Cloth> cloths = (List<Cloth>) clothService.findAll().getBody();
+        assertThat(cloths.size()).isEqualTo(1);
     }
 
     @Test
     public void beanValidaiton() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         Validator validator = validatorFactory.getValidator();
-        WardrobeSaveRequestDto wardrobeSaveRequestDto = new WardrobeSaveRequestDto("", null, null, "true");
+        RequestForWardrobeSave requestForWardrobeSave = new RequestForWardrobeSave("", null, null, "true");
 
-        Set<ConstraintViolation<WardrobeSaveRequestDto>> violationSet = validator.validate(wardrobeSaveRequestDto);
-        for (ConstraintViolation<WardrobeSaveRequestDto> wardrobeSaveRequestDtoConstraintViolation : violationSet) {
+        Set<ConstraintViolation<RequestForWardrobeSave>> violationSet = validator.validate(requestForWardrobeSave);
+        for (ConstraintViolation<RequestForWardrobeSave> wardrobeSaveRequestDtoConstraintViolation : violationSet) {
             System.out.println("wardrobeSaveRequestDtoConstraintViolation = " + wardrobeSaveRequestDtoConstraintViolation);
             System.out.println("wardrobeSaveRequestDtoConstraintViolation.getMessage() = " + wardrobeSaveRequestDtoConstraintViolation.getMessage());
         }

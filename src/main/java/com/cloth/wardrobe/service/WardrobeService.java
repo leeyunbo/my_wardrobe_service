@@ -4,6 +4,7 @@ import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobes;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
@@ -15,8 +16,6 @@ import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
 import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,12 +41,12 @@ public class WardrobeService {
      * 옷장의 정보를 저장한다.
      */
     @Transactional
-    public ResponseEntity<?> save(WardrobeSaveRequestDto wardrobeSaveRequestDto, Member member, MultipartFile file) {
+    public ResponseEntity<?> save(RequestForWardrobeSave requestForWardrobeSave, Member member, MultipartFile file) {
         try {
             Image image = new Image().fileUpload(file, member.getEmail());
-            wardrobeSaveRequestDto.setImage(image);
-            wardrobeSaveRequestDto.setMember(member);
-            wardrobeRepository.save(wardrobeSaveRequestDto.toEntity());
+            requestForWardrobeSave.setImage(image);
+            requestForWardrobeSave.setMember(member);
+            wardrobeRepository.save(requestForWardrobeSave.toEntity());
         } catch (IOException e) {
             throw new BadRequestException("파일이 손상되었습니다.");
         }
@@ -56,12 +56,9 @@ public class WardrobeService {
 
     /**
      * 옷장의 정보를 수정한다.
-     * @param wardrobeId
-     * @param requestDto
-     * @return
      */
     @Transactional
-    public ResponseEntity<?> update(Long wardrobeId, WardrobeUpdateRequestDto requestDto) {
+    public ResponseEntity<?> update(Long wardrobeId, RequestForWardrobeUpdate requestDto) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
         wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -70,37 +67,40 @@ public class WardrobeService {
 
     /**
      * 특정 옷장의 정보를 가져온다.
-     * @param wardrobeId
-     * @return
      */
     @Transactional
     public ResponseEntity<?> findById(Long wardrobeId) {
         Wardrobe wardrobe = findWardrobeById(wardrobeId);
-        return new ResponseEntity<>(new WardrobeGetResponseDto(wardrobe), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseForWardrobe(wardrobe), HttpStatus.OK);
     }
 
     /**
      * 로그인한 유저의 옷장 정보를 가져온다.
-     * @param member
-     * @return
      */
     @Transactional
-    public WardrobeGetResponseDto findByMember(Member member) {
+    public ResponseForWardrobe findByMember(Member member) {
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
 
-        return new WardrobeGetResponseDto(wardrobe);
+        return new ResponseForWardrobe(wardrobe);
     }
 
     /**
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
     @Transactional
-    public ResponseEntity<?> findAll(Pageable pageable) {
-        Page<Wardrobe> wardrobes = wardrobeRepository.findAll(pageable);
+    public ResponseEntity<?> findAll() {
+        List<ContentForWardrobes> wardrobes = new ArrayList<>();
+        ResponseForWardrobes responseForWardrobes = new ResponseForWardrobes();
 
-        return new ResponseEntity<>(wardrobes, HttpStatus.OK);
+        for(Wardrobe wardrobe : wardrobeRepository.findAll()) {
+            wardrobes.add(new ContentForWardrobes(wardrobe.getId(), wardrobe.getName(), wardrobe.getClothes().size(), wardrobe.getLikeCnt(), wardrobe.getMember().getName()));
+        }
+
+        responseForWardrobes.setContents(wardrobes);
+
+        return new ResponseEntity<>(responseForWardrobes, HttpStatus.OK);
     }
 
     /**
@@ -150,7 +150,7 @@ public class WardrobeService {
      * 옷을 추가한다.
      */
     @Transactional
-    public ResponseEntity<?> addCloth(Long wardrobeId, ClothSaveRequestDto clothSaveRequestDto, Member member, MultipartFile file) {
+    public ResponseEntity<?> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, Member member, MultipartFile file) {
         try {
             Wardrobe wardrobe = findWardrobeById(wardrobeId);
             Image image = new Image().fileUpload(file, member.getEmail());
@@ -158,9 +158,9 @@ public class WardrobeService {
             if (!wardrobe.getMember().getEmail().equals(member.getEmail()))
                 throw new BadRequestException("올바르지 않은 접근입니다.");
 
-            clothSaveRequestDto.setMember(member);
-            clothSaveRequestDto.setImage(image);
-            wardrobe.addCloth(clothSaveRequestDto.toEntity());
+            requestForClothSave.setMember(member);
+            requestForClothSave.setImage(image);
+            wardrobe.addCloth(requestForClothSave.toEntity());
         }
         catch (IOException e) {
             throw new BadRequestException("파일이 손상되었습니다.");

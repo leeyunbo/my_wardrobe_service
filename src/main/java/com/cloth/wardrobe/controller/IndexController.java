@@ -4,8 +4,8 @@ import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
-import com.cloth.wardrobe.dto.clothes.ClothGetResponseDto;
-import com.cloth.wardrobe.dto.clothes.WardrobeGetResponseDto;
+import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
+import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.RecordService;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.cloth.wardrobe.domain.community.PostType.Wardrobe;
 
@@ -50,9 +49,8 @@ public class IndexController {
     }
 
     @GetMapping("/wardrobes")
-    public String findWardrobes(Model model, @RequestParam(name = "page_number") int page) {
-        Pageable pageable = PageRequest.of(page-1,10);
-        model.addAttribute("wardrobes", wardrobeService.findAll(pageable).getBody());
+    public String findWardrobes(Model model) {
+        model.addAttribute("wardrobes", wardrobeService.findAll().getBody());
         return "wardrobe/wardrobes-list";
     }
 
@@ -61,10 +59,11 @@ public class IndexController {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = communityService.isLikeUsers(postId, memberId, Wardrobe);
 
-        WardrobeGetResponseDto wardrobeGetResponseDto = (WardrobeGetResponseDto) wardrobeService.findById(postId).getBody();
-        wardrobeGetResponseDto.setLikeUser(isLikeUser);
+        ResponseForWardrobe responseForWardrobe = (ResponseForWardrobe) wardrobeService.findById(postId).getBody();
+        assert responseForWardrobe != null;
+        responseForWardrobe.setLikeUser(isLikeUser);
 
-        model.addAttribute("wardrobe", wardrobeGetResponseDto);
+        model.addAttribute("wardrobe", responseForWardrobe);
         return "wardrobe/wardrobe-detail-view";
     }
 
@@ -72,8 +71,8 @@ public class IndexController {
     public String findWardrobeByMember(Model model, @LoginUser SessionMember sessionMember) {
         try {
             if (sessionMember != null) {
-                WardrobeGetResponseDto wardrobeGetResponseDto = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
-                model.addAttribute("wardrobe", wardrobeGetResponseDto);
+                ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
+                model.addAttribute("wardrobe", responseForWardrobe);
                 return "wardrobe/wardrobe-detail-view";
             } else {
                 return "home";
@@ -90,25 +89,25 @@ public class IndexController {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = communityService.isLikeUsers(id, memberId, PostType.Cloth);
 
-        ClothGetResponseDto clothGetResponseDto = clothService.findById(id);
-        clothGetResponseDto.setLikeUser(isLikeUser);
+        ResponseForCloth responseForCloth = clothService.findById(id);
+        responseForCloth.setLikeUser(isLikeUser);
 
-        model.addAttribute("cloth", clothGetResponseDto);
+        model.addAttribute("cloth", responseForCloth);
         return "cloth/cloth-detail-view";
     }
 
     @GetMapping("/wardrobe/{id}/clothes")
     public String clothesOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
-        WardrobeGetResponseDto wardrobeGetResponseDto = (WardrobeGetResponseDto) wardrobeService.findById(wardrobeId).getBody();
+        ResponseForWardrobe responseForWardrobe = (ResponseForWardrobe) wardrobeService.findById(wardrobeId).getBody();
 
-        model.addAttribute("wardrobe", wardrobeGetResponseDto);
+        model.addAttribute("wardrobe", responseForWardrobe);
         return "cloth/cloth-list";
     }
 
     @GetMapping("/wardrobe/{id}/clothes/add")
     public String addClothOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId) {
-        WardrobeGetResponseDto wardrobeGetResponseDto = (WardrobeGetResponseDto) wardrobeService.findById(wardrobeId).getBody();
-        model.addAttribute("wardrobe", wardrobeGetResponseDto);
+        ResponseForWardrobe responseForWardrobe = (ResponseForWardrobe) wardrobeService.findById(wardrobeId).getBody();
+        model.addAttribute("wardrobe", responseForWardrobe);
         return "cloth/cloth-save";
     }
 
