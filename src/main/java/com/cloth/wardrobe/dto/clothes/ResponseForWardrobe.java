@@ -13,7 +13,9 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-public class WardrobeGetResponseDto {
+public class ResponseForWardrobe {
+    private Integer _code;
+    private String _message;
     private Long id;
     private Member member;
     private Image image;
@@ -23,11 +25,10 @@ public class WardrobeGetResponseDto {
     private String name;
     private String isPublic;
     private int likeCnt;
-    @Setter
-    private boolean isLikeUser;
+    @Setter private boolean isLikeUser;
 
     @Builder
-    public WardrobeGetResponseDto(Wardrobe wardrobe) {
+    public ResponseForWardrobe(Wardrobe wardrobe) {
         this.id = wardrobe.getId();
         this.member = wardrobe.getMember();
         this.image = wardrobe.getImage();

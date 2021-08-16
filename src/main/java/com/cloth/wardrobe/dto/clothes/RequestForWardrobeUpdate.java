@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class WardrobeUpdateRequestDto {
+public class RequestForWardrobeUpdate {
 
     private Image image;
     private String name;
     private String isPublic;
 
     @Builder
-    public WardrobeUpdateRequestDto(Image image, String name, String isPublic) {
+    public RequestForWardrobeUpdate(Image image, String name, String isPublic) {
         this.image = image;
         this.name = name;
         this.isPublic = isPublic;

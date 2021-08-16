@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class WardrobeSaveRequestDto {
+public class RequestForWardrobeSave {
 
     @NotNull @NotBlank private String name;
     @Setter private Member member;
@@ -22,7 +22,7 @@ public class WardrobeSaveRequestDto {
     @NotBlank private String isPublic;
 
     @Builder
-    public WardrobeSaveRequestDto(String name, Member member, Image image, String isPublic) {
+    public RequestForWardrobeSave(String name, Member member, Image image, String isPublic) {
         this.name = name;
         this.member = member;
         this.image = image;

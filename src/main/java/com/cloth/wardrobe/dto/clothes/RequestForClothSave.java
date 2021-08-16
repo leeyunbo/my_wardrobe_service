@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ClothSaveRequestDto {
+public class RequestForClothSave {
 
     @Setter private Member member;
     @Setter private Image image;
@@ -26,7 +26,7 @@ public class ClothSaveRequestDto {
     private String clothBrand;
 
     @Builder
-    public ClothSaveRequestDto(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+    public RequestForClothSave(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
         this.image = image;
         this.clothName = clothName;
         this.clothType = clothType;

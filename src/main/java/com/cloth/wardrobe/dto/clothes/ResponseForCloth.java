@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ClothGetResponseDto {
+public class ResponseForCloth {
 
     private List<Like> likes;
     private List<Record> records;
@@ -33,7 +33,7 @@ public class ClothGetResponseDto {
     private boolean isLikeUser;
 
     @Builder
-    public ClothGetResponseDto(Cloth cloth) {
+    public ResponseForCloth(Cloth cloth) {
         this.id = cloth.getId();
         this.image = cloth.getImage();
         this.records = cloth.getRecords();
