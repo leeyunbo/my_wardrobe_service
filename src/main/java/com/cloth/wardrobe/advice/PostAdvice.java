@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.advice;
 
+import com.cloth.wardrobe.dto.common.ResponseForError;
 import com.cloth.wardrobe.exception.WrongAccessException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -19,7 +20,7 @@ public class PostAdvice {
 
     @ExceptionHandler(WrongAccessException.class)
     public ResponseEntity<?> doNotClicked(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
-
 }

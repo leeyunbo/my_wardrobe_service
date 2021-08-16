@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.advice;
 
+import com.cloth.wardrobe.dto.common.ResponseForError;
 import com.cloth.wardrobe.exception.BadRequestException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -20,21 +21,25 @@ public class CommonAdvice {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> methodArgumentTypeMismatchError(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> noContent(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> internalServerError(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseForError responseForError = new ResponseForError(500, e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
