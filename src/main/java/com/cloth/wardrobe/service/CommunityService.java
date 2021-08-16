@@ -5,7 +5,7 @@ import com.cloth.wardrobe.domain.community.*;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.community.Like;
-import com.cloth.wardrobe.exception.DoNotClickedException;
+import com.cloth.wardrobe.exception.WrongAccessException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.LikeRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
@@ -40,7 +40,7 @@ public class CommunityService {
         try {
             like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
             post.changeLikeCnt(like, MethodType.DELETE);
-        } catch (DoNotClickedException e) {
+        } catch (WrongAccessException e) {
             like = createLikeByPostType(type, member, post);
             post.changeLikeCnt(like, MethodType.ADD);
         }
@@ -53,7 +53,7 @@ public class CommunityService {
         try {
             findLikeByMemberIdAndPostId(postId, memberId, type);
         }
-        catch (DoNotClickedException e) {
+        catch (WrongAccessException e) {
             return false;
         }
 
@@ -105,17 +105,17 @@ public class CommunityService {
         if(type.equals(PostType.Wardrobe)) {
             return likeRepository.findByMember_IdAndWardrobe_Id(memberId, postId)
                     .orElseThrow(() ->
-                            new DoNotClickedException("좋아요를 누르지 않았습니다. id=" + memberId));
+                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
         }
         else if(type.equals(PostType.Cloth)) {
             return likeRepository.findByMember_IdAndCloth_Id(memberId, postId)
                     .orElseThrow(() ->
-                            new DoNotClickedException("좋아요를 누르지 않았습니다. id=" + memberId));
+                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
         }
         else if(type.equals(PostType.Record)) {
             return likeRepository.findByMember_IdAndRecord_Id(memberId, postId)
                     .orElseThrow(() ->
-                            new DoNotClickedException("좋아요를 누르지 않았습니다. id=" + memberId));
+                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
         }
 
         else return null;
