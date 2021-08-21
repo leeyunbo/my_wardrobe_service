@@ -6,6 +6,7 @@ import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
+import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.RecordService;
@@ -18,13 +19,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import static com.cloth.wardrobe.domain.community.PostType.Wardrobe;
 
+/**
+ * 웹 Front를 위한 컨트롤러
+ * 웹 어플리케이션의 이동 및 서버로의 요청을 담당한다.
+ */
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class IndexController {
+public class WebController {
 
     private final RecordService recordService;
     private final CommunityService communityService;
@@ -50,7 +54,8 @@ public class IndexController {
 
     @GetMapping("/wardrobes")
     public String findWardrobes(Model model) {
-        model.addAttribute("wardrobes", wardrobeService.findAll().getBody());
+        ResponseForWardrobes responseForWardrobes = (ResponseForWardrobes) wardrobeService.findAll().getBody();
+        model.addAttribute("wardrobes", responseForWardrobes.getContents());
         return "wardrobe/wardrobes-list";
     }
 
@@ -60,7 +65,6 @@ public class IndexController {
         boolean isLikeUser = communityService.isLikeUsers(postId, memberId, Wardrobe);
 
         ResponseForWardrobe responseForWardrobe = (ResponseForWardrobe) wardrobeService.findById(postId).getBody();
-        assert responseForWardrobe != null;
         responseForWardrobe.setLikeUser(isLikeUser);
 
         model.addAttribute("wardrobe", responseForWardrobe);
