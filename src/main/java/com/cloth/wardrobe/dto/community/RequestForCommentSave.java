@@ -11,13 +11,13 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class CommentSaveRequestDto {
+public class RequestForCommentSave {
 
     @Setter private Member member;
     @NotBlank private String content;
 
     @Builder
-    public CommentSaveRequestDto(String content) {
+    public RequestForCommentSave(String content) {
         this.content = content;
     }
 
