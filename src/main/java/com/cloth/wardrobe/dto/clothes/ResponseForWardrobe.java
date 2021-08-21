@@ -6,6 +6,7 @@ import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.dto.common.ResponseForError;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +14,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-public class ResponseForWardrobe {
-    private Integer _code;
-    private String _message;
+public class ResponseForWardrobe extends ResponseForError {
     private Long id;
     private Member member;
     private Image image;

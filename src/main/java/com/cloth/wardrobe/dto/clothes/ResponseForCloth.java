@@ -5,6 +5,7 @@ import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.dto.common.ResponseForError;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ResponseForCloth {
+public class ResponseForCloth extends ResponseForError {
 
     private List<Like> likes;
     private List<Record> records;

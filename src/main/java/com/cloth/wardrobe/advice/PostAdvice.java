@@ -20,7 +20,9 @@ public class PostAdvice {
 
     @ExceptionHandler(WrongAccessException.class)
     public ResponseEntity<?> doNotClicked(Exception e) {
-        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        ResponseForError responseForError = new ResponseForError();
+        responseForError.set_code(200);
+        responseForError.set_message("권한이 없습니다.");
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 }

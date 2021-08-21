@@ -21,25 +21,33 @@ public class CommonAdvice {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> methodArgumentTypeMismatchError(Exception e) {
-        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        ResponseForError responseForError = new ResponseForError();
+        responseForError.set_code(200);
+        responseForError.set_message("잘못된 입력입니다.");
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(Exception e) {
-        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        ResponseForError responseForError = new ResponseForError();
+        responseForError.set_code(200);
+        responseForError.set_message("잘못된 접근입니다.");
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> noContent(Exception e) {
-        ResponseForError responseForError = new ResponseForError(400, e.getMessage());
+        ResponseForError responseForError = new ResponseForError();
+        responseForError.set_code(200);
+        responseForError.set_message("잘못된 접근입니다.");
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> internalServerError(Exception e) {
-        ResponseForError responseForError = new ResponseForError(500, e.getMessage());
+        ResponseForError responseForError = new ResponseForError();
+        responseForError.set_code(200);
+        responseForError.set_message("서버 점검 중입니다.");
         return new ResponseEntity<>(responseForError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
