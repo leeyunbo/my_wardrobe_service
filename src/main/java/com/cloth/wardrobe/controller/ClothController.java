@@ -21,7 +21,11 @@ public class ClothController {
     private final CustomOAuth2MemberService customOAuth2MemberService;
     private final CommunityService communityService;
 
-    @PostMapping("/api/v1/clothes")
+    @GetMapping("/api/v1/clothes/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        return clothService.findById(id);
+    }
+    @GetMapping("/api/v1/clothes")
     public ResponseEntity<?> findAll() {
         return clothService.findAll();
     }
