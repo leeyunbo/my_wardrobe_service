@@ -5,7 +5,7 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.RequestForClothSave;
-import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
+import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeUpdate;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
 import com.cloth.wardrobe.service.CommunityService;
@@ -58,7 +58,7 @@ public class WardrobeController {
     }
 
     @PostMapping("/api/v1/wardrobes/{id}/comment")
-    public ResponseEntity<?> writeComment(@PathVariable Long id, @RequestBody CommentSaveRequestDto commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
         return wardrobeService.writeComment(
                 id,
                 customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
