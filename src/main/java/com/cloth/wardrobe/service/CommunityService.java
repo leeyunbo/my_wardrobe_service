@@ -5,6 +5,8 @@ import com.cloth.wardrobe.domain.community.*;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.dto.common.Response;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.exception.WrongAccessException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.LikeRepository;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class CommunityService {
 
-    private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final ClothRepository clothRepository;
     private final RecordRepository recordRepository;
@@ -35,89 +36,44 @@ public class CommunityService {
     @Transactional
     public ResponseEntity<?> changeLikeCnt(Long postId, Member member, PostType type) {
         Post post = findPostById(postId, type);
-        Like like;
+        Like like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
 
-        try {
-            like = findLikeByMemberIdAndPostId(postId, member.getId(), type);
-            post.changeLikeCnt(like, MethodType.DELETE);
-        } catch (WrongAccessException e) {
-            like = createLikeByPostType(type, member, post);
-            post.changeLikeCnt(like, MethodType.ADD);
-        }
+        if(like == null) post.changeLikeCnt(new Like(member).setPost(post), MethodType.ADD);
+        else post.changeLikeCnt(like, MethodType.DELETE);
 
-        return new ResponseEntity<>(like.getId(), HttpStatus.OK);
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message("OK");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Transactional
     public boolean isLikeUsers(Long postId, Long memberId, PostType type) {
-        try {
-            findLikeByMemberIdAndPostId(postId, memberId, type);
-        }
-        catch (WrongAccessException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    private Like createLikeByPostType(PostType type, Member member, Post post) {
-        if(post instanceof Wardrobe) {
-            return new Like(member, (Wardrobe) post);
-        }
-        else if(post instanceof Cloth) {
-            return new Like(member, (Cloth) post);
-        }
-        else if(post instanceof Record) {
-            return new Like(member, (Record) post);
-        }
-
-        return null;
-    }
-
-    private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("해당 멤버가 존재하지 않습니다. id=" + memberId));
+        return findLikeByMemberIdAndPostId(postId, memberId, type) != null;
     }
 
     private Post findPostById(Long postId, PostType type) {
         if(type.equals(PostType.Wardrobe)) {
             return wardrobeRepository.findById(postId)
                     .orElseThrow(() ->
-                            new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + postId));
+                            new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + postId));
         }
         else if(type.equals(PostType.Cloth)) {
             return clothRepository.findById(postId)
                     .orElseThrow(() ->
-                            new IllegalArgumentException("해당 옷이 존재하지 않습니다. id=" + postId));
+                            new BadRequestException("해당 옷이 존재하지 않습니다. id=" + postId));
         }
-        else if(type.equals(PostType.Record)) {
+        else {
             return recordRepository.findById(postId)
                     .orElseThrow(() ->
-                            new IllegalArgumentException("해당 기록이 존재하지 않습니다. id=" + postId));
+                            new BadRequestException("해당 기록이 존재하지 않습니다. id=" + postId));
         }
-
-        else return null;
     }
 
     private Like findLikeByMemberIdAndPostId(Long postId, Long memberId, PostType type) {
-        if(type.equals(PostType.Wardrobe)) {
-            return likeRepository.findByMember_IdAndWardrobe_Id(memberId, postId)
-                    .orElseThrow(() ->
-                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
-        }
-        else if(type.equals(PostType.Cloth)) {
-            return likeRepository.findByMember_IdAndCloth_Id(memberId, postId)
-                    .orElseThrow(() ->
-                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
-        }
-        else if(type.equals(PostType.Record)) {
-            return likeRepository.findByMember_IdAndRecord_Id(memberId, postId)
-                    .orElseThrow(() ->
-                            new WrongAccessException("좋아요를 누르지 않았습니다. id=" + memberId));
-        }
-
-        else return null;
+        if(type.equals(PostType.Wardrobe)) return likeRepository.findByMember_IdAndWardrobe_Id(memberId, postId);
+        else if(type.equals(PostType.Cloth)) return likeRepository.findByMember_IdAndCloth_Id(memberId, postId);
+        else  return likeRepository.findByMember_IdAndRecord_Id(memberId, postId);
     }
 }
