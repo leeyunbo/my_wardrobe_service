@@ -73,16 +73,12 @@ public class WebController {
 
     @GetMapping("/member/wardrobe")
     public String findWardrobeByMember(Model model, @LoginUser SessionMember sessionMember) {
-        try {
-            if (sessionMember != null) {
-                ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
-                model.addAttribute("wardrobe", responseForWardrobe);
-                return "wardrobe/wardrobe-detail-view";
-            } else {
-                return "home";
-            }
+        ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
+        if(responseForWardrobe != null) {
+            model.addAttribute("wardrobe", responseForWardrobe);
+            return "wardrobe/wardrobe-detail-view";
         }
-        catch (IllegalArgumentException e) {
+        else {
             return "wardrobe/wardrobes-save";
         }
     }
@@ -93,7 +89,7 @@ public class WebController {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = communityService.isLikeUsers(id, memberId, PostType.Cloth);
 
-        ResponseForCloth responseForCloth = clothService.findById(id);
+        ResponseForCloth responseForCloth = (ResponseForCloth) clothService.findById(id).getBody();
         responseForCloth.setLikeUser(isLikeUser);
 
         model.addAttribute("cloth", responseForCloth);
