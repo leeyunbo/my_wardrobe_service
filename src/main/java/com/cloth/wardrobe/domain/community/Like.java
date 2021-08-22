@@ -38,18 +38,16 @@ public class Like {
     @JoinColumn(name = "record_id")
     private Record record;
 
-    public Like(Member member, Wardrobe wardrobe) {
+    public Like(Member member) {
         this.member = member;
-        this.wardrobe = wardrobe;
     }
 
-    public Like(Member member, Cloth cloth) {
-        this.member = member;
-        this.cloth = cloth;
+    public Like setPost(Post post) {
+        if(post instanceof Cloth) this.cloth = (Cloth) post;
+        else if(post instanceof Wardrobe) this.wardrobe = (Wardrobe) post;
+        else this.record = (Record) post;
+
+        return this;
     }
 
-    public Like(Member member, Record record) {
-        this.member = member;
-        this.record = record;
-    }
 }
