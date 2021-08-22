@@ -4,7 +4,7 @@ import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.s3.Image;
-import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobes;
+import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
@@ -96,11 +96,11 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> findAll() {
-        List<ContentForWardrobes> wardrobes = new ArrayList<>();
+        List<ContentForWardrobe> wardrobes = new ArrayList<>();
         ResponseForWardrobes responseForWardrobes = new ResponseForWardrobes();
 
         for(Wardrobe wardrobe : wardrobeRepository.findAll()) {
-            wardrobes.add(new ContentForWardrobes(
+            wardrobes.add(new ContentForWardrobe(
                     wardrobe.getId(),
                     wardrobe.getName(),
                     wardrobe.getClothes().size(),
