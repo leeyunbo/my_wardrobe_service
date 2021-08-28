@@ -1,9 +1,9 @@
 package com.cloth.wardrobe.dto.common;
 
 import lombok.Data;
+import lombok.Setter;
 
-@Data
 public class Response {
-    private Integer _code;
-    private String _message;
+    @Setter private Integer _code;
+    @Setter private String _message;
 }
