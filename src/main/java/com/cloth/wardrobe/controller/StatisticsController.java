@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,8 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping("api/v1/statistics")
-    public ResponseEntity<?> getStatistics() {
-        return statisticsService.getStatistics();
+    public ResponseEntity<ResponseForStatistics> findStatistics() {
+        return statisticsService.findStatistics();
     }
 
 }
