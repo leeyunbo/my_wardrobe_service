@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.dto.statistics;
 
+import com.cloth.wardrobe.domain.statistics.StatisticsType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ContentForStatistics {
     String name;
-    String type;
+    StatisticsType type;
     int percent;
     int count;
 }

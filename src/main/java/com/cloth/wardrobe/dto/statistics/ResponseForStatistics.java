@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public class ResponseForStatistics extends Response {
-    ContentForStatistics content;
+    List<ContentForStatistics> content;
 }
