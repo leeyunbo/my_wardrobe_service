@@ -86,7 +86,7 @@ public class WardrobeService {
     public ResponseForWardrobe findByMember(Member member) {
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
+                        new BadRequestException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
 
         return new ResponseForWardrobe(wardrobe);
     }
