@@ -52,6 +52,10 @@ public class WardrobeService {
             throw new BadRequestException("파일이 손상되었습니다.");
         }
 
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message("OK");
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
