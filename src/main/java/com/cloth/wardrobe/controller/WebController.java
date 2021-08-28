@@ -7,6 +7,7 @@ import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import com.cloth.wardrobe.service.RecordService;
@@ -73,12 +74,12 @@ public class WebController {
 
     @GetMapping("/member/wardrobe")
     public String findWardrobeByMember(Model model, @LoginUser SessionMember sessionMember) {
-        ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
-        if(responseForWardrobe != null) {
+        try {
+            ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember));
             model.addAttribute("wardrobe", responseForWardrobe);
             return "wardrobe/wardrobe-detail-view";
         }
-        else {
+        catch (BadRequestException e) {
             return "wardrobe/wardrobes-save";
         }
     }
