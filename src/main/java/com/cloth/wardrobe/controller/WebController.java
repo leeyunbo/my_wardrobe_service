@@ -7,11 +7,9 @@ import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
+import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.exception.BadRequestException;
-import com.cloth.wardrobe.service.ClothService;
-import com.cloth.wardrobe.service.CommunityService;
-import com.cloth.wardrobe.service.RecordService;
-import com.cloth.wardrobe.service.WardrobeService;
+import com.cloth.wardrobe.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +34,7 @@ public class WebController {
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
     private final ClothService clothService;
+    private final StatisticsService statisticsService;
 
     //== Home 관련 ==//
     @GetMapping("/")
@@ -117,6 +116,14 @@ public class WebController {
         Pageable pageable = PageRequest.of(0,10);
         model.addAttribute("records",recordService.findAll(pageable));
         return "cloth/record-list";
+    }
+
+    @GetMapping("/statistics")
+    public String findStatistics(Model model) {
+        ResponseForStatistics responseForStatistics = statisticsService.findStatistics().getBody();
+        model.addAttribute("contents", responseForStatistics.getContent());
+        return "statistics/statistics-list";
+
     }
 
 }
