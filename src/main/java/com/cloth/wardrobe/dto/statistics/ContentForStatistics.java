@@ -9,6 +9,6 @@ import lombok.Data;
 public class ContentForStatistics {
     String name;
     StatisticsType type;
-    int percent;
+    double percent;
     int count;
 }

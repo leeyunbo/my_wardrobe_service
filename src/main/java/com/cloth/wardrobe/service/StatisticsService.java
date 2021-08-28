@@ -47,10 +47,11 @@ public class StatisticsService {
         ResponseForStatistics responseForStatistics = new ResponseForStatistics();
 
         List<ContentForStatistics> contentForStatistics = new ArrayList<>();
-        addContentForStatistic(StatisticsType.Brand, brandSortedKeySet, contentForStatistics, brandMap);
-        addContentForStatistic(StatisticsType.Color, colorSortedKeySet, contentForStatistics, colorMap);
-        addContentForStatistic(StatisticsType.BuyingType, buyingTypeSortedKeySet, contentForStatistics, buyingTypeMap);
-        addContentForStatistic(StatisticsType.Type, typeSortedKeySet, contentForStatistics, typeMap);
+        int total = clothes.size();
+        addContentForStatistic(total, StatisticsType.Brand, brandSortedKeySet, contentForStatistics, brandMap);
+        addContentForStatistic(total, StatisticsType.Color, colorSortedKeySet, contentForStatistics, colorMap);
+        addContentForStatistic(total, StatisticsType.BuyingType, buyingTypeSortedKeySet, contentForStatistics, buyingTypeMap);
+        addContentForStatistic(total, StatisticsType.Type, typeSortedKeySet, contentForStatistics, typeMap);
 
         responseForStatistics.setContent(contentForStatistics);
         responseForStatistics.set_code(200);
@@ -66,18 +67,18 @@ public class StatisticsService {
                 .toArray(String[]::new);
     }
 
-    private int getPercent(int total, int cnt) {
-        return (cnt/total) * 100;
+    private double getPercent(int total, int cnt) {
+        return (double) cnt / total * 100;
     }
 
-    private void addContentForStatistic(StatisticsType type, String[] keyset, List<ContentForStatistics> contentForStatistics, Map<String, Integer> map) {
-        int length = Math.min(keyset.length, 5);
+    private void addContentForStatistic(int total, StatisticsType type, String[] keySet, List<ContentForStatistics> contentForStatistics, Map<String, Integer> map) {
+        int length = Math.min(keySet.length, 5);
         for(int i=0; i<length; i++) {
             contentForStatistics.add(new ContentForStatistics(
-                    keyset[i],
+                    keySet[i],
                     type,
-                    getPercent(keyset.length ,map.get(keyset[i])),
-                    map.get(keyset[i])));
+                    getPercent(total ,map.get(keySet[i])),
+                    map.get(keySet[i])));
         }
     }
 
