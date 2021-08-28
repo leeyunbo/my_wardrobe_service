@@ -25,7 +25,7 @@ public class StatisticsService {
     private final ClothRepository clothRepository;
 
     @Transactional
-    public ResponseEntity<?> getStatistics() {
+    public ResponseEntity<ResponseForStatistics> findStatistics() {
         HashMap<String, Integer> brandMap = new HashMap<>();
         HashMap<String, Integer> typeMap = new HashMap<>();
         HashMap<String, Integer> buyingTypeMap = new HashMap<>();
@@ -34,9 +34,9 @@ public class StatisticsService {
         List<Cloth> clothes = clothRepository.findAll();
         for(Cloth cloth : clothes) {
             brandMap.put(cloth.getClothBrand(), brandMap.getOrDefault(cloth.getClothBrand(),0) + 1);
-            typeMap.put(cloth.getClothType(), brandMap.getOrDefault(cloth.getClothType(), 0) + 1);
-            buyingTypeMap.put(cloth.getBuyingWay(), brandMap.getOrDefault(cloth.getBuyingWay(), 0) + 1);
-            colorMap.put(cloth.getClothColor(), brandMap.getOrDefault(cloth.getClothColor(), 0) + 1);
+            typeMap.put(cloth.getClothType(), typeMap.getOrDefault(cloth.getClothType(), 0) + 1);
+            buyingTypeMap.put(cloth.getBuyingWay(), buyingTypeMap.getOrDefault(cloth.getBuyingWay(), 0) + 1);
+            colorMap.put(cloth.getClothColor(), colorMap.getOrDefault(cloth.getClothColor(), 0) + 1);
         }
 
         String[] brandSortedKeySet = sortByMap(brandMap);
@@ -53,6 +53,8 @@ public class StatisticsService {
         addContentForStatistic(StatisticsType.Type, typeSortedKeySet, contentForStatistics, typeMap);
 
         responseForStatistics.setContent(contentForStatistics);
+        responseForStatistics.set_code(200);
+        responseForStatistics.set_message("OK");
 
         return new ResponseEntity<>(responseForStatistics, HttpStatus.OK);
     }
