@@ -6,15 +6,14 @@
         <h3 class="text-muted">나만의 옷장</h3>
     </a>
 
-    <div class="navbar-dark">
+    <div class="navbar-dark" style="margin-bottom: 30px;">
         <div th:if="${session.user == null}" class ="nav-tabs">
             <a class="btn btn-dark" href="/oauth2/authorization/google">로그인</a>
         </div>
 
         <div th:if="${session.user != null}" class ="member-name-label">
             <img class="img-thumbnail" th:src="${session.user.getPicture()}" style="width:70px; height:70px"> &nbsp;
-            <td class="member-summary" th:text="${session.user.getName() + '님 안녕하세요 :)'}"></td>
-            <a class="btn btn-dark" href="" style="width: 90px;">로그아웃</a> <br/>
+            <span class="member-summary" th:text="'옷장러 ' + ${session.user.getName() + '님 안녕하세요 :)'}"></span>
         </div>
     </div>
 </div>
