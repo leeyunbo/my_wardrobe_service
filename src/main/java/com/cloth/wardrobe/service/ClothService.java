@@ -7,7 +7,7 @@ import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
 import com.cloth.wardrobe.dto.common.Response;
-import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
+import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
@@ -55,7 +55,7 @@ public class ClothService {
     }
 
     @Transactional
-    public ResponseEntity<?> addRecord(Long clothId, Member member, RecordSaveRequestDto recordSaveRequestDto) {
+    public ResponseEntity<?> addRecord(Long clothId, Member member, RequestForRecordSave recordSaveRequestDto) {
         Cloth cloth = clothRepository.findById(clothId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("해당 품목이 존재하지 않습니다. id=" + clothId));

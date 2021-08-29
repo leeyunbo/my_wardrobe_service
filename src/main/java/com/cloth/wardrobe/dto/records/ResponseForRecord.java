@@ -11,19 +11,23 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
+@Setter @Getter
 @NoArgsConstructor
-public class RecordGetResponseDto {
-    private Member member;
+public class ResponseForRecord {
+    private String memberName;
+    private String clothName;
     private List<Image> images;
     private String subject;
     private String content;
+    private int likeCnt;
 
     @Builder
-    public RecordGetResponseDto(Record record) {
-        member = record.getMember();
+    public ResponseForRecord(Record record) {
+        memberName = record.getMember().getName();
+        clothName = record.getCloth().getClothName();
         images = record.getImages();
         subject = record.getSubject();
         content = record.getContent();
+        likeCnt = record.getLikeCnt();
     }
 }

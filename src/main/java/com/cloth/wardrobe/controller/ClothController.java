@@ -4,7 +4,7 @@ import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
-import com.cloth.wardrobe.dto.records.RecordSaveRequestDto;
+import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class ClothController {
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
-    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RecordSaveRequestDto recordSaveRequestDto) {
+    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RequestForRecordSave recordSaveRequestDto) {
         return clothService.addRecord(
                 clothId,
                 customOAuth2MemberService.getMemberBySession(sessionMember),

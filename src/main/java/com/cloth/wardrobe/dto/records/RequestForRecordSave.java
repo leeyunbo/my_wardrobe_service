@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class RecordSaveRequestDto {
+public class RequestForRecordSave {
 
     @Setter private Member member;
     @Setter private List<Image> images;
@@ -22,7 +22,7 @@ public class RecordSaveRequestDto {
     @NotNull private String content;
 
     @Builder
-    public RecordSaveRequestDto(List<Image> images, String subject, String content) {
+    public RequestForRecordSave(List<Image> images, String subject, String content) {
         this.images = images;
         this.subject = subject;
         this.content = content;
