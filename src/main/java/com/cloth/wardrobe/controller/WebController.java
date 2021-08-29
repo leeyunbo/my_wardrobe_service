@@ -113,8 +113,7 @@ public class WebController {
 
     @GetMapping("/records")
     public String findRecords(Model model) {
-        Pageable pageable = PageRequest.of(0,10);
-        model.addAttribute("records",recordService.findAll(pageable));
+        model.addAttribute("records", recordService.findAll().getBody());
         return "cloth/record-list";
     }
 
