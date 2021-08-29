@@ -14,16 +14,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="record : ${records}">
+            <tr th:each="record : ${records.content}">
                 <td>
                     <a>
                         <img src="http://localhost:8080/image/example_image.jpeg" style="height:100px;">
                     </a>
                     <!--                    <a href="#" th:text="${cloth.images.get(0)}"></a>-->
                 </td>
-                <td th:text="${record.cloth.clothName}"></td>
+                <td th:text="${record.clothName}"></td>
                 <td th:text="${record.subject}"></td>
-                <td th:text="${record.member.name}"></td>
+                <td th:text="${record.memberName}"></td>
                 <td th:text="${record.likeCnt}"></td>
             </tr>
             </tbody>

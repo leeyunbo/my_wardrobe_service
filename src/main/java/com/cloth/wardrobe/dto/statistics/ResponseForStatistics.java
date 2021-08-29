@@ -1,14 +1,13 @@
 package com.cloth.wardrobe.dto.statistics;
 
 import com.cloth.wardrobe.dto.common.Response;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter @Setter
 @NoArgsConstructor
 public class ResponseForStatistics extends Response {
     List<ContentForStatistics> content;
