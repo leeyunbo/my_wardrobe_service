@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -38,11 +39,15 @@ public class ClothController {
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
-    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId, @LoginUser SessionMember sessionMember, @RequestBody RequestForRecordSave recordSaveRequestDto) {
+    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId,
+                                              @LoginUser SessionMember sessionMember,
+                                              @RequestPart RequestForRecordSave requestForRecordSave,
+                                              @RequestPart(value="file") MultipartFile file ) {
         return clothService.addRecord(
                 clothId,
                 customOAuth2MemberService.getMemberBySession(sessionMember),
-                recordSaveRequestDto);
+                requestForRecordSave,
+                file);
     }
 
     @DeleteMapping("/api/v1/clothes/{clothId}/records/{recordId}")

@@ -17,13 +17,13 @@ import java.util.List;
 public class RequestForRecordSave {
 
     @Setter private Member member;
-    @Setter private List<Image> images;
+    @Setter private Image image;
     @NotBlank private String subject;
     @NotNull private String content;
 
     @Builder
-    public RequestForRecordSave(List<Image> images, String subject, String content) {
-        this.images = images;
+    public RequestForRecordSave(Image image, String subject, String content) {
+        this.image = image;
         this.subject = subject;
         this.content = content;
     }
@@ -31,7 +31,7 @@ public class RequestForRecordSave {
     public Record toEntity() {
         return Record.builder()
                 .member(member)
-                .images(images)
+                .image(image)
                 .subject(subject)
                 .content(content)
                 .build();

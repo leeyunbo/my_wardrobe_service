@@ -38,7 +38,7 @@ public class Image extends BaseTimeEntity {
     private Wardrobe wardrobe;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     private Record record;
 
@@ -55,7 +55,6 @@ public class Image extends BaseTimeEntity {
     }
 
     public Image fileUpload(MultipartFile file, String email) throws IOException {
-        StringBuilder realPathOfFile = new StringBuilder();
         this.fileName = UUID.randomUUID() + "_" + email + "_" + file.getOriginalFilename();
         this.imageLocalPath = "/Users/iyunbog/Downloads/Study/wardrobe_image/" + fileName;
         this.imageServerPath = "/image/" + fileName;

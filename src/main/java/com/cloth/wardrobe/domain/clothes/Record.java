@@ -29,18 +29,14 @@ public class Record extends Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    /**
-     *  LAZY : 프록시 객체를 우선으로 만들어놓고 할당해 놓은 후, 실제로 호출될 때 쿼리가 날라간다.
-     *  ManyToOne에서 사용된다.
-     *  반대는 EAGER
-     */
     @Setter
     @ManyToOne
     @JoinColumn(name = "cloth_id")
     private Cloth cloth;
 
-    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
-    private List<Image> images;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private final List<Like> likes = new ArrayList<>();
@@ -52,9 +48,9 @@ public class Record extends Post {
     private int likeCnt;
 
     @Builder
-    public Record(Member member, List<Image> images, Cloth cloth, String subject, String content) {
+    public Record(Member member, Image image, Cloth cloth, String subject, String content) {
         this.member = member;
-        this.images = images;
+        this.image = image;
         this.cloth = cloth;
         this.subject = subject;
         this.content = content;

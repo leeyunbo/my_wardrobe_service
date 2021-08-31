@@ -22,11 +22,6 @@ var main = {
     save : function () {
         const data = {
             clothName: $('#cloth_name').val(),
-            images: [
-                {
-                    imagePath: $('#image').val()
-                }
-            ],
             clothType: $('#cloth_type').val(),
             buyingWay: $('#buying_way').val(),
             buyingDate: $('#buying_date').val(),
@@ -67,21 +62,20 @@ var main = {
 
     record_save : function () {
         var data = {
-            images : [
-                {
-                    imagePath: $('#record-image').val()
-                }
-            ],
             subject : $('#record-subject').val(),
             content : $('#record-content').val()
         };
 
+        const formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+        formData.append('requestForRecordSave', new Blob([JSON.stringify(data)], {type: "application/json"}));
+
         $.ajax({
             type: 'POST',
             url: '/api/v1/clothes/' + $('#cloth_id').val() + '/records',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: formData,
+            processData: false,
+            contentType: false
         }).done(function() {
             alert('코디 기록을 등록했어요.');
             window.location.href = '/clothes/' + $('#cloth_id').val();
