@@ -10,7 +10,7 @@
                 <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Brand')}">
                     <td>
                         <span style="font-weight: bolder" th:text="${content.name}"></span>
-                        <span th:text="'는 ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                        <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
                     </td>                </tr>
                 </tbody>
             </table>
@@ -22,7 +22,7 @@
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Color')}">
                         <td>
                             <span style="font-weight: bolder" th:text="${content.name}"></span>
-                            <span th:text="'는 ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
                         </td>
                     </tr>
                 </tbody>
@@ -35,7 +35,7 @@
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'BuyingType')}">
                         <td>
                             <span style="font-weight: bolder" th:text="${content.name}"></span>
-                            <span th:text="'는 ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
                         </td>                    </tr>
                 </tbody>
             </table>
@@ -47,7 +47,7 @@
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Type')}">
                         <td>
                             <span style="font-weight: bolder" th:text="${content.name}"></span>
-                            <span th:text="'는 ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
                         </td>                    </tr>
                 </tbody>
             </table>
