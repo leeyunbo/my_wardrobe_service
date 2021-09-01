@@ -41,18 +41,15 @@ public class Record extends Post {
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private final List<Like> likes = new ArrayList<>();
 
-    private String subject;
-
     private String content;
 
     private int likeCnt;
 
     @Builder
-    public Record(Member member, Image image, Cloth cloth, String subject, String content) {
+    public Record(Member member, Image image, Cloth cloth, String content) {
         this.member = member;
         this.image = image;
         this.cloth = cloth;
-        this.subject = subject;
         this.content = content;
     }
 

@@ -18,13 +18,11 @@ public class RequestForRecordSave {
 
     @Setter private Member member;
     @Setter private Image image;
-    @NotBlank private String subject;
     @NotNull private String content;
 
     @Builder
-    public RequestForRecordSave(Image image, String subject, String content) {
+    public RequestForRecordSave(Image image, String content) {
         this.image = image;
-        this.subject = subject;
         this.content = content;
     }
 
@@ -32,7 +30,6 @@ public class RequestForRecordSave {
         return Record.builder()
                 .member(member)
                 .image(image)
-                .subject(subject)
                 .content(content)
                 .build();
     }
