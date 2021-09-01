@@ -5,7 +5,7 @@
     <div>
         <label class="font-weight-bolder">✨옷장러들의 브랜드 선호도에요✨</label>
         <div class="card">
-            <table class="table table-striped">
+            <table class="table">
                 <tbody>
                 <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Brand')}">
                     <td>
@@ -17,7 +17,7 @@
         </div>
         <label class="font-weight-bolder" style="margin-top:30px">🏳️‍🌈옷장러들의 색상 선호도에요🏳️‍🌈</label>
         <div class="card">
-            <table class="table table-striped">
+            <table class="table">
                 <tbody>
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Color')}">
                         <td>
@@ -30,7 +30,7 @@
         </div>
         <label class="font-weight-bolder" style="margin-top:30px">🛍옷장러들의 구매 방식 선호도에요🛍</label>
         <div class="card">
-            <table class="table table-striped">
+            <table class="table">
                 <tbody>
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'BuyingType')}">
                         <td>
@@ -42,7 +42,7 @@
         </div>
         <label class="font-weight-bolder" style="margin-top:30px">👚옷장러들의 아이템 타입 선호도에요👚</label>
         <div class="card">
-            <table class="table table-striped">
+            <table class="table">
                 <tbody>
                     <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Type')}">
                         <td>
