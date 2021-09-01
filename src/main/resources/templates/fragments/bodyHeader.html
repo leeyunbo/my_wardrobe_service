@@ -2,18 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div class="header" th:fragment="bodyHeader">
 
-    <a href="/">
-        <h3 class="text-muted">나만의 옷장</h3>
-    </a>
+    <div class="topNav" style="text-align: center; margin-bottom: 30px;">
+        <a href="/">
+            <img class="img-fluid" src="/image/title_image.png" alt="타이틀 이미지"/>
+        </a>
+    </div>
 
     <div class="navbar-dark" style="margin-bottom: 30px;">
-        <div th:if="${session.user == null}" class ="nav-tabs">
-            <a class="btn btn-dark" href="/oauth2/authorization/google">로그인</a>
-        </div>
-
         <div th:if="${session.user != null}" class ="member-name-label">
-            <img class="img-thumbnail" th:src="${session.user.getPicture()}" style="width:70px; height:70px"> &nbsp;
-            <span class="member-summary" th:text="'옷장러 ' + ${session.user.getName() + '님 안녕하세요 :)'}"></span>
+            <span th:text="'옷장러 ' + ${session.user.getName() + '님 안녕하세요 😊'}" style="font-size:14px;"></span>
         </div>
     </div>
 </div>
