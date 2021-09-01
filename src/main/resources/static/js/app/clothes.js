@@ -17,6 +17,10 @@ var main = {
             _this.delete_record($(this).attr("id").replace('btn-record-delete', ''))
         })
 
+        document.getElementById("file").onchange = function () {
+            if(!_this.check_image(this)) return;
+            document.getElementById("uploadFile").value = this.value;
+        };
     },
 
     save : function () {
@@ -62,7 +66,6 @@ var main = {
 
     record_save : function () {
         var data = {
-            subject : $('#record-subject').val(),
             content : $('#record-content').val()
         };
 
@@ -96,6 +99,17 @@ var main = {
             alert(JSON.stringify(error));
         })
     },
+
+    check_image : function (obj) {
+        const ext = obj.value.slice(obj.value.lastIndexOf(".") + 1).toLowerCase();
+
+        if(!(ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg")) {
+            alert('이미지파일 (.jpg, .png, .gif, .jpeg) 만 업로드 가능합니다.');
+            return false;
+        }
+
+        return true;
+    }
 };
 
 main.init();

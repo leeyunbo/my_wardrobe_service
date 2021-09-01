@@ -24,6 +24,11 @@ var main = {
         $('#wardrobe_image_view').on('click', function () {
             _this.move_clothes();
         })
+
+        document.getElementById("file").onchange = function () {
+            if(!check_image(this)) return;
+            document.getElementById("uploadFile").value = this.value;
+        };
     },
 
     save : function () {
@@ -116,6 +121,17 @@ var main = {
 
     move_clothes : function () {
         window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes';
+    },
+
+    check_image : function (obj) {
+        var ext = obj.value.slice(obj.value.lastIndexOf(".") + 1).toLowerCase();
+
+        if(!(ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg")) {
+            alert('이미지파일 (.jpg, .png, .gif, .jpeg) 만 업로드 가능합니다.');
+            return false;
+        }
+
+        return true;
     }
 };
 
