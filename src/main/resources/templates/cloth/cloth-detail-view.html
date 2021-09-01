@@ -6,7 +6,7 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
     <form th:object="${cloth}">
         <div class="form-group">
-            <label th:for="clothName">별명</label>
+            <label th:for="clothName">이름</label>
             <span th:text="${cloth.clothName}" class="form-control"></span>
         </div>
 
@@ -40,10 +40,8 @@
             <span th:text="${cloth.buyingDate}" class="form-control"></span>
         </div>
 
-        <br/>
-
         <div class="form-group">
-            <input type="button" class="btn btn-dark" id="btn-cloth-like-change"
+            <input type="button" class="btn btn-dark small" id="btn-cloth-like-change"
                    th:value="${cloth.likeUser==true} ? '좋아요 취소 ' + ${cloth.likeCnt} : '좋아요 ' + ${cloth.likeCnt}"/>
         </div>
 
@@ -51,18 +49,17 @@
 
         <table class="table table-striped">
             <tbody>
-            <label th:text="${cloth.member.name} + '님 만의 ' + ${cloth.clothName} + ' 코디를 구경해보세요!'"></label>
+            <label th:text="${cloth.member.name} + '님 만의 ' + ${cloth.clothName} + ' 코디를 구경해보세요!'" style="font-weight: bolder"></label>
             <tr th:each="record : *{records}" >
                 <td><img th:src="${record.image == null ? '/image/no_image.png' : record.image.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px"></td>
                 <td>
-                    <span class="font-weight-bolder" th:text="${record.getSubject()}"></span> <br/>
                     <span class="font-weight-lighter" th:text="${record.getCreatedDate().getYear()} + '년 '
                     + ${record.getCreatedDate().getMonthValue()} + '월 '
-                    + ${record.getCreatedDate().getDayOfMonth()} + '일'" style="font-size: 9px;"></span>
-                    <p th:text="${record.getContent()}" style="margin-top: 15px; font-size: 12px;"></p>
+                    + ${record.getCreatedDate().getDayOfMonth()} + '일'" style="font-size: 11px;"></span>
+                    <p th:text="${record.getContent()}" style="margin-top: 15px; font-size: 13px;"></p>
                 </td>
                 <td>
-                    <input type="button" th:if="${record.member.email == session.user.email}" class="btn btn-dark" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
+                    <input type="button" th:if="${record.member.email == session.user.email}" class="btn btn-dark small" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
                 </td>
             </tr>
             </tbody>
@@ -71,21 +68,31 @@
         <br/>
 
         <div class="form-group" th:if="${cloth.member.email == session.user.email}">
-            <label th:text="'해당 품목에 대한 ' + ${cloth.member.name} + '님만의 코디를 보여주세요 :)'"></label>
-            <div class="form-group">
+            <label th:text="${cloth.clothName} + '에 대한 ' + ${cloth.member.name} + '님만의 코디를 보여주세요'" style="font-weight: bolder"></label> <br/>
+            <!--
+            <div class="mb-3">
                 <form method="POST" enctype="multipart/form-data" id="upload-image-form">
-                    <label for="file">옷장을 대표할 사진을 등록해주세요.</label>
                     <input type="file" class="form-control" name="file" id="file">
                 </form>
+            </div>-->
+            <input id="uploadFile" disabled="disabled"/>
+            <div id="file-form" class="fileUpload btn btn-dark small">
+                <span>이미지 선택</span>
+                <input type="file" id="file" class="upload" />
             </div>
-            <input type="text" class="form-control" id="record-subject" placeholder="제목을 입력하세요."> <br/>
-            <textarea class="form-control" id="record-content" placeholder="내용을 입력하세요."></textarea>
-            <input type="button" class="btn btn-dark" id="btn-record-save" value="등록" style="float: right; margin-top:2px;">
+
+            <div class="form-outline">
+                <label for="record-content">내용을 작성해주세요.</label><textarea class="form-control" id="record-content" placeholder="내용" rows="8"></textarea>
+            </div>
+            <input type="button" class="btn btn-dark small" id="btn-record-save" value="등록" style="float: right; margin-top:8px;">
         </div>
     </form>
 
     <br/>
-    <div th:replace="fragments/footer :: footer"></div>
+    <br/>
+    <br/>
+
+    <div class="footer" th:replace="fragments/footer :: footer"></div>
 </div> <!-- /container -->
 
 <input type="hidden" class="form-control" id="cloth_id" th:value="${cloth.id}">

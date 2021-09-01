@@ -18,8 +18,12 @@
             </div>
 
             <div class="form-group">
-                <label for="file">아이템을 대표할 사진을 선택해주세요.</label>
-                <input type="file" class="form-control" name="file" id="file">
+                <label for="uploadFile">아이템을 대표할 사진을 선택해주세요.</label>
+                <input id="uploadFile" disabled="disabled"/>
+                <div id="file-form" class="fileUpload btn btn-dark small">
+                    <span>이미지 선택</span>
+                    <input type="file" id="file" class="upload" />
+                </div>
             </div>
 
             <div class="form-group">
