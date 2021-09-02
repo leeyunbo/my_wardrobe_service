@@ -1,9 +1,14 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.statistics.StatisticsType;
 import com.cloth.wardrobe.dto.statistics.ContentForStatistics;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -23,15 +25,24 @@ import java.util.Map;
 public class StatisticsService {
 
     private final ClothRepository clothRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public ResponseEntity<ResponseForStatistics> findStatistics() {
+    public ResponseEntity<ResponseForStatistics> findStatistics(Optional<SessionMember> sessionMember) {
         HashMap<String, Integer> brandMap = new HashMap<>();
         HashMap<String, Integer> typeMap = new HashMap<>();
         HashMap<String, Integer> buyingTypeMap = new HashMap<>();
         HashMap<String, Integer> colorMap = new HashMap<>();
 
-        List<Cloth> clothes = clothRepository.findAll();
+        List<Cloth> clothes;
+        if(sessionMember.isEmpty()) {
+            clothes = clothRepository.findAll();
+        }
+        else {
+            Member member = memberRepository.findByEmail(sessionMember.get().getEmail()).orElseThrow(() -> new BadRequestException("올바르지 않은 사용자 입니다."));
+            clothes = clothRepository.findClothsByMemberOrderByLikeCntDesc(member);
+        }
+
         for(Cloth cloth : clothes) {
             brandMap.put(cloth.getClothBrand(), brandMap.getOrDefault(cloth.getClothBrand(),0) + 1);
             typeMap.put(cloth.getClothType(), typeMap.getOrDefault(cloth.getClothType(), 0) + 1);

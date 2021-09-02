@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"> <head th:replace="fragments/header :: header" /> <body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <label class="font-weight-bolder" th:text="'✨' + ${session.user.getName()} + '님의 브랜드 선호도에요✨'"></label>
+        <div class="card">
+            <table class="table">
+                <tbody>
+                <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Brand')}">
+                    <td>
+                        <span style="font-weight: bolder" th:text="${content.name}"></span>
+                        <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                    </td>                </tr>
+                </tbody>
+            </table>
+        </div>
+        <label class="font-weight-bolder" th:text="'🏳️‍🌈' + ${session.user.getName()} + '님의 색상 선호도에요🏳️‍🌈'" style="margin-top:30px">🌈</label>
+        <div class="card">
+            <table class="table">
+                <tbody>
+                    <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Color')}">
+                        <td>
+                            <span style="font-weight: bolder" th:text="${content.name}"></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <label class="font-weight-bolder" th:text="'🛍' + ${session.user.getName()} + '님의 구매 방식 선호도에요🛍'" style="margin-top:30px"></label>
+        <div class="card">
+            <table class="table">
+                <tbody>
+                    <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'BuyingType')}">
+                        <td>
+                            <span style="font-weight: bolder" th:text="${content.name}"></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                        </td>                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <label class="font-weight-bolder" th:text="'👚' + ${session.user.getName()} + '님의 아이템 타입 선호도에요👚'" style="margin-top:30px"></label>
+        <div class="card">
+            <table class="table">
+                <tbody>
+                    <tr th:each="content, idx : ${contents}" th:object="${contents}" th:if="${#strings.equals(content.type.name(), 'Type')}">
+                        <td>
+                            <span style="font-weight: bolder" th:text="${content.name}"></span>
+                            <span th:text="': ' + ${content.count} + '번 선택되었고 전체의 ' + ${content.percent} + '%를 차지하네요' "></span>
+                        </td>                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+
+</body>
+<script>
+
+</script>
+</html>
