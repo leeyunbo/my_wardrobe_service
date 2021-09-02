@@ -8,7 +8,6 @@
             <tr>
                 <th>사진</th>
                 <th>아이템</th>
-                <th>제목</th>
                 <th>작성자</th>
                 <th>좋아요</th>
             </tr>
@@ -16,12 +15,12 @@
             <tbody>
             <tr th:each="record : ${records.content}">
                 <td>
-                    <a>
-                        <img src="http://localhost:8080/image/example_image.jpeg" style="height:100px;">
-                    </a>
+                    <img th:src="${record.image == null ? '/image/no_image.png' : record.image.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px">
                 </td>
-                <td th:text="${record.clothName}"></td>
-                <td th:text="${record.subject}"></td>
+                <!--<a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>-->
+                <td>
+                    <a href="#" th:text="${record.clothName}" th:href="@{/clothes/{id} (id=${record.clothId})}"></a>
+                </td>
                 <td th:text="${record.memberName}"></td>
                 <td th:text="${record.likeCnt}"></td>
             </tr>
