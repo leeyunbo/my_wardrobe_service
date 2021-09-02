@@ -4,6 +4,7 @@ import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Optional;
+
 import static com.cloth.wardrobe.domain.community.PostType.Wardrobe;
 
 /**
@@ -119,10 +123,16 @@ public class WebController {
 
     @GetMapping("/statistics")
     public String findStatistics(Model model) {
-        ResponseForStatistics responseForStatistics = statisticsService.findStatistics().getBody();
+        ResponseForStatistics responseForStatistics = statisticsService.findStatistics(Optional.empty()).getBody();
         model.addAttribute("contents", responseForStatistics.getContent());
         return "statistics/statistics-list";
+    }
 
+    @GetMapping("/statistics/me")
+    public String findStatisticsByLoginUser(Model model, @LoginUser SessionMember sessionMember) {
+        ResponseForStatistics responseForStatistics = statisticsService.findStatistics(Optional.ofNullable(sessionMember)).getBody();
+        model.addAttribute("contents", responseForStatistics.getContent());
+        return "statistics/statistics-me-list";
     }
 
 }
