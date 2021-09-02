@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter @Getter
 @NoArgsConstructor
 public class ResponseForRecord {
+    private Long clothId;
     private String memberName;
     private String clothName;
     private Image image;
@@ -18,6 +19,7 @@ public class ResponseForRecord {
 
     @Builder
     public ResponseForRecord(Record record) {
+        clothId = record.getCloth().getId();
         memberName = record.getMember().getName();
         clothName = record.getCloth().getClothName();
         image = record.getImage();
