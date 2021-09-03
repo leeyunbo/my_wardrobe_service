@@ -5,8 +5,8 @@ import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
 import com.cloth.wardrobe.repository.ImageRepository;
-import com.cloth.wardrobe.dto.community.CommentResponseRequestDto;
-import com.cloth.wardrobe.dto.community.CommentSaveRequestDto;
+import com.cloth.wardrobe.dto.community.ResponseForComment;
+import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.repository.WardrobeRepository;
@@ -177,14 +177,14 @@ public class WardrobeControllerTest {
                 .name(name)
                 .build());
 
-        CommentSaveRequestDto commentSaveRequestDto = CommentSaveRequestDto
+        RequestForCommentSave commentSaveRequestDto = RequestForCommentSave
                 .builder()
                 .content("TEST 내용")
                 .build();
 
         wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
 
-        List<CommentResponseRequestDto> comments = wardrobeService.getComments(wardrobe.getId());
+        List<ResponseForComment> comments = wardrobeService.getComments(wardrobe.getId());
         assertThat(comments.size()).isEqualTo(1);
 
         wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
