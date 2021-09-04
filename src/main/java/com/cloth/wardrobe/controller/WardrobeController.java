@@ -46,8 +46,8 @@ public class WardrobeController {
     }
 
     @GetMapping("/api/v1/wardrobes")
-    public ResponseEntity<?> findAll() {
-        return wardrobeService.findAll();
+    public ResponseEntity<?> findAll(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize) {
+        return wardrobeService.findAll(pageNumber, pageSize);
     }
 
     @PutMapping("/api/v1/wardrobes/{id}/like_cnt")

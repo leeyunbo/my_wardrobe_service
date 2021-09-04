@@ -17,8 +17,11 @@ import com.cloth.wardrobe.dto.community.ResponseForComment;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,11 +102,14 @@ public class WardrobeService {
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
     @Transactional
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(int pageNumber, int pageSize) {
         List<ContentForWardrobe> wardrobes = new ArrayList<>();
         ResponseForWardrobes responseForWardrobes = new ResponseForWardrobes();
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
 
-        for(Wardrobe wardrobe : wardrobeRepository.findAll()) {
+        Page<Wardrobe> wardrobePage = wardrobeRepository.findAll(pageRequest);
+
+        for(Wardrobe wardrobe : wardrobePage.getContent()) {
             wardrobes.add(new ContentForWardrobe(
                     wardrobe.getId(),
                     wardrobe.getName(),
@@ -113,9 +119,16 @@ public class WardrobeService {
             );
         }
 
-        responseForWardrobes.setContents(wardrobes);
         responseForWardrobes.set_code(200);
         responseForWardrobes.set_message("OK");
+        responseForWardrobes.setContents(wardrobes);
+        responseForWardrobes.setTotalPages(wardrobePage.getTotalPages());
+        responseForWardrobes.setPageNumber(wardrobePage.getNumber());
+        responseForWardrobes.setSize(wardrobePage.getSize());
+        responseForWardrobes.setNumberOfElements(wardrobes.size());
+        responseForWardrobes.setTotalElements(wardrobePage.getTotalElements());
+        responseForWardrobes.setIsLast(wardrobePage.isLast());
+        responseForWardrobes.setIsFirst(wardrobePage.isFirst());
 
         return new ResponseEntity<>(responseForWardrobes, HttpStatus.OK);
     }

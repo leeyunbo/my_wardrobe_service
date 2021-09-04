@@ -8,7 +8,7 @@ import lombok.Getter;
 public class ContentForWardrobe {
     private Long id;
     private String name;
-    private int clothesCnt;
-    private int likeCnt;
+    private Integer clothesCnt;
+    private Integer likeCnt;
     private String memberName;
 }
