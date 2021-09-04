@@ -24,7 +24,7 @@ http://localhost:8080/api/v1/wardrobes?page=1&pageSize=10
 |pageNumber|Integer|필수|현재 Pagintation Index|
 |numberOfElements|Integer|필수|현재 페이지의 옷장 개수|
 |size|Integer|필수|한 페이지의 최대 옷장 개수|
-|totalElements|Integer|필수|총 옷장 수|
+|totalElements|Long|필수|총 옷장 수|
 |isLast|Integer|필수|마지막 페이지 여부|
 |isFirst|Integer|필수|첫 페이지 여부|
 |contents|Object[]|필수|옷장 목록|
