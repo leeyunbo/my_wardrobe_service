@@ -2,28 +2,35 @@ package com.cloth.wardrobe.dto.records;
 
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.dto.common.ResponseForImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter @Getter
 @NoArgsConstructor
 public class ResponseForRecord {
+    private Long id;
     private Long clothId;
-    private String memberName;
     private String clothName;
-    private Image image;
+    private ResponseForImage image;
     private String content;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private int likeCnt;
 
     @Builder
     public ResponseForRecord(Record record) {
+        id = record.getId();
         clothId = record.getCloth().getId();
-        memberName = record.getMember().getName();
         clothName = record.getCloth().getClothName();
-        image = record.getImage();
         content = record.getContent();
+        createdDate = record.getCreatedDate();
+        modifiedDate = record.getModifiedDate();
         likeCnt = record.getLikeCnt();
+        image = new ResponseForImage(record.getImage());
     }
 }

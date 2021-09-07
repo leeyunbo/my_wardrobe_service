@@ -15,17 +15,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RequestForWardrobeSave {
 
-    @NotNull @NotBlank private String name;
-    @Setter private Member member;
-    @Setter private Image image;
+    private String name;
     private int likeCnt;
-    @NotBlank private String isPublic;
+    private String isPublic;
 
     @Builder
-    public RequestForWardrobeSave(String name, Member member, Image image, String isPublic) {
+    public RequestForWardrobeSave(String name, String isPublic) {
         this.name = name;
-        this.member = member;
-        this.image = image;
         this.isPublic = isPublic;
         this.likeCnt = 0;
     }
@@ -33,10 +29,8 @@ public class RequestForWardrobeSave {
     public Wardrobe toEntity() {
         return Wardrobe.builder()
                 .name(name)
-                .member(member)
                 .isPublic(isPublic)
                 .likeCnt(likeCnt)
-                .image(image)
                 .build();
     }
 }

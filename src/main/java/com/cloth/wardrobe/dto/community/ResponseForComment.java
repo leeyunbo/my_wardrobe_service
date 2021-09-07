@@ -5,16 +5,24 @@ import com.cloth.wardrobe.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ResponseForComment {
     private Long id;
-    private Member member;
+    private String nameOfWriter;
+    private String emailOfWriter;
     private String content;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     @Builder
     public ResponseForComment(Comment comment) {
         this.id = comment.getId();
-        this.member = comment.getMember();
+        this.nameOfWriter = comment.getMember().getName();
+        this.emailOfWriter = comment.getMember().getEmail();
         this.content = comment.getContent();
+        this.createdDate = comment.getCreatedDate();
+        this.modifiedDate = comment.getModifiedDate();
     }
 }
