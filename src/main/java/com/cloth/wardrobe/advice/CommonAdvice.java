@@ -2,6 +2,7 @@ package com.cloth.wardrobe.advice;
 
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.exception.BadRequestException;
+import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -23,17 +24,26 @@ public class CommonAdvice {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> methodArgumentTypeMismatchError(Exception e) {
-        Response responseForError = new Response();
-        responseForError.set_code(200);
-        responseForError.set_message("잘못된 입력입니다.");
+        Response responseForError = createResponse(e);
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(Exception e) {
+        Response responseForError = createResponse(e);
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DoNotFoundContentException.class)
+    public ResponseEntity<?> doNotFoundContent(Exception e) {
+        Response responseForError = createResponse(e);
+        return new ResponseEntity<>(responseForError, HttpStatus.NO_CONTENT);
+    }
+
+    private Response createResponse(Exception e) {
         Response responseForError = new Response();
         responseForError.set_code(200);
-        responseForError.set_message("잘못된 접근입니다.");
-        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
+        responseForError.set_message(e.getMessage());
+        return responseForError;
     }
 }
