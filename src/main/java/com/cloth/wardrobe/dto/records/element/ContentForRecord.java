@@ -1,9 +1,12 @@
 package com.cloth.wardrobe.dto.records.element;
 
 import com.cloth.wardrobe.domain.clothes.Record;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter @Setter
 public class ContentForRecord {
     Long id;
     String content;

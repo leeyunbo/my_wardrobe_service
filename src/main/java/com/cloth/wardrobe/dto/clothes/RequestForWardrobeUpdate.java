@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.clothes;
 
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.cloth.wardrobe.dto.common;
 
 
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import lombok.Getter;
 
 @Getter

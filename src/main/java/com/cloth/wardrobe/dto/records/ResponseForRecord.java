@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.dto.records;
 
 import com.cloth.wardrobe.domain.clothes.Record;
-import com.cloth.wardrobe.domain.s3.Image;
 import com.cloth.wardrobe.dto.common.ResponseForImage;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class ResponseForRecord {
     private Long id;
     private Long clothId;
     private String clothName;
-    private ResponseForImage image;
+    private String imageServerPath;
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -31,6 +30,6 @@ public class ResponseForRecord {
         createdDate = record.getCreatedDate();
         modifiedDate = record.getModifiedDate();
         likeCnt = record.getLikeCnt();
-        image = new ResponseForImage(record.getImage());
+        imageServerPath = record.getImage().getImageServerPath();
     }
 }
