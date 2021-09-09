@@ -12,7 +12,7 @@
 
         <div class="form-group">
             <label th:for="image">사진</label>
-            <img th:src="${cloth.image == null ? 'http://localhost:8080/image/no_image.png' : cloth.image.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 400px;">
+            <img th:src="${cloth.imageServerPath == null ? 'http://localhost:8080/image/no_image.png' : cloth.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 400px;">
         </div>
 
         <div class="form-group">
@@ -42,16 +42,16 @@
 
         <div class="form-group">
             <input type="button" class="btn btn-dark small" id="btn-cloth-like-change"
-                   th:value="${cloth.likeUser==true} ? '좋아요 취소 ' + ${cloth.likeCnt} : '좋아요 ' + ${cloth.likeCnt}"/>
+                   th:value="${isLike==true} ? '좋아요 취소 ' + ${cloth.likeCnt} : '좋아요 ' + ${cloth.likeCnt}"/>
         </div>
 
         <br/>
 
         <table class="table table-striped">
             <tbody>
-            <label th:text="${cloth.member.name} + '님 만의 ' + ${cloth.clothName} + ' 코디를 구경해보세요!'" style="font-weight: bolder"></label>
-            <tr th:each="record : *{records}" >
-                <td><img th:src="${record.image == null ? '/image/no_image.png' : record.image.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px"></td>
+            <label th:text="${cloth.memberName} + '님 만의 ' + ${cloth.clothName} + ' 코디를 구경해보세요!'" style="font-weight: bolder"></label>
+            <tr th:each="record : ${records}" >
+                <td><img th:src="${record.imageServerPath == null ? '/image/no_image.png' : record.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px"></td>
                 <td>
                     <span class="font-weight-lighter" th:text="${record.getCreatedDate().getYear()} + '년 '
                     + ${record.getCreatedDate().getMonthValue()} + '월 '
@@ -59,7 +59,7 @@
                     <p th:text="${record.getContent()}" style="margin-top: 15px; font-size: 13px;"></p>
                 </td>
                 <td>
-                    <input type="button" th:if="${record.member.email == session.user.email}" class="btn btn-dark small" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
+                    <input type="button" th:if="${record.email == session.user.email}" class="btn btn-dark small" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
                 </td>
             </tr>
             </tbody>
@@ -67,8 +67,8 @@
 
         <br/>
 
-        <div class="form-group" th:if="${cloth.member.email == session.user.email}">
-            <label th:text="${cloth.clothName} + '에 대한 ' + ${cloth.member.name} + '님만의 코디를 보여주세요'" style="font-weight: bolder"></label> <br/>
+        <div class="form-group" th:if="${cloth.email == session.user.email}">
+            <label th:text="${cloth.clothName} + '에 대한 ' + ${cloth.memberName} + '님만의 코디를 보여주세요'" style="font-weight: bolder"></label> <br/>
             <!--
             <div class="mb-3">
                 <form method="POST" enctype="multipart/form-data" id="upload-image-form">
