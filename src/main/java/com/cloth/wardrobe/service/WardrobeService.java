@@ -3,10 +3,11 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.exception.BadRequestException;
+import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.domain.member.Member;
@@ -21,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,8 +48,9 @@ public class WardrobeService {
     public ResponseEntity<?> save(RequestForWardrobeSave requestForWardrobeSave, Member member, MultipartFile file) {
         try {
             Image image = new Image().fileUpload(file, member.getEmail());
-            requestForWardrobeSave.setImage(image);
-            requestForWardrobeSave.setMember(member);
+            Wardrobe wardrobe = requestForWardrobeSave.toEntity();
+            wardrobe.setImage(image);
+            wardrobe.setMember(member);
             wardrobeRepository.save(requestForWardrobeSave.toEntity());
         } catch (IOException e) {
             throw new BadRequestException("파일이 손상되었습니다.");
@@ -90,12 +91,14 @@ public class WardrobeService {
      * 로그인한 유저의 옷장 정보를 가져온다.
      */
     @Transactional
-    public ResponseForWardrobe findByMember(Member member) {
+    public ResponseEntity<ResponseForWardrobe> findByMember(Member member) {
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
-                .orElseThrow(() ->
-                        new BadRequestException("해당 멤버의 옷장 존재하지 않습니다. id=" + member.getId()));
+                .orElseThrow(() -> new DoNotFoundContentException("해당 멤버의 옷장이 존재하지 않습니다. id=" + member.getId()));
 
-        return new ResponseForWardrobe(wardrobe);
+        ResponseForWardrobe responseForWardrobe = new ResponseForWardrobe(wardrobe);
+        responseForWardrobe.set_code(200);
+        responseForWardrobe.set_message("OK");
+        return new ResponseEntity<>(responseForWardrobe, HttpStatus.OK);
     }
 
     /**
