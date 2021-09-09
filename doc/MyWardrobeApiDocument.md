@@ -60,5 +60,36 @@
 |isPublic|String|필수|공개 여부|"Y" OR "N"|
 |imageServerPath|String|필수|이미지 Path||
 
+## Cloth 관련 API
+### Cloth 상세 정보 가져오기
+```
+/api/v1/clothes/{id}
+```
+
+|메서드|요청 URL|
+|------|---|
+|GET|api/v1/clothes/{id}|
+
+#### Request Parameters 
+|파라미터|타입|필수 여부|설명|
+|------|---|---|---|
+|id|Long|필수|Cloth id|
+
+#### Response Parameters
+|파라미터|타입|필수 여부|설명|비고|
+|------|---|---|---|---|
+|_code|Integer|필수|HTTP 상태 코드 3자리||
+|_message|String|필수|응답 메시지||
+|id|Long|필수|Cloth id||
+|likeCnt|Integer|필수|좋아요 수||
+|memberName|String|필수|주인 이름||
+|email|String|필수|주인 이메일||
+|clothName|String|필수|Cloth 이름||
+|clothType|String|필수|Cloth 종류||
+|buyingDate|String|필수|Cloth 구매 일자|YYYY-MM-DD|
+|buyingWay|String|필수|Cloth 구매 방법||
+|clothColor|String|필수|Cloth 색상||
+|clothBrand|String|필수|Cloth 브랜드||
+|imageServerPath|String|필수|이미지 Path||
 
 

@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain.s3;
+package com.cloth.wardrobe.domain.common;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
 import com.cloth.wardrobe.domain.clothes.Cloth;
@@ -59,7 +59,7 @@ public class Image extends BaseTimeEntity {
         this.imageLocalPath = "/Users/iyunbog/Downloads/Study/wardrobe_image/" + fileName;
         this.imageServerPath = "/image/" + fileName;
 
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(imageLocalPath)));
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(imageLocalPath));
         stream.write(file.getBytes());
         stream.close();
         return this;
