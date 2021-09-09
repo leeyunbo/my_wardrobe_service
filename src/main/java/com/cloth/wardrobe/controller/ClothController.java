@@ -5,6 +5,7 @@ import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.domain.community.PostType;
 import com.cloth.wardrobe.dto.records.RequestForRecordSave;
+import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.service.ClothService;
 import com.cloth.wardrobe.service.CommunityService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,15 @@ public class ClothController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         return clothService.findById(id);
     }
+
     @GetMapping("/api/v1/clothes")
     public ResponseEntity<?> findAll() {
         return clothService.findAll();
+    }
+
+    @GetMapping("/api/v1/clothes/{id}/records")
+    public ResponseEntity<ResponseForRecords> findRecordsByClothId(@PathVariable Long id) {
+        return clothService.findRecordsByClothId(id);
     }
 
     @PutMapping("/api/v1/clothes/{id}/like_cnt")

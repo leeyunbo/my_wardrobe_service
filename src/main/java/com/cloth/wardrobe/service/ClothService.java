@@ -3,13 +3,17 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.records.RequestForRecordSave;
+import com.cloth.wardrobe.dto.records.ResponseForRecords;
+import com.cloth.wardrobe.dto.records.element.ContentForRecord;
 import com.cloth.wardrobe.exception.BadRequestException;
+import com.cloth.wardrobe.exception.DoNotFoundContentException;
+import com.cloth.wardrobe.exception.WrongAccessException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.awt.image.MultiPixelPackedSampleModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +38,7 @@ public class ClothService {
     private final ClothRepository clothRepository;
 
     @Transactional
-    public ResponseEntity<?> findById(Long clothId) {
+    public ResponseEntity<ResponseForCloth> findById(Long clothId) {
         Cloth cloth = clothRepository.findById(clothId)
                 .orElseThrow(() -> new BadRequestException("해당 품목이 존재하지 않습니다. id=" + clothId));
 
@@ -46,7 +50,7 @@ public class ClothService {
     }
 
     @Transactional
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<ResponseForClothes> findAll() {
         List<ContentForCloth> clothes = new ArrayList<>();
 
         for(Cloth cloth : clothRepository.findAll()) {
@@ -62,9 +66,28 @@ public class ClothService {
     }
 
     @Transactional
-    public ResponseEntity<?> addRecord(Long clothId, Member member, RequestForRecordSave requestForRecordSave, MultipartFile file) {
+    public ResponseEntity<ResponseForRecords> findRecordsByClothId(Long id) {
+        Cloth cloth = clothRepository.findById(id)
+                .orElseThrow(() -> new DoNotFoundContentException("해당 아이템이 존재하지 않습니다. id=" + id));
+
+        ResponseForRecords responseForRecords = new ResponseForRecords();
+        List<ContentForRecord> contents =
+                cloth.getRecords()
+                        .stream()
+                        .map(ContentForRecord::new)
+                        .collect(Collectors.toList());
+
+        responseForRecords.setContent(contents);
+        responseForRecords.set_code(200);
+        responseForRecords.set_message("OK");
+
+        return new ResponseEntity<>(responseForRecords, HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Response> addRecord(Long clothId, Member member, RequestForRecordSave requestForRecordSave, MultipartFile file) {
         Cloth cloth = clothRepository.findById(clothId)
-                .orElseThrow(() -> new BadRequestException("해당 품목이 존재하지 않습니다. id=" + clothId));
+                .orElseThrow(() -> new DoNotFoundContentException("해당 품목이 존재하지 않습니다. id=" + clothId));
 
         if (cloth.getMember().getEmail().equals(member.getEmail())) {
             try {
@@ -83,19 +106,19 @@ public class ClothService {
             }
         }
         else {
-            throw new BadRequestException("올바르지 않은 접근입니다.");
+            throw new WrongAccessException("올바르지 않은 접근입니다.");
         }
     }
 
     @Transactional
-    public ResponseEntity<?> deleteRecord(Long clothId, Long recordId, Member member) {
+    public ResponseEntity<Response> deleteRecord(Long clothId, Long recordId, Member member) {
         Cloth cloth = clothRepository.findById(clothId)
-                .orElseThrow(() -> new BadRequestException("해당 품목이 존재하지 않습니다."));
+                .orElseThrow(() -> new DoNotFoundContentException("해당 품목이 존재하지 않습니다."));
 
         if (cloth.getMember().getEmail().equals(member.getEmail())) {
 
             Record record = recordRepository.findById(recordId)
-                    .orElseThrow(() -> new BadRequestException("해당 기록이 존재하지 않습니다."));
+                    .orElseThrow(() -> new DoNotFoundContentException("해당 기록이 존재하지 않습니다."));
 
             cloth.deleteRecord(record);
 
