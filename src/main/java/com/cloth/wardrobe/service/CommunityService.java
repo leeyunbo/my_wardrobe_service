@@ -6,7 +6,10 @@ import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.member.MemberRepository;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.dto.common.Response;
+import com.cloth.wardrobe.dto.community.ResponseForComment;
+import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.dto.community.ResponseForLike;
+import com.cloth.wardrobe.dto.community.element.ContentForComment;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.exception.WrongAccessException;
 import com.cloth.wardrobe.repository.ClothRepository;
@@ -20,7 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -73,7 +79,30 @@ public class CommunityService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    private Post findPostById(Long postId, PostType type) {
+    @Transactional
+    public ResponseEntity<ResponseForComments> findCommentsByPostId(Long postId, String type) {
+        Post post = findPostById(postId, PostType.valueOf(type));
+        ResponseForComments responseForComments = new ResponseForComments();
+
+        List<Comment> comments;
+        if(post instanceof Wardrobe) comments = ((Wardrobe) post).getComments();
+        else if(post instanceof Record) comments = ((Record) post).getComments();
+        else if(post instanceof Cloth) comments = ((Cloth) post).getComments();
+        else throw new BadRequestException("type이 올바르지 않습니다.");
+
+        List<ContentForComment> convertedComments =
+                comments.stream()
+                        .map(ContentForComment::new)
+                        .collect(Collectors.toList());
+        responseForComments.setContents(convertedComments);
+        responseForComments.set_code(200);
+        responseForComments.set_message("OK");
+
+        return new ResponseEntity<>(responseForComments, HttpStatus.OK);
+    }
+
+    @Transactional
+    public Post findPostById(Long postId, PostType type) {
         if(type.equals(PostType.Wardrobe)) {
             return wardrobeRepository.findById(postId)
                     .orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다."));
