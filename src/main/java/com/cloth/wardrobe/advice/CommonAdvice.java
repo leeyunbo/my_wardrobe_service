@@ -24,26 +24,32 @@ public class CommonAdvice {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> methodArgumentTypeMismatchError(Exception e) {
-        Response responseForError = createResponse(e);
+        Response responseForError = createResponse("잘못된 요청입니다. "  + e.getMessage());
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(Exception e) {
-        Response responseForError = createResponse(e);
+        Response responseForError = createResponse(e.getMessage());
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DoNotFoundContentException.class)
     public ResponseEntity<?> doNotFoundContent(Exception e) {
-        Response responseForError = createResponse(e);
+        Response responseForError = createResponse(e.getMessage());
         return new ResponseEntity<>(responseForError, HttpStatus.NO_CONTENT);
     }
 
-    private Response createResponse(Exception e) {
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> illegalArgument(Exception e) {
+        Response responseForError = createResponse("잘못된 요청입니다. " + e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
+    }
+
+    private Response createResponse(String message) {
         Response responseForError = new Response();
         responseForError.set_code(200);
-        responseForError.set_message(e.getMessage());
+        responseForError.set_message(message);
         return responseForError;
     }
 }
