@@ -4,10 +4,11 @@ import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -29,22 +30,22 @@ public class Wardrobe extends Post {
     // 멤버
     @OneToOne
     @JoinColumn(name = "member_id")
-    public Member member;
+    @Setter  public Member member;
 
     // 이미지
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
-    private Image image;
+    @Setter  private Image image;
 
     // 옷장
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cloth> clothes = new ArrayList<>();
+    private final List<Cloth> clothes = new ArrayList<>();
 
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "wardrobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Like> likes = new ArrayList<>();
+    private final List<Like> likes = new ArrayList<>();
 
     private String name;
 
@@ -93,6 +94,7 @@ public class Wardrobe extends Post {
      * @param comment
      * @return
      */
+    @Override
     public Wardrobe writeComment(Comment comment) {
         this.comments.add(comment);
         comment.setWardrobe(this);
@@ -102,6 +104,7 @@ public class Wardrobe extends Post {
     /**
      * 옷장 코멘트 제거
      */
+    @Override
     public Wardrobe deleteComment(Comment comment) {
         this.comments.remove(comment);
         comment.setWardrobe(null);
@@ -112,6 +115,7 @@ public class Wardrobe extends Post {
     /**
      * 좋아요수 변경
      */
+    @Override
     public Wardrobe changeLikeCnt(Like like, MethodType type) {
         if(type.equals(MethodType.ADD)) {
             this.likeCnt++;

@@ -1,6 +1,8 @@
 package com.cloth.wardrobe.domain.community;
 
 import com.cloth.wardrobe.domain.BaseTimeEntity;
+import com.cloth.wardrobe.domain.clothes.Cloth;
+import com.cloth.wardrobe.domain.clothes.Record;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import lombok.Builder;
@@ -31,6 +33,16 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "record_id")
+    private Record record;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cloth_id")
+    private Cloth cloth;
 
     private String content;
 

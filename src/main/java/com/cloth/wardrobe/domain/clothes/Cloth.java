@@ -1,16 +1,16 @@
 package com.cloth.wardrobe.domain.clothes;
 
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +38,15 @@ public class Cloth extends Post {
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Record> records = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private Image image;
+    @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private final List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Like> likes = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     public String clothName;
 
@@ -99,6 +102,28 @@ public class Cloth extends Post {
     public Cloth deleteRecord(Record record) {
         records.remove(record);
         record.setCloth(null);
+        return this;
+    }
+
+    /**
+     * 옷장 코멘트 작성
+     * @param comment
+     * @return
+     */
+    @Override
+    public Cloth writeComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setCloth(this);
+        return this;
+    }
+
+    /**
+     * 옷장 코멘트 제거
+     */
+    @Override
+    public Cloth deleteComment(Comment comment) {
+        this.comments.remove(comment);
+        comment.setCloth(null);
         return this;
     }
 }

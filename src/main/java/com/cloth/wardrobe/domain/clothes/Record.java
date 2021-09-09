@@ -1,9 +1,10 @@
 package com.cloth.wardrobe.domain.clothes;
 
+import com.cloth.wardrobe.domain.community.Comment;
 import com.cloth.wardrobe.domain.community.Like;
 import com.cloth.wardrobe.domain.community.Post;
 import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.s3.Image;
+import com.cloth.wardrobe.domain.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,9 @@ public class Record extends Post {
     @OneToMany(mappedBy = "cloth", cascade = CascadeType.ALL)
     private final List<Like> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "record", fetch = FetchType.LAZY)
+    private final List<Comment> comments = new ArrayList<>();
+
     private String content;
 
     private int likeCnt;
@@ -68,6 +72,28 @@ public class Record extends Post {
                 like.setRecord(null);
                 break;
         }
+        return this;
+    }
+
+    /**
+     * 코디 코멘트 작성
+     * @param comment
+     * @return
+     */
+    @Override
+    public Record writeComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setRecord(this);
+        return this;
+    }
+
+    /**
+     * 코디 코멘트 제거
+     */
+    @Override
+    public Record deleteComment(Comment comment) {
+        this.comments.remove(comment);
+        comment.setRecord(null);
         return this;
     }
 }
