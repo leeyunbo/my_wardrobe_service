@@ -29,8 +29,8 @@ public class ClothController {
     }
 
     @GetMapping("/api/v1/clothes")
-    public ResponseEntity<?> findAll() {
-        return clothService.findAll();
+    public ResponseEntity<?> findAll(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize) {
+        return clothService.findAll(pageNumber, pageSize);
     }
 
     @GetMapping("/api/v1/clothes/{id}/records")

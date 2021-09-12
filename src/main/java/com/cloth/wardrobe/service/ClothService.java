@@ -2,6 +2,7 @@ package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Record;
+import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.member.Member;
 import com.cloth.wardrobe.domain.common.Image;
 import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
@@ -18,6 +19,8 @@ import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,7 @@ public class ClothService {
 
     private final RecordRepository recordRepository;
     private final ClothRepository clothRepository;
+    private final PaginationService paginationService;
 
     @Transactional
     public ResponseEntity<ResponseForCloth> findById(Long clothId) {
@@ -50,19 +54,11 @@ public class ClothService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseForClothes> findAll() {
-        List<ContentForCloth> clothes = new ArrayList<>();
+    public ResponseEntity<ResponseForClothes> findAll(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+        Page<Cloth> paginatedClothes = clothRepository.findAll(pageRequest);
 
-        for(Cloth cloth : clothRepository.findAll()) {
-            clothes.add(new ContentForCloth(cloth.getId(), cloth.getImage(), cloth.getBuyingDate(), cloth.getClothBrand()));
-        }
-
-        ResponseForClothes responseForClothes = new ResponseForClothes();
-        responseForClothes.set_code(200);
-        responseForClothes.set_message("OK");
-        responseForClothes.setContents(clothes);
-
-        return new ResponseEntity<>(responseForClothes, HttpStatus.OK);
+        return paginationService.convertToPaginatedClothes(paginatedClothes);
     }
 
     @Transactional

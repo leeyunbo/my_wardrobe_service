@@ -15,7 +15,7 @@ import java.util.List;
 public interface ClothRepository extends JpaRepository<Cloth, Long> {
 
     @Query("SELECT c FROM Cloth c ORDER BY c.likeCnt DESC")
-    List<Cloth> findAll();
+    Page<Cloth> findAll(Pageable pageable);
 
     List<Cloth> findClothsByMemberOrderByLikeCntDesc(Member member);
 }
