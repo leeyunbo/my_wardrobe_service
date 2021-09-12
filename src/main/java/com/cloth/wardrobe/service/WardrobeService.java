@@ -40,6 +40,7 @@ public class WardrobeService {
     private final WardrobeRepository wardrobeRepository;
     private final CommentRepository commentRepository;
     private final ClothRepository clothRepository;
+    private final PaginationService paginationService;
 
     /**
      * 옷장의 정보를 저장한다.
@@ -106,34 +107,10 @@ public class WardrobeService {
      */
     @Transactional
     public ResponseEntity<?> findAll(int pageNumber, int pageSize) {
-        List<ContentForWardrobe> wardrobes = new ArrayList<>();
-        ResponseForWardrobes responseForWardrobes = new ResponseForWardrobes();
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+        Page<Wardrobe> paginationedWardrobes = wardrobeRepository.findAll(pageRequest);
 
-        Page<Wardrobe> wardrobePage = wardrobeRepository.findAll(pageRequest);
-
-        for(Wardrobe wardrobe : wardrobePage.getContent()) {
-            wardrobes.add(new ContentForWardrobe(
-                    wardrobe.getId(),
-                    wardrobe.getName(),
-                    wardrobe.getClothes().size(),
-                    wardrobe.getLikeCnt(),
-                    wardrobe.getMember().getName())
-            );
-        }
-
-        responseForWardrobes.set_code(200);
-        responseForWardrobes.set_message("OK");
-        responseForWardrobes.setContents(wardrobes);
-        responseForWardrobes.setTotalPages(wardrobePage.getTotalPages());
-        responseForWardrobes.setPageNumber(wardrobePage.getNumber());
-        responseForWardrobes.setSize(wardrobePage.getSize());
-        responseForWardrobes.setNumberOfElements(wardrobes.size());
-        responseForWardrobes.setTotalElements(wardrobePage.getTotalElements());
-        responseForWardrobes.setIsLast(wardrobePage.isLast());
-        responseForWardrobes.setIsFirst(wardrobePage.isFirst());
-
-        return new ResponseEntity<>(responseForWardrobes, HttpStatus.OK);
+        return paginationService.convertToPaginatedWardrobes(paginationedWardrobes);
     }
 
     /**
