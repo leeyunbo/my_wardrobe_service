@@ -1,12 +1,14 @@
 package com.cloth.wardrobe.dto.clothes;
 
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
-import com.cloth.wardrobe.dto.common.Response;
-import lombok.Data;
+import com.cloth.wardrobe.dto.common.PaginatedResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
-public class ResponseForClothes extends Response {
+@Setter
+@Getter
+public class ResponseForClothes extends PaginatedResponse {
     private List<ContentForCloth> contents;
 }
