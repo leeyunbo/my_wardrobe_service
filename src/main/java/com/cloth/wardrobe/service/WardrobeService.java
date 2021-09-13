@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.domain.clothes.Cloth;
 import com.cloth.wardrobe.domain.clothes.Wardrobe;
 import com.cloth.wardrobe.domain.community.Comment;
@@ -81,10 +82,15 @@ public class WardrobeService {
      * 특정 옷장의 정보를 가져온다.
      */
     @Transactional
-    public ResponseEntity<?> findById(Long wardrobeId) {
+    public ResponseEntity<ResponseForWardrobe> findById(Long wardrobeId) {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                 .orElseThrow(() ->
                         new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
+
+        ResponseForWardrobe responseForWardrobe = new ResponseForWardrobe(wardrobe);
+        responseForWardrobe.set_code(200);
+        responseForWardrobe.set_message("OK");
+
         return new ResponseEntity<>(new ResponseForWardrobe(wardrobe), HttpStatus.OK);
     }
 
@@ -207,5 +213,15 @@ public class WardrobeService {
         response.set_message("OK");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 옷장에 포함되는 옷을 가져온다.
+     */
+    public ResponseEntity<ResponseForClothes> getClothesByWardrobeId(int pageNumber, int pageSize, Long id) {
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+        Page<Cloth> paginatedClothes = clothRepository.findClothsByWardrobeId(pageRequest, id);
+
+        return paginationService.convertToPaginatedClothes(paginatedClothes);
     }
 }
