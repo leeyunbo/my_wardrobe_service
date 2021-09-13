@@ -17,5 +17,7 @@ public interface ClothRepository extends JpaRepository<Cloth, Long> {
     @Query("SELECT c FROM Cloth c ORDER BY c.likeCnt DESC")
     Page<Cloth> findAll(Pageable pageable);
 
+    Page<Cloth> findClothsByWardrobeId(Pageable pageable, Long wardrobeId);
+
     List<Cloth> findClothsByMemberOrderByLikeCntDesc(Member member);
 }
