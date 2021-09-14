@@ -1,8 +1,8 @@
 package com.cloth.wardrobe.dto.clothes;
 
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.common.Image;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

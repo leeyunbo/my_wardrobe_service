@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.dto.community;
 
-import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.entity.community.Comment;
 import lombok.Builder;
 import lombok.Getter;
 

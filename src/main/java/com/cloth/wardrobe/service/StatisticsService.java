@@ -1,11 +1,10 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.member.MemberRepository;
-import com.cloth.wardrobe.domain.statistics.StatisticsType;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.member.MemberRepository;
+import com.cloth.wardrobe.entity.statistics.StatisticsType;
 import com.cloth.wardrobe.dto.statistics.ContentForStatistics;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.exception.BadRequestException;

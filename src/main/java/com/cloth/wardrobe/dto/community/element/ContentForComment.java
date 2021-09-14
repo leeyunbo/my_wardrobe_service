@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.community.element;
 
-import com.cloth.wardrobe.domain.community.Comment;
+import com.cloth.wardrobe.entity.community.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

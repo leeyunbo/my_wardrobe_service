@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.clothes;
 
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

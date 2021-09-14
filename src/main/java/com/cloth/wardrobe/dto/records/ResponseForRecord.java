@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.dto.records;
 
-import com.cloth.wardrobe.domain.clothes.Record;
-import com.cloth.wardrobe.dto.common.ResponseForImage;
+import com.cloth.wardrobe.entity.clothes.Record;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

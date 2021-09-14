@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.community;
 
-import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.entity.community.Like;
 import com.cloth.wardrobe.dto.common.Response;
 import lombok.Getter;
 import lombok.Setter;

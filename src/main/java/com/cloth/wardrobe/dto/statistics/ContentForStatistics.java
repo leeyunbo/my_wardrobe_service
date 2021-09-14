@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.dto.statistics;
 
-import com.cloth.wardrobe.domain.statistics.StatisticsType;
+import com.cloth.wardrobe.entity.statistics.StatisticsType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

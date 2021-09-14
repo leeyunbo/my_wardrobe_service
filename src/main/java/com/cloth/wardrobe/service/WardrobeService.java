@@ -1,18 +1,16 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.common.Image;
-import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.community.Comment;
+import com.cloth.wardrobe.entity.common.Image;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.CommentRepository;
-import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.member.MemberRepository;
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.member.MemberRepository;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.dto.community.ResponseForComment;
@@ -28,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,7 +109,7 @@ public class WardrobeService {
      * isPublic이 true인 옷장들의 리스트들을 유저 이름 검색 기준으로 가져온다. (페이징 사용)
      */
     @Transactional
-    public ResponseEntity<?> findAll(int pageNumber, int pageSize) {
+    public ResponseEntity<ResponseForWardrobes> findAll(int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
         Page<Wardrobe> paginationedWardrobes = wardrobeRepository.findAll(pageRequest);
 
@@ -218,7 +215,7 @@ public class WardrobeService {
     /**
      * 옷장에 포함되는 옷을 가져온다.
      */
-    public ResponseEntity<ResponseForClothes> getClothesByWardrobeId(int pageNumber, int pageSize, Long id) {
+    public ResponseEntity<ResponseForClothes> findClothesByWardrobeId(int pageNumber, int pageSize, Long id) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
         Page<Cloth> paginatedClothes = clothRepository.findClothsByWardrobeId(pageRequest, id);
 
