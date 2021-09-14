@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.entity.clothes;
 
 public enum MethodType {
     DELETE, ADD, UPDATE

@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain.statistics;
+package com.cloth.wardrobe.entity.statistics;
 
 public enum StatisticsType {
     Brand, Color, BuyingType, Type

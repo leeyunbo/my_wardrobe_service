@@ -1,9 +1,9 @@
-package com.cloth.wardrobe.domain.common;
+package com.cloth.wardrobe.entity.common;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Record;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.BaseTimeEntity;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Record;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

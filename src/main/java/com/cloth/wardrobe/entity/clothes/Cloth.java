@@ -1,10 +1,10 @@
-package com.cloth.wardrobe.domain.clothes;
+package com.cloth.wardrobe.entity.clothes;
 
-import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.community.Like;
-import com.cloth.wardrobe.domain.community.Post;
-import com.cloth.wardrobe.domain.member.Member;
-import com.cloth.wardrobe.domain.common.Image;
+import com.cloth.wardrobe.entity.community.Comment;
+import com.cloth.wardrobe.entity.community.Like;
+import com.cloth.wardrobe.entity.community.PostEntity;
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.common.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +18,7 @@ import java.util.List;
 @Table(name = "clothes")
 @Getter
 @NoArgsConstructor
-public class Cloth extends Post {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "cloth_id")
-    private Long id;
+public class Cloth extends PostEntity {
 
     @Setter
     @ManyToOne
@@ -76,7 +71,7 @@ public class Cloth extends Post {
     }
 
     @Override
-    public Post changeLikeCnt(Like like, MethodType type) {
+    public PostEntity changeLikeCnt(Like like, MethodType type) {
         switch (type) {
             case ADD:
                 this.likeCnt++;
@@ -110,7 +105,6 @@ public class Cloth extends Post {
      * @param comment
      * @return
      */
-    @Override
     public Cloth writeComment(Comment comment) {
         this.comments.add(comment);
         comment.setCloth(this);
@@ -120,7 +114,6 @@ public class Cloth extends Post {
     /**
      * 옷장 코멘트 제거
      */
-    @Override
     public Cloth deleteComment(Comment comment) {
         this.comments.remove(comment);
         comment.setCloth(null);

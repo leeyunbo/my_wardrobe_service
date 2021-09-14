@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain.member;
+package com.cloth.wardrobe.entity.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

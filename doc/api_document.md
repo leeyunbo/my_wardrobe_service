@@ -11,8 +11,8 @@
 #### Request Parameters 
 |파라미터|타입|필수 여부|설명|
 |------|---|---|---|
-|page_number|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
-|page_size|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
+|page|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
+|pageSize|Integer|필수|한 페이지에 포함되는 최대 Element 수를 의미한다.|
 
 
 #### Response Parameters 
@@ -73,8 +73,8 @@
 #### Request Parameters
 |파라미터|타입|필수 여부|설명|
 |------|---|---|---|
-|page_number|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
-|page_size|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
+|page|Integer|필수|Pagination Index로 페이지 시작 번호는 `1`로 한다.|
+|pageSize|Integer|필수|한 페이지에 포함되는 최대 Element 수를 의미한다.|
 
 
 #### Response Parameters
@@ -95,6 +95,8 @@
 |파라미터|타입|필수 여부|설명|비고|
 |------|---|---|---|---|
 |id|Long|필수|Cloth id|
+|clothName|String|필수|Cloth 이름|
+|clothType|String|필수|Cloth 종류|
 |buyingDate|String|필수|Cloth 구매 일자|YYYY-MM-DD|
 |clothBrand|String|필수|브랜드|
 |imageServerPath|String|필수|이미지 Path|

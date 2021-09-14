@@ -120,7 +120,7 @@ var main = {
     },
 
     move_clothes : function () {
-        window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes';
+        window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes?page=1&pageSize=20';
     },
 
     check_image : function (obj) {

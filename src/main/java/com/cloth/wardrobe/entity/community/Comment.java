@@ -1,17 +1,16 @@
-package com.cloth.wardrobe.domain.community;
+package com.cloth.wardrobe.entity.community;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Record;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.entity.BaseTimeEntity;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Record;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")

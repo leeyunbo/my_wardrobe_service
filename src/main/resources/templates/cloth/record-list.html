@@ -13,9 +13,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="record : ${records.content}">
+            <tr th:each="record : ${records}">
                 <td>
-                    <img th:src="${record.image == null ? '/image/no_image.png' : record.image.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px">
+                    <img th:src="${record.imageServerPath == null ? '/image/no_image.png' : record.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px">
                 </td>
                 <!--<a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>-->
                 <td>

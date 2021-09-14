@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"> <head th:replace="fragments/header :: header" /> <body>
 <div class="container">
@@ -14,10 +15,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="cloth : ${wardrobe.clothes}">
+            <tr th:each="cloth : ${clothes}">
                 <td>
                     <a th:href="@{/clothes/{id} (id=${cloth.id})}">
-                        <img th:src="${cloth.image == null ? 'http://localhost:8080/image/no_image.png' : cloth.image.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 200px; width: 200px">
+                        <img th:src="${cloth.imageServerPath == null ? 'http://localhost:8080/image/no_image.png' : cloth.imageServerPath}" id="wardrobe_image_view" class="form-control" style="height: 200px; width: 200px">
                     </a>
                 </td>
                 <td th:text="${cloth.clothName}"></td>
@@ -29,7 +30,7 @@
         </table>
 
         <div class="form-group">
-            <a class="btn btn-dark small" th:if="${wardrobe.member.email == session.user.email}" th:href="@{/wardrobe/{id}/clothes/add (id=${wardrobe.id})}"}>옷 등록하기</a>
+            <a class="btn btn-dark small" th:if="${wardrobe.email == session.user.email}" th:href="@{/wardrobe/{id}/clothes/add (id=${wardrobe.id})}"}>옷 등록하기</a>
         </div>
 
     </div>

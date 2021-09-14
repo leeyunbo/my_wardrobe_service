@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.domain;
+package com.cloth.wardrobe.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

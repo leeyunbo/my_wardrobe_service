@@ -1,11 +1,11 @@
-package com.cloth.wardrobe.domain.member;
+package com.cloth.wardrobe.entity.member;
 
-import com.cloth.wardrobe.domain.BaseTimeEntity;
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Record;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.community.Comment;
-import com.cloth.wardrobe.domain.community.Like;
+import com.cloth.wardrobe.entity.BaseTimeEntity;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Record;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.community.Comment;
+import com.cloth.wardrobe.entity.community.Like;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
