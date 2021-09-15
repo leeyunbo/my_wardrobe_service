@@ -16,15 +16,17 @@ import java.util.List;
 
 
 @Data
+@Entity
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class PostEntity extends BaseTimeEntity {
+@DiscriminatorColumn
+@Inheritance(strategy = InheritanceType.JOINED)
+public class PostEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Setter
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -36,12 +38,11 @@ public abstract class PostEntity extends BaseTimeEntity {
 
     private int likeCnt = 0;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "like_id")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private final List<Like> likes = new ArrayList<>();
 
-    public abstract PostEntity writeComment(Comment comment);
-    public abstract PostEntity deleteComment(Comment comment);
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    private final List<Comment> comments = new ArrayList<>();
 
     public PostEntity(Member member, Image image) {
         this.member = member;
@@ -59,6 +60,18 @@ public abstract class PostEntity extends BaseTimeEntity {
             this.likes.remove(like);
             like.setPost(null);
         }
+        return this;
+    }
+
+    public PostEntity writeComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setPost(this);
+        return this;
+    }
+
+    public PostEntity deleteComment(Comment comment) {
+        this.comments.remove(comment);
+        comment.setPost(null);
         return this;
     }
 }

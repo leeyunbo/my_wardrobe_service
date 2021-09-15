@@ -27,6 +27,7 @@ public class Like extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private PostEntity post;
 
 

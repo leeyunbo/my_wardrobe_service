@@ -4,10 +4,8 @@ import com.cloth.wardrobe.entity.BaseTimeEntity;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Record;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.cloth.wardrobe.entity.community.PostEntity;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +16,8 @@ import java.util.UUID;
 @Slf4j
 @Entity
 @Table(name = "images")
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class Image extends BaseTimeEntity {
     @Id
@@ -32,20 +31,9 @@ public class Image extends BaseTimeEntity {
 
     private String fileName;
 
-    @Setter
-    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
-    @JoinColumn(name = "wardrobe_id")
-    private Wardrobe wardrobe;
-
-    @Setter
-    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
-    @JoinColumn(name = "record_id")
-    private Record record;
-
-    @Setter
-    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
-    @JoinColumn(name = "cloth_id")
-    private Cloth cloth;
+    @OneToOne
+    @JoinColumn(name = "post_id")
+    private PostEntity post;
 
     @Builder
     public Image(String imageLocalPath, String imageServerPath, String fileName) {
