@@ -128,8 +128,7 @@ public class WardrobeService {
                 .map(ResponseForComment::new)
                 .collect(Collectors.toList());
     }
-
-
+    
     /**
      * 댓글을 작성한다.
      */
