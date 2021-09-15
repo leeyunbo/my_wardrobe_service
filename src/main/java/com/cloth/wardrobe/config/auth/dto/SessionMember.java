@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.config.auth.dto;
 
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.entity.member.Member;
 import lombok.Getter;
 import java.io.Serializable;
 

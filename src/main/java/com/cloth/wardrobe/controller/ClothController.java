@@ -3,11 +3,11 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.service.ClothService;
-import com.cloth.wardrobe.service.CommunityService;
+import com.cloth.wardrobe.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ClothController {
 
     private final ClothService clothService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
-    private final CommunityService communityService;
+    private final PostService communityService;
 
     @GetMapping("/api/v1/clothes/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
@@ -34,15 +34,14 @@ public class ClothController {
     }
 
     @GetMapping("/api/v1/clothes/{id}/records")
-    public ResponseEntity<ResponseForRecords> findRecordsByClothId(@PathVariable Long id) {
-        return clothService.findRecordsByClothId(id);
+    public ResponseEntity<ResponseForRecords> findRecordsByClothId(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize, @PathVariable Long id) {
+        return clothService.findRecordsByClothId(pageNumber, pageSize, id);
     }
 
     @PutMapping("/api/v1/clothes/{id}/like_cnt")
     public ResponseEntity<?> changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return communityService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember),
-                PostType.Cloth);
+                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")

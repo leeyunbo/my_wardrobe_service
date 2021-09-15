@@ -3,13 +3,13 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.domain.community.PostType;
+import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.clothes.RequestForClothSave;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeUpdate;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
-import com.cloth.wardrobe.service.CommunityService;
+import com.cloth.wardrobe.service.PostService;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class WardrobeController {
 
-    private final CommunityService communityService;
+    private final PostService communityService;
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
@@ -62,8 +62,7 @@ public class WardrobeController {
     @PutMapping("/{id}/like_cnt")
     public ResponseEntity<?> addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return communityService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember),
-                PostType.Wardrobe);
+                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
     @PostMapping("/{id}/comment")
@@ -84,7 +83,7 @@ public class WardrobeController {
 
     @GetMapping("/{id}/clothes")
     public ResponseEntity<ResponseForClothes> getClothByWardrobeId(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize, @PathVariable Long id) {
-        return wardrobeService.getClothesByWardrobeId(
+        return wardrobeService.findClothesByWardrobeId(
                 pageNumber,
                 pageSize,
                 id);
