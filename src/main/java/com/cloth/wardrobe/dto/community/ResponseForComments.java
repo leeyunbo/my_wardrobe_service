@@ -1,7 +1,7 @@
 package com.cloth.wardrobe.dto.community;
 
 
-import com.cloth.wardrobe.dto.common.Response;
+import com.cloth.wardrobe.dto.common.PaginatedResponse;
 import com.cloth.wardrobe.dto.community.element.ContentForComment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponseForComments extends Response {
+public class ResponseForComments extends PaginatedResponse {
      List<ContentForComment> contents;
-
-     public ResponseForComments(List<ContentForComment> contents) {
-          this.contents = contents;
-     }
 }

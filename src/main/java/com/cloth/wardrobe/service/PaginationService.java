@@ -1,11 +1,17 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
+import com.cloth.wardrobe.dto.community.ResponseForComments;
+import com.cloth.wardrobe.dto.community.element.ContentForComment;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Record;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
 import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
+import com.cloth.wardrobe.dto.records.ResponseForRecords;
+import com.cloth.wardrobe.dto.records.element.ContentForRecord;
+import com.cloth.wardrobe.entity.community.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +71,50 @@ public class PaginationService {
         responseForClothes.setIsFirst(paginatedClothes.isFirst());
 
         return new ResponseEntity<>(responseForClothes, HttpStatus.OK);
+    }
+
+    protected ResponseEntity<ResponseForRecords> convertToPaginatedRecords(Page<Record> paginatedRecords) {
+        List<ContentForRecord> records = new ArrayList<>();
+        ResponseForRecords responseForRecords = new ResponseForRecords();
+
+        for(Record record : paginatedRecords.getContent()) {
+            records.add(new ContentForRecord(record));
+        }
+
+        responseForRecords.set_code(200);
+        responseForRecords.set_message("OK");
+        responseForRecords.setContents(records);
+        responseForRecords.setTotalPages(paginatedRecords.getTotalPages());
+        responseForRecords.setPageNumber(paginatedRecords.getNumber());
+        responseForRecords.setSize(paginatedRecords.getSize());
+        responseForRecords.setNumberOfElements(records.size());
+        responseForRecords.setTotalElements(paginatedRecords.getTotalElements());
+        responseForRecords.setIsLast(paginatedRecords.isLast());
+        responseForRecords.setIsFirst(paginatedRecords.isFirst());
+
+        return new ResponseEntity<>(responseForRecords, HttpStatus.OK);
+    }
+
+    protected ResponseEntity<ResponseForComments> convertToPaginatedComments(Page<Comment> paginatedComments) {
+        List<ContentForComment> comments = new ArrayList<>();
+        ResponseForComments responseForComments = new ResponseForComments();
+
+        for(Comment comment : paginatedComments.getContent()) {
+            comments.add(new ContentForComment(comment));
+        }
+
+        responseForComments.set_code(200);
+        responseForComments.set_message("OK");
+        responseForComments.setContents(comments);
+        responseForComments.setTotalPages(paginatedComments.getTotalPages());
+        responseForComments.setPageNumber(paginatedComments.getNumber());
+        responseForComments.setSize(paginatedComments.getSize());
+        responseForComments.setNumberOfElements(comments.size());
+        responseForComments.setTotalElements(paginatedComments.getTotalElements());
+        responseForComments.setIsLast(paginatedComments.isLast());
+        responseForComments.setIsFirst(paginatedComments.isFirst());
+
+        return new ResponseEntity<>(responseForComments, HttpStatus.OK);
     }
 
 
