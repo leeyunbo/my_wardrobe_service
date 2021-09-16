@@ -34,9 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WardrobeService {
 
-    private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
-    private final CommentRepository commentRepository;
     private final ClothRepository clothRepository;
     private final PaginationService paginationService;
 
@@ -114,56 +112,6 @@ public class WardrobeService {
         Page<Wardrobe> paginationedWardrobes = wardrobeRepository.findAll(pageRequest);
 
         return paginationService.convertToPaginatedWardrobes(paginationedWardrobes);
-    }
-
-    /**
-     * 댓글을 모두 가져온다.
-     */
-    @Transactional
-    public List<ResponseForComment> getComments(Long wardrobeId) {
-        Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new IllegalArgumentException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
-
-        return wardrobe.getComments()
-                .stream()
-                .map(ResponseForComment::new)
-                .collect(Collectors.toList());
-    }
-    
-    /**
-     * 댓글을 작성한다.
-     */
-    @Transactional
-    public ResponseEntity<?> writeComment(Long wardrobeId, Long memberId, RequestForCommentSave commentSaveRequestDto) {
-        Wardrobe wardrobe =  wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException("해당 멤버가 존재하지 않습니다. id=" + memberId));
-
-        commentSaveRequestDto.setMember(member);
-        wardrobe.writeComment(commentSaveRequestDto.toEntity());
-
-        Response response = new Response();
-        response.set_code(200);
-        response.set_message("OK");
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * 댓글을 삭제한다.
-     */
-    @Transactional
-    public ResponseEntity<?> deleteComment(Long wardrobeId, Long commentId, Member member) {
-        Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("댓글이 존재하지 않습니다. id=" + commentId));
-
-        if (!comment.getMember().getEmail().equals(member.getEmail())) throw new BadRequestException("올바르지 않은 접근입니다.");
-
-        wardrobe.deleteComment(comment);
-
-        Response response = new Response();
-        response.set_code(200);
-        response.set_message("OK");
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

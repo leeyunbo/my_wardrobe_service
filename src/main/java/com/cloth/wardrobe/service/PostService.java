@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.entity.clothes.*;
 import com.cloth.wardrobe.entity.community.*;
 import com.cloth.wardrobe.entity.member.Member;
@@ -34,6 +36,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final PaginationService paginationService;
+    private final CheckService checkService;
 
     /**
      * 좋아요 수를 증가시키거나 감소시킨다.
@@ -78,10 +81,45 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<ResponseForComments> findCommentsByPostId(Long postId, int pageNumber, int pageSize) {
-        ResponseForComments responseForComments = new ResponseForComments();
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
         Page<Comment> paginatedComments = commentRepository.findCommentsByPostId(pageRequest, postId);
 
         return paginationService.convertToPaginatedComments(paginatedComments);
     }
+
+    @Transactional
+    public ResponseEntity<?> writeComment(Long postId, SessionMember sessionMember, RequestForCommentSave commentSaveRequestDto) {
+        PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+
+        checkService.confirmRightApproach(sessionMember.getEmail(), post.getMember().getEmail());
+
+        post.writeComment(commentSaveRequestDto.toEntity());
+
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message("OK");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 댓글을 삭제한다.
+     */
+    @Transactional
+    public ResponseEntity<?> deleteComment(Long postId, Long commentId, SessionMember sessionMember) {
+        PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+
+        checkService.confirmRightApproach(sessionMember.getEmail(), post.getMember().getEmail());
+
+        post.deleteComment(comment);
+
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message("OK");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 }

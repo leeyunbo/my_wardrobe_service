@@ -26,7 +26,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class WardrobeController {
 
-    private final PostService communityService;
     private final WardrobeService wardrobeService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
@@ -57,28 +56,6 @@ public class WardrobeController {
         return wardrobeService.findAll(
                 pageNumber,
                 pageSize);
-    }
-
-    @PutMapping("/{id}/like_cnt")
-    public ResponseEntity<?> addLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
-        return communityService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
-    }
-
-    @PostMapping("/{id}/comment")
-    public ResponseEntity<?> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.writeComment(
-                id,
-                customOAuth2MemberService.getMemberBySession(sessionMember).getId(),
-                commentSaveRequestDto);
-    }
-
-    @DeleteMapping("/{wardrobeId}/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long wardrobeId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.deleteComment(
-                wardrobeId,
-                commentId,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
     @GetMapping("/{id}/clothes")

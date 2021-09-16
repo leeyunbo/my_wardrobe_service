@@ -21,7 +21,6 @@ public class ClothController {
 
     private final ClothService clothService;
     private final CustomOAuth2MemberService customOAuth2MemberService;
-    private final PostService communityService;
 
     @GetMapping("/api/v1/clothes/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
@@ -36,12 +35,6 @@ public class ClothController {
     @GetMapping("/api/v1/clothes/{id}/records")
     public ResponseEntity<ResponseForRecords> findRecordsByClothId(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize, @PathVariable Long id) {
         return clothService.findRecordsByClothId(pageNumber, pageSize, id);
-    }
-
-    @PutMapping("/api/v1/clothes/{id}/like_cnt")
-    public ResponseEntity<?> changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
-        return communityService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
     }
 
     @PostMapping("/api/v1/clothes/{clothId}/records")
