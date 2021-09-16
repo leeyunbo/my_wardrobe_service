@@ -1,19 +1,25 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.domain.clothes.Cloth;
-import com.cloth.wardrobe.domain.clothes.Wardrobe;
-import com.cloth.wardrobe.domain.member.Member;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.community.ResponseForComments;
+import com.cloth.wardrobe.entity.clothes.Cloth;
+import com.cloth.wardrobe.entity.clothes.Wardrobe;
+import com.cloth.wardrobe.entity.community.Comment;
+import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ImageRepository;
 import com.cloth.wardrobe.dto.community.ResponseForComment;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
-import com.cloth.wardrobe.domain.member.MemberRepository;
+import com.cloth.wardrobe.entity.member.MemberRepository;
 import com.cloth.wardrobe.repository.WardrobeRepository;
 import com.cloth.wardrobe.service.ClothService;
+import com.cloth.wardrobe.service.PostService;
 import com.cloth.wardrobe.service.WardrobeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +30,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -61,10 +69,16 @@ public class WardrobeControllerTest {
     ImageRepository imageRepository;
 
     @Autowired
+    PostService postService;
+
+    @Autowired
     WardrobeService wardrobeService;
 
     @Autowired
     ClothService clothService;
+
+    protected MockHttpSession session;
+    protected MockHttpServletRequest request;
 
 
     @Autowired
@@ -91,7 +105,6 @@ public class WardrobeControllerTest {
         RequestForWardrobeSave requestDto = RequestForWardrobeSave
                 .builder()
                 .name("name")
-                .member(memberRepository.findById(1L).get())
                 .isPublic("false")
                 .build();
         String url = "http://localhost:8080/api/v1/wardrobe";
@@ -120,31 +133,26 @@ public class WardrobeControllerTest {
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic("true")
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic(isPublic)
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic(isPublic)
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic(isPublic)
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
         wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic(isPublic)
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
 
@@ -167,58 +175,50 @@ public class WardrobeControllerTest {
         // given
         String name = "테스트 옷장";
         String isPublic = "false";
-        int likeCnt = 0;
-        Member member = memberRepository.findById(1L).get();
+        Member member = memberRepository.findById(1L).orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
         Wardrobe wardrobe = wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic(isPublic)
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
 
-        RequestForCommentSave commentSaveRequestDto = RequestForCommentSave
+        RequestForCommentSave requestForCommentSave = RequestForCommentSave
                 .builder()
                 .content("TEST 내용")
                 .build();
 
-        wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
+        SessionMember sessionMember = new SessionMember(member);
+        session = new MockHttpSession();
+        session.setAttribute("member", sessionMember);
 
-        List<ResponseForComment> comments = wardrobeService.getComments(wardrobe.getId());
-        assertThat(comments.size()).isEqualTo(1);
+        postService.writeComment(wardrobe.getId(), sessionMember, requestForCommentSave);
 
-        wardrobeService.writeComment(wardrobe.getId(), 1L, commentSaveRequestDto);
+        ResponseForComments comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
+        assertThat(comments.getContents().size()).isEqualTo(2);
 
-        comments = wardrobeService.getComments(wardrobe.getId());
-        assertThat(comments.size()).isEqualTo(2);
+        postService.deleteComment(wardrobe.getId(), comments.getContents().get(0).getId(), sessionMember);
 
-        wardrobeService.deleteComment(wardrobe.getId(), comments.get(0).getId(), member);
-
-        comments = wardrobeService.getComments(wardrobe.getId());
-        assertThat(comments.size()).isEqualTo(1);
+        comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
+        assertThat(comments.getContents().size()).isEqualTo(1);
     }
 
-    @Test
-    public void 이미지_저장_테스트() {
-    }
 
     @Test
     public void 옷_저장_테스트() {
         String name = "테스트 옷장";
-        int likeCnt = 0;
         Member member = memberRepository.findById(1L).get();
 
         Wardrobe wardrobe = wardrobeRepository.save(Wardrobe.builder()
                 .member(member)
                 .isPublic("true")
-                .likeCnt(likeCnt)
                 .name(name)
                 .build());
 
         Cloth cloth = new Cloth();
         wardrobe.addCloth(cloth);
 
-        List<Cloth> cloths = (List<Cloth>) clothService.findAll().getBody();
+        List<Cloth> cloths = (List<Cloth>) clothService.findAll(1, 10).getBody();
         assertThat(cloths.size()).isEqualTo(1);
     }
 
@@ -226,7 +226,7 @@ public class WardrobeControllerTest {
     public void beanValidaiton() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         Validator validator = validatorFactory.getValidator();
-        RequestForWardrobeSave requestForWardrobeSave = new RequestForWardrobeSave("", null, null, "true");
+        RequestForWardrobeSave requestForWardrobeSave = new RequestForWardrobeSave("", "true");
 
         Set<ConstraintViolation<RequestForWardrobeSave>> violationSet = validator.validate(requestForWardrobeSave);
         for (ConstraintViolation<RequestForWardrobeSave> wardrobeSaveRequestDtoConstraintViolation : violationSet) {
