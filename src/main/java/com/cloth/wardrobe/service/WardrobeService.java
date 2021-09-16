@@ -45,10 +45,8 @@ public class WardrobeService {
     public ResponseEntity<?> save(RequestForWardrobeSave requestForWardrobeSave, Member member, MultipartFile file) {
         try {
             Image image = new Image().fileUpload(file, member.getEmail());
-            Wardrobe wardrobe = requestForWardrobeSave.toEntity();
-            wardrobe.setImage(image);
-            wardrobe.setMember(member);
-            wardrobeRepository.save(requestForWardrobeSave.toEntity());
+            Wardrobe wardrobe = requestForWardrobeSave.toEntity(member, image);
+            wardrobeRepository.save(wardrobe);
         } catch (IOException e) {
             throw new BadRequestException("파일이 손상되었습니다.");
         }
