@@ -3,6 +3,7 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/posts")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -33,18 +34,18 @@ public class PostController {
     }
 
     @PutMapping("/{id}/like")
-    public ResponseEntity<?> changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<Response> changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
         return postService.changeLikeCnt(id,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
+                sessionMember);
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<?> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<Response> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
         return postService.writeComment(id, sessionMember, commentSaveRequestDto);
     }
 
     @DeleteMapping("/{postId}/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long postId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<Response> deleteComment(@PathVariable Long postId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
         return postService.deleteComment(postId, commentId, sessionMember);
     }
 

@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import com.cloth.wardrobe.entity.clothes.*;
@@ -9,14 +10,12 @@ import com.cloth.wardrobe.entity.community.Like;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.dto.community.ResponseForLike;
-import com.cloth.wardrobe.dto.community.element.ContentForComment;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,7 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final CustomOAuth2MemberService customOAuth2MemberService;
     private final PaginationService paginationService;
     private final CheckService checkService;
 
@@ -42,7 +42,8 @@ public class PostService {
      * 좋아요 수를 증가시키거나 감소시킨다.
      */
     @Transactional
-    public ResponseEntity<?> changeLikeCnt(Long id, Member member) {
+    public ResponseEntity<Response> changeLikeCnt(Long id, SessionMember sessionMember) {
+        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
         PostEntity post = postRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
         Optional<Like> like = likeRepository.findByMember_IdAndPost_Id(member.getId(), id);
@@ -88,7 +89,7 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<?> writeComment(Long postId, SessionMember sessionMember, RequestForCommentSave commentSaveRequestDto) {
+    public ResponseEntity<Response> writeComment(Long postId, SessionMember sessionMember, RequestForCommentSave commentSaveRequestDto) {
         PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
         checkService.confirmRightApproach(sessionMember.getEmail(), post.getMember().getEmail());
@@ -106,7 +107,7 @@ public class PostService {
      * 댓글을 삭제한다.
      */
     @Transactional
-    public ResponseEntity<?> deleteComment(Long postId, Long commentId, SessionMember sessionMember) {
+    public ResponseEntity<Response> deleteComment(Long postId, Long commentId, SessionMember sessionMember) {
         PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 

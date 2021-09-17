@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "records", indexes = {@Index(columnList = "id")})
+@Table(name = "records", indexes = {@Index(columnList = "post_id")})
 public class Record extends PostEntity {
 
     @Setter

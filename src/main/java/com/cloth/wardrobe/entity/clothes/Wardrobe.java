@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "wardrobes")
+@Table(name = "wardrobes", indexes = {@Index(columnList = "post_id")})
 @Getter
 @NoArgsConstructor
 @DiscriminatorValue("Wardrobe")

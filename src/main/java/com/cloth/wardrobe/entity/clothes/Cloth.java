@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "clothes")
+@Table(name = "clothes", indexes = {@Index(columnList = "post_id")})
 @Getter
 @NoArgsConstructor
 public class Cloth extends PostEntity {
