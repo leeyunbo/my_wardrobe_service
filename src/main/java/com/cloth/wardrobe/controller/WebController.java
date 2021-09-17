@@ -55,14 +55,14 @@ public class WebController {
     }
 
     @GetMapping("/wardrobes")
-    public String findWardrobes(Model model, @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int pageSize) {
+    public String findWardrobes(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize) {
         ResponseForWardrobes responseForWardrobes = wardrobeService.findAll(pageNumber, pageSize).getBody();
         model.addAttribute("wardrobes", responseForWardrobes.getContents());
         return "wardrobe/wardrobes-list";
     }
 
     @GetMapping("/wardrobes/{id}")
-    public String findWardrobeById(Model model, @PathVariable(name = "id") Long postId, @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int pageSize, @LoginUser SessionMember sessionMember) {
+    public String findWardrobeById(Model model, @PathVariable(name = "id") Long postId, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         Boolean isLikeUser = communityService.isLikeUsers(postId, memberId).getBody().getIsLike();
 
@@ -76,7 +76,7 @@ public class WebController {
     }
 
     @GetMapping("/member/wardrobe")
-    public String findWardrobeByMember(Model model, @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int pageSize, @LoginUser SessionMember sessionMember) {
+    public String findWardrobeByMember(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
         try {
             ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember)).getBody();
             ResponseForComments responseForComments = communityService.findCommentsByPostId(responseForWardrobe.getId(), pageNumber, pageSize).getBody();
@@ -97,7 +97,7 @@ public class WebController {
 
     //== Cloth 관련 ==//
     @GetMapping("/clothes/{id}")
-    public String findClothById(Model model, @PathVariable(name = "id") Long id, @RequestParam("page_number") Integer pageNumber, @RequestParam("page_size") Integer pageSize, @LoginUser SessionMember sessionMember) {
+    public String findClothById(Model model, @PathVariable(name = "id") Long id, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
         Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
         boolean isLikeUser = communityService.isLikeUsers(id, memberId).getBody().getIsLike();
 
@@ -112,7 +112,7 @@ public class WebController {
     }
 
     @GetMapping("/wardrobe/{id}/clothes")
-    public String clothesOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId, @RequestParam("page_number") Integer pageNumber, @RequestParam("page_size") Integer pageSize) {
+    public String clothesOfWardrobe(Model model, @PathVariable(name = "id") Long wardrobeId, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize) {
         ResponseForWardrobe responseForWardrobe = wardrobeService.findById(wardrobeId).getBody();
         ResponseForClothes responseForClothes = wardrobeService.findClothesByWardrobeId(pageNumber, pageSize, wardrobeId).getBody();
 
@@ -131,7 +131,7 @@ public class WebController {
     }
 
     @GetMapping("/records")
-    public String findRecords(Model model, @RequestParam("page_number") Integer pageNumber, @RequestParam("page_size") Integer pageSize) {
+    public String findRecords(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize) {
         model.addAttribute("records", recordService.findAll(pageNumber, pageSize).getBody().getContents());
 
         return "cloth/record-list";
