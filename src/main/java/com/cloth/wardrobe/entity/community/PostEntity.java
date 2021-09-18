@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
+@Getter @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

@@ -21,7 +21,7 @@ public class RequestForCommentSave {
         this.content = content;
     }
 
-    public Comment toEntity() {
+    public Comment toEntity(Member member) {
         return Comment.builder()
                 .member(member)
                 .content(content)

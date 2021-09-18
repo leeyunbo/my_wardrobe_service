@@ -39,7 +39,7 @@ public class Member extends BaseTimeEntity {
 
     // 옷장
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "wardrobe_id")
     private Wardrobe wardrobe;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)

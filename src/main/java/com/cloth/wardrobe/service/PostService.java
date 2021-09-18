@@ -20,10 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -62,7 +59,6 @@ public class PostService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Transactional
     public ResponseEntity<ResponseForLike> isLikeUsers(Long postId, Long memberId) {
         Optional<Like> like = likeRepository.findByMember_IdAndPost_Id(memberId, postId);
         ResponseForLike response;
@@ -80,7 +76,6 @@ public class PostService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Transactional
     public ResponseEntity<ResponseForComments> findCommentsByPostId(Long postId, int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
         Page<Comment> paginatedComments = commentRepository.findCommentsByPostId(pageRequest, postId);
@@ -90,11 +85,11 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<Response> writeComment(Long postId, SessionMember sessionMember, RequestForCommentSave commentSaveRequestDto) {
-        PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+        Member member = customOAuth2MemberService.getMemberBySession(sessionMember);
 
-        checkService.confirmRightApproach(sessionMember.getEmail(), post.getMember().getEmail());
-
-        post.writeComment(commentSaveRequestDto.toEntity());
+        post.writeComment(commentSaveRequestDto.toEntity(member));
 
         Response response = new Response();
         response.set_code(200);
@@ -111,7 +106,7 @@ public class PostService {
         PostEntity post = postRepository.findById(postId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
-        checkService.confirmRightApproach(sessionMember.getEmail(), post.getMember().getEmail());
+        checkService.confirmRightApproach(sessionMember.getEmail(), comment.getMember().getEmail());
 
         post.deleteComment(comment);
 
