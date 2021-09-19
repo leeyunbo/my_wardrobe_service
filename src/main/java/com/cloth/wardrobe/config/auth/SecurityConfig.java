@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.config.auth;
 
-import com.cloth.wardrobe.domain.member.Role;
+import com.cloth.wardrobe.entity.member.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests() // URL별 권한 관리를 설정하는 옵션의 시작점
                     .antMatchers("/", "/css/**", "/images/**", "/js/**", "/profile").permitAll() // 전체 열람 권한
-                    .antMatchers("/api/v1/**").hasRole(Role.GUEST.name()) // USER 권한 사용자만 접근 가능하게 구현
+                    .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // USER 권한 사용자만 접근 가능하게 구현
                     .anyRequest().authenticated()  // 나머지 URL은 authenticate 즉, 로그인된 사용자만 접근 가능
                 .and()
                     .logout()
