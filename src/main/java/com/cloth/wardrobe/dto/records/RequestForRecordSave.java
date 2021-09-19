@@ -14,17 +14,18 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RequestForRecordSave {
 
-    @Setter private Member member;
-    @Setter private Image image;
-    @NotNull private String content;
+    private Image image;
+    private String content;
+    private String email;
 
     @Builder
-    public RequestForRecordSave(Image image, String content) {
+    public RequestForRecordSave(Image image, String content, String email) {
         this.image = image;
         this.content = content;
+        this.email = email;
     }
 
-    public Record toEntity() {
+    public Record toEntity(Member member, Image image) {
         return Record.builder()
                 .member(member)
                 .image(image)

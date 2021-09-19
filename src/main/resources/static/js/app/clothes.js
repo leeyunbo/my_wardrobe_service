@@ -30,7 +30,8 @@ var main = {
             buyingWay: $('#buying_way').val(),
             buyingDate: $('#buying_date').val(),
             clothColor: $('#cloth_color').val(),
-            clothBrand: $('#cloth_brand').val()
+            clothBrand: $('#cloth_brand').val(),
+            email: $('#session_email').val()
         };
 
         const formData = new FormData();
@@ -97,7 +98,8 @@ var main = {
 
     record_save : function () {
         var data = {
-            content : $('#record-content').val()
+            content : $('#record-content').val(),
+            email: $('#session_email').val()
         };
 
         const formData = new FormData();
@@ -119,11 +121,16 @@ var main = {
     },
 
     delete_record : function (id) {
+        var data = {
+            email: $('#session_email').val()
+        };
+
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/clothes/'+ $('#cloth_id').val() +'/records/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/clothes/' + $('#cloth_id').val();
         }).fail(function (error) {

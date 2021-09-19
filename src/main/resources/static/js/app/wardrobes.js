@@ -35,7 +35,8 @@ var main = {
         var data = {
             name: $('#name').val(),
             content: $('#content').val(),
-            isPublic: $('#isPublic').val()
+            isPublic: $('#isPublic').val(),
+            email: $('#session_email').val()
         };
 
         var formData = new FormData();

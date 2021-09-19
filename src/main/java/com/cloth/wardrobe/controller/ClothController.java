@@ -3,6 +3,7 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.records.RequestForRecordDelete;
 import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
@@ -39,22 +40,18 @@ public class ClothController {
 
     @PostMapping("/api/v1/clothes/{id}/record")
     public ResponseEntity<?> addRecordOfCloth(@PathVariable Long id,
-                                              @LoginUser SessionMember sessionMember,
                                               @RequestPart(value="data") RequestForRecordSave requestForRecordSave,
                                               @RequestPart(value="file") MultipartFile file ) {
-        return clothService.addRecord(
-                id,
-                customOAuth2MemberService.getMemberBySession(sessionMember),
-                requestForRecordSave,
-                file);
+        return clothService.addRecord(id, requestForRecordSave, file);
     }
 
     @DeleteMapping("/api/v1/clothes/{cloth_id}/records/{record_id}")
-    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable(name="cloth_id") Long clothId, @PathVariable(name="record_id") Long recordId, @LoginUser SessionMember sessionMember) {
+    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable(name="cloth_id") Long clothId, @PathVariable(name="record_id") Long recordId, RequestForRecordDelete requestForRecordDelete) {
         return clothService.deleteRecord(
                 clothId,
                 recordId,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
+                requestForRecordDelete
+        );
     }
 }
 

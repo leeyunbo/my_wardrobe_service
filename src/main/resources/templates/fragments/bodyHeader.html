@@ -11,6 +11,7 @@
     <div class="navbar-dark" style="margin-bottom: 30px;">
         <div th:if="${session.user != null}" class ="member-name-label">
             <span th:text="'옷장러 ' + ${session.user.getName() + '님 안녕하세요 😊'}" style="font-size:14px;"></span>
+            <span id="session_email" th:text="${session.user.getEmail()}" style="display:none;"></span>
         </div>
     </div>
 </div>
