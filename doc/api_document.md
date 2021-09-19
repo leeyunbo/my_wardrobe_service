@@ -567,3 +567,32 @@ formData.append('data', requestBody);
 |------|---|---|---|---|
 |_code|Integer|필수|HTTP 상태 코드 3자리|
 |_message|String|필수|응답 메시지|
+
+## 통계 관련 API
+### 선호도 확인하기 
+```
+/api/v1/statistics
+```
+
+|메서드|요청 URL|
+|------|---|
+|GET|/api/v1/statistics|
+
+#### 설명 
+> 총 4가지 기준 (브랜드, 색상, 구매 방법, 종류)에 대한 유저들의 선호도 API 입니다. <br/>
+> 각 요소에 대해 유저들이 선택한 횟수와 전체 횟수에 대한 비율을 상위 5위까지 반환합니다. 
+
+#### Response Parameters
+|파라미터|타입|필수 여부|설명|
+|------|---|---|---|
+|_code|Integer|필수|HTTP 상태 코드 3자리|
+|_message|String|필수|응답 메시지|
+|contents|Object[]|필수|선호도 목록|
+
+#### contents 상세 정보
+|파라미터|타입|필수 여부|설명|비고|
+|------|---|---|---|---|
+|name|Long|필수|요소 이름|
+|type|String|필수|기준|Brand, Color, BuyingType, Type|
+|percent|Double|필수|비율|
+|count|Long|필수|횟수|
