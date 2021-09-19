@@ -88,7 +88,7 @@ public class StatisticsService {
                     keySet[i],
                     type,
                     getPercent(total ,map.get(keySet[i])),
-                    map.get(keySet[i])));
+                    Integer.toUnsignedLong(map.get(keySet[i]))));
         }
     }
 

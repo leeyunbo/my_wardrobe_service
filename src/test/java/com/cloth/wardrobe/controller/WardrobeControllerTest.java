@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.community.RequestForComment;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
@@ -172,6 +173,8 @@ public class WardrobeControllerTest {
         // given
         String name = "테스트 옷장";
         String isPublic = "false";
+        String email = "nodoyunbok@gmail.com";
+
         Member member = memberRepository.findById(1L).orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
         Wardrobe wardrobe = wardrobeRepository.save(Wardrobe.builder()
@@ -183,18 +186,16 @@ public class WardrobeControllerTest {
         RequestForCommentSave requestForCommentSave = RequestForCommentSave
                 .builder()
                 .content("TEST 내용")
+                .email(email)
                 .build();
 
-        SessionMember sessionMember = new SessionMember(member);
-        session = new MockHttpSession();
-        session.setAttribute("member", sessionMember);
-
-        postService.writeComment(wardrobe.getId(), sessionMember, requestForCommentSave);
+        postService.writeComment(wardrobe.getId(), requestForCommentSave);
 
         ResponseForComments comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
         assertThat(comments.getContents().size()).isEqualTo(2);
 
-        postService.deleteComment(wardrobe.getId(), comments.getContents().get(0).getId(), sessionMember);
+        RequestForComment requestForComment = new RequestForComment(email);
+        postService.deleteComment(wardrobe.getId(), comments.getContents().get(0).getId(), requestForComment);
 
         comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
         assertThat(comments.getContents().size()).isEqualTo(1);

@@ -1,13 +1,9 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.common.Response;
-import com.cloth.wardrobe.dto.community.RequestForCommentSave;
-import com.cloth.wardrobe.entity.community.PostType;
-import com.cloth.wardrobe.dto.community.ResponseForComments;
-import com.cloth.wardrobe.dto.community.ResponseForLike;
+import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +19,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/{id}/is_like")
-    public ResponseEntity<ResponseForLike> isLikeUsers(@PathVariable Long id, @RequestParam("member_id") Long memberId) {
-        return postService.isLikeUsers(id, memberId);
+    public ResponseEntity<ResponseForLike> isLikeUsers(@PathVariable Long id, @RequestBody RequestForLike requestForLike) {
+        return postService.isLikeUsers(id, requestForLike);
     }
 
     @GetMapping("/{id}/comments")
@@ -33,19 +29,18 @@ public class PostController {
     }
 
     @PutMapping("/{id}/like")
-    public ResponseEntity<Response> changeLikeCnt(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
-        return postService.changeLikeCnt(id,
-                sessionMember);
+    public ResponseEntity<Response> changeLikeCnt(@PathVariable Long id, @RequestBody RequestForLike requestForLike) {
+        return postService.changeLikeCnt(id, requestForLike);
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<Response> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave commentSaveRequestDto, @LoginUser SessionMember sessionMember) {
-        return postService.writeComment(id, sessionMember, commentSaveRequestDto);
+    public ResponseEntity<Response> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave requestForCommentSave) {
+        return postService.writeComment(id, requestForCommentSave);
     }
 
     @DeleteMapping("/{post_id}/comment/{comment_id}")
-    public ResponseEntity<Response> deleteComment(@PathVariable(name="post_id") Long postId, @PathVariable(name="comment_id") Long commentId, @LoginUser SessionMember sessionMember) {
-        return postService.deleteComment(postId, commentId, sessionMember);
+    public ResponseEntity<Response> deleteComment(@PathVariable(name="post_id") Long postId, @PathVariable(name="comment_id") Long commentId, @RequestBody RequestForComment requestForComment) {
+        return postService.deleteComment(postId, commentId, requestForComment);
     }
 
 }

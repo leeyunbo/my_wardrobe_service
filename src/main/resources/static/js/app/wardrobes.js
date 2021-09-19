@@ -78,7 +78,8 @@ var main = {
 
     save_comment : function () {
         var data = {
-            content : $('#comment-content').val()
+            content : $('#comment-content').val(),
+            email: $('#session_email').val()
         };
 
         $.ajax({
@@ -95,11 +96,16 @@ var main = {
     },
 
     delete_comment : function (id) {
+        var data = {
+            email: $('#session_email').val()
+        };
+
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/posts/'+ $('#wardrobe_id').val() +'/comment/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobes/' + $('#wardrobe_id').val();
         }).fail(function (error) {
@@ -108,11 +114,16 @@ var main = {
     },
 
     change_like : function () {
+        var data = {
+            email: $('#session_email').val()
+        };
+
         $.ajax({
             type: 'PUT',
             url: '/api/v1/posts/' + $('#wardrobe_id').val() + '/like',
             dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobes/' + $('#wardrobe_id').val();
         }).fail(function (error) {

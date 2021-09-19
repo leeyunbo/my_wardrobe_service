@@ -13,12 +13,13 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RequestForCommentSave {
 
-    @Setter private Member member;
-    @NotBlank private String content;
+    private String content;
+    private String email;
 
     @Builder
-    public RequestForCommentSave(String content) {
+    public RequestForCommentSave(String content, String email) {
         this.content = content;
+        this.email = email;
     }
 
     public Comment toEntity(Member member) {

@@ -4,6 +4,7 @@ import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.clothes.*;
+import com.cloth.wardrobe.dto.community.RequestForLike;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
@@ -63,8 +64,8 @@ public class WebController {
 
     @GetMapping("/wardrobes/{id}")
     public String findWardrobeById(Model model, @PathVariable(name = "id") Long postId, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
-        Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
-        Boolean isLikeUser = communityService.isLikeUsers(postId, memberId).getBody().getIsLike();
+        RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
+        Boolean isLikeUser = communityService.isLikeUsers(postId, requestForIsLike).getBody().getIsLike();
 
         ResponseForWardrobe responseForWardrobe = wardrobeService.findById(postId).getBody();
         ResponseForComments responseForComments = communityService.findCommentsByPostId(postId, pageNumber, pageSize).getBody();
@@ -82,8 +83,8 @@ public class WebController {
             ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(requestForWardrobe).getBody();
             ResponseForComments responseForComments = communityService.findCommentsByPostId(responseForWardrobe.getId(), pageNumber, pageSize).getBody();
 
-            Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
-            Boolean isLikeUser = communityService.isLikeUsers(responseForWardrobe.getId(), memberId).getBody().getIsLike();
+            RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
+            Boolean isLikeUser = communityService.isLikeUsers(responseForWardrobe.getId(), requestForIsLike).getBody().getIsLike();
 
             model.addAttribute("wardrobe", responseForWardrobe);
             model.addAttribute("comments", responseForComments.getContents());
@@ -99,8 +100,8 @@ public class WebController {
     //== Cloth 관련 ==//
     @GetMapping("/clothes/{id}")
     public String findClothById(Model model, @PathVariable(name = "id") Long id, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
-        Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
-        boolean isLikeUser = communityService.isLikeUsers(id, memberId).getBody().getIsLike();
+        RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
+        boolean isLikeUser = communityService.isLikeUsers(id, requestForIsLike).getBody().getIsLike();
 
         ResponseForCloth responseForCloth = clothService.findById(id).getBody();
         ResponseForRecords responseForRecords = clothService.findRecordsByClothId(pageNumber, pageSize, id).getBody();

@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ClothController {
 
     private final ClothService clothService;
-    private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @GetMapping("/api/v1/clothes/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
@@ -46,12 +45,8 @@ public class ClothController {
     }
 
     @DeleteMapping("/api/v1/clothes/{cloth_id}/records/{record_id}")
-    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable(name="cloth_id") Long clothId, @PathVariable(name="record_id") Long recordId, RequestForRecordDelete requestForRecordDelete) {
-        return clothService.deleteRecord(
-                clothId,
-                recordId,
-                requestForRecordDelete
-        );
+    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable(name="cloth_id") Long clothId, @PathVariable(name="record_id") Long recordId, @RequestBody  RequestForRecordDelete requestForRecordDelete) {
+        return clothService.deleteRecord(clothId, recordId, requestForRecordDelete);
     }
 }
 
