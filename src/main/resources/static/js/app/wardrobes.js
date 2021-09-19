@@ -40,7 +40,7 @@ var main = {
 
         var formData = new FormData();
         formData.append('file', $('#file')[0].files[0]);
-        formData.append('wardrobeSaveRequestDto', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
 
         $.ajax({
             type: 'POST',
@@ -82,7 +82,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/wardrobes/'+ $('#wardrobe_id').val() +'/comment',
+            url: '/api/v1/posts/'+ $('#wardrobe_id').val() +'/comment',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -96,7 +96,7 @@ var main = {
     delete_comment : function (id) {
         $.ajax({
             type: 'DELETE',
-            url: '/api/v1/wardrobes/'+ $('#wardrobe_id').val() +'/comment/' + id,
+            url: '/api/v1/posts/'+ $('#wardrobe_id').val() +'/comment/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
         }).done(function() {
@@ -109,7 +109,7 @@ var main = {
     change_like : function () {
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() + '/like_cnt',
+            url: '/api/v1/posts/' + $('#wardrobe_id').val() + '/like',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         }).done(function() {
@@ -120,7 +120,7 @@ var main = {
     },
 
     move_clothes : function () {
-        window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes?page=1&pageSize=20';
+        window.location.href = '/wardrobe/' + + $('#wardrobe_id').val() + '/clothes';
     },
 
     check_image : function (obj) {

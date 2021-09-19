@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
-    private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @GetMapping("/{id}/is_like")
-    public ResponseEntity<ResponseForLike> isLikeUsers(@PathVariable Long id, @LoginUser SessionMember sessionMember) {
-        return postService.isLikeUsers(id, customOAuth2MemberService.getMemberBySession(sessionMember).getId());
+    public ResponseEntity<ResponseForLike> isLikeUsers(@PathVariable Long id, @RequestParam("member_id") Long memberId) {
+        return postService.isLikeUsers(id, memberId);
     }
 
     @GetMapping("/{id}/comments")
@@ -44,8 +43,8 @@ public class PostController {
         return postService.writeComment(id, sessionMember, commentSaveRequestDto);
     }
 
-    @DeleteMapping("/{postId}/comment/{commentId}")
-    public ResponseEntity<Response> deleteComment(@PathVariable Long postId, @PathVariable Long commentId, @LoginUser SessionMember sessionMember) {
+    @DeleteMapping("/{post_id}/comment/{comment_id}")
+    public ResponseEntity<Response> deleteComment(@PathVariable(name="post_id") Long postId, @PathVariable(name="comment_id") Long commentId, @LoginUser SessionMember sessionMember) {
         return postService.deleteComment(postId, commentId, sessionMember);
     }
 

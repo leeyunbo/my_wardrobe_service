@@ -18,7 +18,7 @@ public class ResponseForRecord {
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private int likeCnt;
+    private Integer likeCnt;
 
     @Builder
     public ResponseForRecord(Record record) {

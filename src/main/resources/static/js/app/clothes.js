@@ -35,11 +35,11 @@ var main = {
 
         const formData = new FormData();
         formData.append('file', $('#file')[0].files[0]);
-        formData.append('clothSaveRequestDto', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() +'/clothes',
+            url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() +'/cloth',
             data: formData,
             processData: false,
             contentType: false
@@ -51,10 +51,41 @@ var main = {
         });
     },
 
+    save_comment : function () {
+        var data = {
+            content : $('#comment-content').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        })
+    },
+
+    delete_comment : function (id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+        }).done(function() {
+            window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        })
+    },
+
     change_like : function () {
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/clothes/' + $('#cloth_id').val() + '/like_cnt',
+            url: '/api/v1/posts/' + $('#cloth_id').val() + '/like',
             dataType: 'text',
             contentType: 'application/json; charset=utf-8'
         }).done(function() {
@@ -71,11 +102,11 @@ var main = {
 
         const formData = new FormData();
         formData.append('file', $('#file')[0].files[0]);
-        formData.append('requestForRecordSave', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/clothes/' + $('#cloth_id').val() + '/records',
+            url: '/api/v1/clothes/' + $('#cloth_id').val() + '/record',
             data: formData,
             processData: false,
             contentType: false

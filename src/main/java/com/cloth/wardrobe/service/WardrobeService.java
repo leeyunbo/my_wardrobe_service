@@ -116,7 +116,7 @@ public class WardrobeService {
      * 옷을 추가한다.
      */
     @Transactional
-    public ResponseEntity<?> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, Member member, MultipartFile file) {
+    public ResponseEntity<Response> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, Member member, MultipartFile file) {
         try {
             Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
             Image image = new Image().fileUpload(file, member.getEmail());

@@ -37,20 +37,20 @@ public class ClothController {
         return clothService.findRecordsByClothId(pageNumber, pageSize, id);
     }
 
-    @PostMapping("/api/v1/clothes/{clothId}/records")
-    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long clothId,
+    @PostMapping("/api/v1/clothes/{id}/record")
+    public ResponseEntity<?> addRecordOfCloth(@PathVariable Long id,
                                               @LoginUser SessionMember sessionMember,
-                                              @RequestPart RequestForRecordSave requestForRecordSave,
+                                              @RequestPart(value="data") RequestForRecordSave requestForRecordSave,
                                               @RequestPart(value="file") MultipartFile file ) {
         return clothService.addRecord(
-                clothId,
+                id,
                 customOAuth2MemberService.getMemberBySession(sessionMember),
                 requestForRecordSave,
                 file);
     }
 
-    @DeleteMapping("/api/v1/clothes/{clothId}/records/{recordId}")
-    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable Long clothId, @PathVariable Long recordId, @LoginUser SessionMember sessionMember) {
+    @DeleteMapping("/api/v1/clothes/{cloth_id}/records/{record_id}")
+    public ResponseEntity<?> deleteRecordOfCloth(@PathVariable(name="cloth_id") Long clothId, @PathVariable(name="record_id") Long recordId, @LoginUser SessionMember sessionMember) {
         return clothService.deleteRecord(
                 clothId,
                 recordId,

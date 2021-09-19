@@ -50,8 +50,10 @@
         <table class="table table-striped">
             <tbody>
             <label th:text="${cloth.memberName} + '님 만의 ' + ${cloth.clothName} + ' 코디를 구경해보세요!'" style="font-weight: bolder"></label>
-            <tr th:each="record : ${records}" >
-                <td><img th:src="${record.imageServerPath == null ? '/image/no_image.png' : record.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px"></td>
+            <tr th:each="record : ${records}">
+                <td>
+                    <img th:src="${record.imageServerPath == null ? '/image/no_image.png' : record.imageServerPath}" id="record_image_view" class="form-control" style="height: 200px; width: 200px">
+                </td>
                 <td>
                     <span class="font-weight-lighter" th:text="${record.getCreatedDate().getYear()} + '년 '
                     + ${record.getCreatedDate().getMonthValue()} + '월 '

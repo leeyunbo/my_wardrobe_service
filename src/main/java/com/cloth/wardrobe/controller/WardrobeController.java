@@ -3,6 +3,7 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.clothes.RequestForClothSave;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
@@ -30,7 +31,7 @@ public class WardrobeController {
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestPart(value="wardrobeSaveRequestDto") RequestForWardrobeSave requestForWardrobeSave,
+    public ResponseEntity<?> save(@Valid @RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
                                   @RequestPart(value="file") MultipartFile file,
                                   @LoginUser SessionMember sessionMember) throws IOException {
         return wardrobeService.save(
@@ -66,11 +67,11 @@ public class WardrobeController {
                 id);
     }
 
-    @PostMapping("/{id}/clothes")
-    public ResponseEntity<?> addCloth(@PathVariable Long id,
-                                      @RequestPart(value="clothSaveRequestDto") RequestForClothSave requestForClothSave,
-                                      @RequestPart(value="file") MultipartFile file,
-                                      @LoginUser SessionMember sessionMember) {
+    @PostMapping("/{id}/cloth")
+    public ResponseEntity<Response> addCloth(@PathVariable Long id,
+                                             @RequestPart(value="data") RequestForClothSave requestForClothSave,
+                                             @RequestPart(value="file") MultipartFile file,
+                                             @LoginUser SessionMember sessionMember) {
         return wardrobeService.addCloth(
                 id,
                 requestForClothSave,
@@ -78,8 +79,8 @@ public class WardrobeController {
                 ,file);
     }
 
-    @DeleteMapping("/{wardrobeId}/clothes/{clothId}")
-    public ResponseEntity<?> deleteCloth(@PathVariable Long wardrobeId, @PathVariable Long clothId, @LoginUser SessionMember sessionMember) {
+    @DeleteMapping("/{wardrobe_id}/clothes/{cloth_id}")
+    public ResponseEntity<?> deleteCloth(@PathVariable(name = "wardrobe_id") Long wardrobeId, @PathVariable(name = "cloth_id") Long clothId, @LoginUser SessionMember sessionMember) {
         return wardrobeService.deleteCloth(
                 wardrobeId,
                 clothId,
