@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.dto.clothes;
+package com.cloth.wardrobe.dto.wardrobe;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,16 +1,10 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.common.Response;
-import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.clothes.RequestForClothSave;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
-import com.cloth.wardrobe.dto.community.RequestForCommentSave;
-import com.cloth.wardrobe.dto.clothes.RequestForWardrobeUpdate;
-import com.cloth.wardrobe.dto.clothes.RequestForWardrobeSave;
-import com.cloth.wardrobe.service.PostService;
+import com.cloth.wardrobe.dto.wardrobe.RequestForWardrobeUpdate;
+import com.cloth.wardrobe.dto.wardrobe.RequestForWardrobeSave;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +22,6 @@ import java.io.IOException;
 public class WardrobeController {
 
     private final WardrobeService wardrobeService;
-    private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,

@@ -1,20 +1,16 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.dto.wardrobe.*;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
-import com.cloth.wardrobe.entity.community.Comment;
 import com.cloth.wardrobe.entity.common.Image;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.exception.BadRequestException;
-import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.repository.ClothRepository;
-import com.cloth.wardrobe.repository.CommentRepository;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.repository.WardrobeRepository;
-import com.cloth.wardrobe.dto.community.ResponseForComment;
-import com.cloth.wardrobe.dto.community.RequestForCommentSave;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service

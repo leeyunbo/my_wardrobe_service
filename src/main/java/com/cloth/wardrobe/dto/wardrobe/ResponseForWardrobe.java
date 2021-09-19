@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.dto.clothes;
+package com.cloth.wardrobe.dto.wardrobe;
 
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.dto.common.Response;

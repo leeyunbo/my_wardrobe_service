@@ -6,7 +6,7 @@ import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Record;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
-import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
+import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobes;
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
 import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
