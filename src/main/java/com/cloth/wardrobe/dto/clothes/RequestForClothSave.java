@@ -14,17 +14,17 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RequestForClothSave {
 
-    @Setter private Member member;
     @Setter private Image image;
-    @NotBlank private String clothName;
-    @NotBlank private String clothType;
+    private String clothName;
+    private String clothType;
     private String buyingDate;
     private String buyingWay;
-    @NotBlank private String clothColor;
+    private String clothColor;
     private String clothBrand;
+    private String email;
 
     @Builder
-    public RequestForClothSave(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
+    public RequestForClothSave(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand, String email) {
         this.image = image;
         this.clothName = clothName;
         this.clothType = clothType;
@@ -32,9 +32,10 @@ public class RequestForClothSave {
         this.buyingWay = buyingWay;
         this.clothColor = clothColor;
         this.clothBrand = clothBrand;
+        this.email = email;
     }
 
-    public Cloth toEntity() {
+    public Cloth toEntity(Member member) {
         return Cloth.builder()
                 .member(member)
                 .clothName(clothName)

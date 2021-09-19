@@ -12,13 +12,15 @@ import lombok.NoArgsConstructor;
 public class RequestForWardrobeSave {
 
     private String name;
-    private int likeCnt;
     private String isPublic;
+    private String email;
+    private Integer likeCnt;
 
     @Builder
-    public RequestForWardrobeSave(String name, String isPublic) {
+    public RequestForWardrobeSave(String name, String isPublic, String email) {
         this.name = name;
         this.isPublic = isPublic;
+        this.email = email;
         this.likeCnt = 0;
     }
 

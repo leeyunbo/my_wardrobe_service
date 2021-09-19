@@ -34,40 +34,52 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WardrobeService {
 
+    private final MemberRepository memberRepository;
     private final WardrobeRepository wardrobeRepository;
     private final ClothRepository clothRepository;
+    private final CheckService checkService;
     private final PaginationService paginationService;
 
     /**
      * 옷장의 정보를 저장한다.
      */
     @Transactional
-    public ResponseEntity<?> save(RequestForWardrobeSave requestForWardrobeSave, Member member, MultipartFile file) {
+    public ResponseEntity<Response> save(RequestForWardrobeSave requestForWardrobeSave, MultipartFile file) {
         try {
+            Member member = memberRepository.findByEmail(requestForWardrobeSave.getEmail())
+                    .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+
             Image image = new Image().fileUpload(file, member.getEmail());
             Wardrobe wardrobe = requestForWardrobeSave.toEntity(member, image);
             wardrobeRepository.save(wardrobe);
         } catch (IOException e) {
-            throw new BadRequestException("파일이 손상되었습니다.");
+            throw new BadRequestException("잘못된 요청입니다.");
         }
 
         Response response = new Response();
         response.set_code(200);
         response.set_message("OK");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      * 옷장의 정보를 수정한다.
      */
     @Transactional
-    public ResponseEntity<?> update(Long wardrobeId, RequestForWardrobeUpdate requestDto) {
+    public ResponseEntity<Response> update(Long wardrobeId, RequestForWardrobeUpdate requestForWardrobeUpdate) {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
-                .orElseThrow(() ->
-                        new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
-        wardrobe.update(requestDto.getImage(), requestDto.getName(), requestDto.getIsPublic());
-        return new ResponseEntity<>(HttpStatus.OK);
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+
+        checkService.confirmRightApproach(requestForWardrobeUpdate.getEmail(), wardrobe.getMember().getEmail());
+
+        wardrobe.update(requestForWardrobeUpdate.getImage(), requestForWardrobeUpdate.getName(), requestForWardrobeUpdate.getIsPublic());
+
+        Response response = new Response();
+        response.set_message("OK");
+        response.set_code(200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -77,8 +89,7 @@ public class WardrobeService {
     @Transactional
     public ResponseEntity<ResponseForWardrobe> findById(Long wardrobeId) {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
-                .orElseThrow(() ->
-                        new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
         ResponseForWardrobe responseForWardrobe = new ResponseForWardrobe(wardrobe);
         responseForWardrobe.set_code(200);
@@ -91,13 +102,16 @@ public class WardrobeService {
      * 로그인한 유저의 옷장 정보를 가져온다.
      */
     @Transactional
-    public ResponseEntity<ResponseForWardrobe> findByMember(Member member) {
+    public ResponseEntity<ResponseForWardrobe> findByMember(RequestForWardrobe requestForWardrobe) {
+        Member member = memberRepository.findByEmail(requestForWardrobe.getEmail())
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
         Wardrobe wardrobe = wardrobeRepository.findWardrobeByMember(member)
-                .orElseThrow(() -> new DoNotFoundContentException("해당 멤버의 옷장이 존재하지 않습니다. id=" + member.getId()));
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
         ResponseForWardrobe responseForWardrobe = new ResponseForWardrobe(wardrobe);
         responseForWardrobe.set_code(200);
         responseForWardrobe.set_message("OK");
+
         return new ResponseEntity<>(responseForWardrobe, HttpStatus.OK);
     }
 
@@ -116,19 +130,21 @@ public class WardrobeService {
      * 옷을 추가한다.
      */
     @Transactional
-    public ResponseEntity<Response> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, Member member, MultipartFile file) {
+    public ResponseEntity<Response> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, MultipartFile file) {
         try {
-            Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
+            Member member = memberRepository.findByEmail(requestForClothSave.getEmail())
+                    .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+            Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
+                    .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+
+            checkService.confirmRightApproach(member.getEmail(), wardrobe.getMember().getEmail());
+
             Image image = new Image().fileUpload(file, member.getEmail());
-
-            if (!wardrobe.getMember().getEmail().equals(member.getEmail())) throw new BadRequestException("올바르지 않은 접근입니다.");
-
-            requestForClothSave.setMember(member);
             requestForClothSave.setImage(image);
-            wardrobe.addCloth(requestForClothSave.toEntity());
+            wardrobe.addCloth(requestForClothSave.toEntity(member));
         }
         catch (IOException e) {
-            throw new BadRequestException("파일이 손상되었습니다.");
+            throw new BadRequestException("잘못된 요청입니다.");
         }
 
         Response response = new Response();
@@ -142,11 +158,15 @@ public class WardrobeService {
      * 옷을 삭제한다.
      */
     @Transactional
-    public ResponseEntity<?> deleteCloth(Long wardrobeId, Long clothId, Member member) {
-        Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId).orElseThrow(() -> new BadRequestException("해당 옷장이 존재하지 않습니다. id=" + wardrobeId));
-        Cloth cloth = clothRepository.findById(clothId).orElseThrow(() -> new BadRequestException("해당 품목이 존재하지 않습니다. id=" + clothId));
+    public ResponseEntity<?> deleteCloth(Long wardrobeId, Long clothId, RequestForWardrobeUpdate requestForWardrobeUpdate) {
+        Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+        Cloth cloth = clothRepository.findById(clothId)
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
+        Member member = memberRepository.findByEmail(requestForWardrobeUpdate.getEmail())
+                .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-        if(!wardrobe.getMember().getEmail().equals(member.getEmail())) throw new BadRequestException("올바르지 않은 접근입니다.");
+        checkService.confirmRightApproach(member.getEmail(), cloth.getMember().getEmail());
 
         wardrobe.deleteCloth(cloth);
 

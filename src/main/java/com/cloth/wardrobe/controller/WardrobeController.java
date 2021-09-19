@@ -32,19 +32,13 @@ public class WardrobeController {
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
-                                  @RequestPart(value="file") MultipartFile file,
-                                  @LoginUser SessionMember sessionMember) throws IOException {
-        return wardrobeService.save(
-                requestForWardrobeSave,
-                customOAuth2MemberService.getMemberBySession(sessionMember),
-                file);
+                                  @RequestPart(value="file") MultipartFile file) throws IOException {
+        return wardrobeService.save(requestForWardrobeSave, file);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RequestForWardrobeUpdate wardrobeUpdateRequestDto) {
-        return wardrobeService.update(
-                id,
-                wardrobeUpdateRequestDto);
+        return wardrobeService.update(id, wardrobeUpdateRequestDto);
     }
 
     @GetMapping("/{id}")
@@ -54,36 +48,23 @@ public class WardrobeController {
 
     @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize) {
-        return wardrobeService.findAll(
-                pageNumber,
-                pageSize);
+        return wardrobeService.findAll(pageNumber, pageSize);
     }
 
     @GetMapping("/{id}/clothes")
     public ResponseEntity<ResponseForClothes> getClothByWardrobeId(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize, @PathVariable Long id) {
-        return wardrobeService.findClothesByWardrobeId(
-                pageNumber,
-                pageSize,
-                id);
+        return wardrobeService.findClothesByWardrobeId(pageNumber, pageSize, id);
     }
 
     @PostMapping("/{id}/cloth")
     public ResponseEntity<Response> addCloth(@PathVariable Long id,
                                              @RequestPart(value="data") RequestForClothSave requestForClothSave,
-                                             @RequestPart(value="file") MultipartFile file,
-                                             @LoginUser SessionMember sessionMember) {
-        return wardrobeService.addCloth(
-                id,
-                requestForClothSave,
-                customOAuth2MemberService.getMemberBySession(sessionMember)
-                ,file);
+                                             @RequestPart(value="file") MultipartFile file) {
+        return wardrobeService.addCloth(id, requestForClothSave,file);
     }
 
     @DeleteMapping("/{wardrobe_id}/clothes/{cloth_id}")
-    public ResponseEntity<?> deleteCloth(@PathVariable(name = "wardrobe_id") Long wardrobeId, @PathVariable(name = "cloth_id") Long clothId, @LoginUser SessionMember sessionMember) {
-        return wardrobeService.deleteCloth(
-                wardrobeId,
-                clothId,
-                customOAuth2MemberService.getMemberBySession(sessionMember));
+    public ResponseEntity<?> deleteCloth(@PathVariable(name = "wardrobe_id") Long wardrobeId, @PathVariable(name = "cloth_id") Long clothId, @RequestBody RequestForWardrobeUpdate requestForWardrobeUpdate) {
+        return wardrobeService.deleteCloth(wardrobeId, clothId, requestForWardrobeUpdate);
     }
 }

@@ -3,10 +3,7 @@ package com.cloth.wardrobe.controller;
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.config.auth.LoginUser;
 import com.cloth.wardrobe.config.auth.dto.SessionMember;
-import com.cloth.wardrobe.dto.clothes.ResponseForCloth;
-import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
-import com.cloth.wardrobe.dto.clothes.ResponseForWardrobe;
-import com.cloth.wardrobe.dto.clothes.ResponseForWardrobes;
+import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
@@ -78,7 +75,8 @@ public class WebController {
     @GetMapping("/member/wardrobe")
     public String findWardrobeByMember(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
         try {
-            ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(customOAuth2MemberService.getMemberBySession(sessionMember)).getBody();
+            RequestForWardrobe requestForWardrobe = new RequestForWardrobe(sessionMember.getEmail());
+            ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(requestForWardrobe).getBody();
             ResponseForComments responseForComments = communityService.findCommentsByPostId(responseForWardrobe.getId(), pageNumber, pageSize).getBody();
 
             Long memberId = customOAuth2MemberService.getMemberBySession(sessionMember).getId();
