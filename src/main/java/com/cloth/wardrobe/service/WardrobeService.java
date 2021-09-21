@@ -65,7 +65,7 @@ public class WardrobeService {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-        checkService.confirmRightApproach(requestForWardrobeUpdate.getEmail(), wardrobe.getMember().getEmail());
+        checkService.isAppropriateEmail(requestForWardrobeUpdate.getEmail(), wardrobe.getMember().getEmail());
 
         wardrobe.update(requestForWardrobeUpdate.getImage(), requestForWardrobeUpdate.getName(), requestForWardrobeUpdate.getIsPublic());
 
@@ -131,7 +131,7 @@ public class WardrobeService {
             Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                     .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-            checkService.confirmRightApproach(member.getEmail(), wardrobe.getMember().getEmail());
+            checkService.isAppropriateEmail(member.getEmail(), wardrobe.getMember().getEmail());
 
             Image image = new Image().fileUpload(file, member.getEmail());
             requestForClothSave.setImage(image);
@@ -160,7 +160,7 @@ public class WardrobeService {
         Member member = memberRepository.findByEmail(requestForWardrobeUpdate.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-        checkService.confirmRightApproach(member.getEmail(), cloth.getMember().getEmail());
+        checkService.isAppropriateEmail(member.getEmail(), cloth.getMember().getEmail());
 
         wardrobe.deleteCloth(cloth);
 

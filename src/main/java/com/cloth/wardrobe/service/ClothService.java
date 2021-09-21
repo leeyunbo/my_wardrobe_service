@@ -12,7 +12,6 @@ import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import com.cloth.wardrobe.exception.BadRequestException;
-import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.repository.ClothRepository;
 import com.cloth.wardrobe.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +72,7 @@ public class ClothService {
         Member member = memberRepository.findByEmail(requestForRecordSave.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-        checkService.confirmRightApproach(member.getEmail(), cloth.getMember().getEmail());
+        checkService.isAppropriateEmail(member.getEmail(), cloth.getMember().getEmail());
 
         try {
             Image image = new Image().fileUpload(file, member.getEmail());
@@ -96,7 +95,7 @@ public class ClothService {
         Member member = memberRepository.findByEmail(requestForRecordDelete.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));
 
-        checkService.confirmRightApproach(member.getEmail(), cloth.getMember().getEmail());
+        checkService.isAppropriateEmail(member.getEmail(), cloth.getMember().getEmail());
 
         Record record = recordRepository.findById(recordId)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청입니다."));

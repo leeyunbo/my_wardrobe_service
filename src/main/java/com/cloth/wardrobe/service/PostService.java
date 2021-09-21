@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.service;
 
 import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.entity.clothes.*;
 import com.cloth.wardrobe.entity.community.*;
@@ -117,7 +116,7 @@ public class PostService {
         Member member = memberRepository.findByEmail(requestForComment.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
-        checkService.confirmRightApproach(member.getEmail(), comment.getMember().getEmail());
+        checkService.isAppropriateEmail(member.getEmail(), comment.getMember().getEmail());
 
         post.deleteComment(comment);
 
