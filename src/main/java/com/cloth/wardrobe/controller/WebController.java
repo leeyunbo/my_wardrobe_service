@@ -11,6 +11,7 @@ import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.dto.wardrobe.RequestForWardrobe;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobe;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobes;
+import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.service.*;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,6 @@ public class WebController {
     private final RecordService recordService;
     private final PostService communityService;
     private final WardrobeService wardrobeService;
-    private final CustomOAuth2MemberService customOAuth2MemberService;
     private final ClothService clothService;
     private final StatisticsService statisticsService;
 
@@ -92,7 +92,7 @@ public class WebController {
 
             return "wardrobe/wardrobe-detail-view";
         }
-        catch (DoNotFoundContentException e) {
+        catch (BadRequestException e) {
             return "wardrobe/wardrobes-save";
         }
     }
