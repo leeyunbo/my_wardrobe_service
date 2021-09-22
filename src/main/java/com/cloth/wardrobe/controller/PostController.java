@@ -1,7 +1,5 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.service.PostService;

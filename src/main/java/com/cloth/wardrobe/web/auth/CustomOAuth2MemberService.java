@@ -1,7 +1,7 @@
-package com.cloth.wardrobe.config.auth;
+package com.cloth.wardrobe.web.auth;
 
-import com.cloth.wardrobe.config.auth.dto.OAuthAttributes;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.web.auth.dto.OAuthAttributes;
+import com.cloth.wardrobe.web.auth.dto.SessionMember;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

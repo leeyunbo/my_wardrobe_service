@@ -1,8 +1,7 @@
-package com.cloth.wardrobe.controller;
+package com.cloth.wardrobe.web;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.web.auth.LoginUser;
+import com.cloth.wardrobe.web.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.dto.community.RequestForLike;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
@@ -12,7 +11,6 @@ import com.cloth.wardrobe.dto.wardrobe.RequestForWardrobe;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobe;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobes;
 import com.cloth.wardrobe.exception.BadRequestException;
-import com.cloth.wardrobe.exception.DoNotFoundContentException;
 import com.cloth.wardrobe.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

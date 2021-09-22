@@ -1,6 +1,5 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.community.RequestForComment;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.entity.clothes.Cloth;

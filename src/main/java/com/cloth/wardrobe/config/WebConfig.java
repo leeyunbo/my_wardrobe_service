@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.config;
 
-import com.cloth.wardrobe.config.auth.LoginUserArgumentResolver;
+import com.cloth.wardrobe.web.auth.LoginUserArgumentResolver;
 import com.cloth.wardrobe.filter.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
-package com.cloth.wardrobe.config.auth;
+package com.cloth.wardrobe.web.auth;
 
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
+import com.cloth.wardrobe.web.auth.dto.SessionMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

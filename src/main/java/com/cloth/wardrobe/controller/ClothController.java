@@ -1,14 +1,9 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
-import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.records.RequestForRecordDelete;
-import com.cloth.wardrobe.entity.community.PostType;
 import com.cloth.wardrobe.dto.records.RequestForRecordSave;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.service.ClothService;
-import com.cloth.wardrobe.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

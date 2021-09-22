@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.config.auth.dto;
+package com.cloth.wardrobe.web.auth.dto;
 
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.Role;
