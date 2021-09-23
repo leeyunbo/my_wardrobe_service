@@ -5,6 +5,7 @@ import com.cloth.wardrobe.web.auth.dto.SessionMember;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,6 +21,7 @@ import java.util.Collections;
 /**
  * 구글 로그인 후 가져온 사용자 정보를 기반으로 가입 및 정보수정, 세션 저장 기능 지원
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -68,15 +70,5 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
                 .orElse(attributes.toEntity());
 
         return memberRepository.save(member);
-    }
-
-    /**
-     * Session 정보를 이용하여 회원 전체 정보를 가져온다.
-     * @param sessionMember
-     * @return
-     */
-    public Member getMemberBySession(SessionMember sessionMember) {
-        return memberRepository.findByEmail(sessionMember.getEmail())
-                .get();
     }
 }
