@@ -1,7 +1,6 @@
 package com.cloth.wardrobe.web.auth;
 
 import com.cloth.wardrobe.web.auth.dto.OAuthAttributes;
-import com.cloth.wardrobe.web.auth.dto.SessionMember;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +47,6 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes()); //OAuth2User의 attribute를 담는 DTO
 
         Member member = saveOrUpdate(attributes);
-        httpSession.setAttribute("user", new SessionMember(member)); // 세션 DTO
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(member.getRoleKey())),
