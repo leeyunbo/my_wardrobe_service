@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.web.auth.dto;
 
 import com.cloth.wardrobe.entity.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import java.io.Serializable;
 
@@ -10,14 +11,15 @@ import java.io.Serializable;
  * -> 성능 문제가 발생할 확률이 농후함
  */
 @Getter
-public class SessionMember implements Serializable {
+public class RequestForMember implements Serializable {
     private String name;
     private String email;
     private String picture;
 
-    public SessionMember(Member member) {
-        this.name = member.getName();
-        this.email = member.getEmail();
-        this.picture = member.getPicture();
+    @Builder
+    public RequestForMember(String name, String email, String picture) {
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
     }
 }

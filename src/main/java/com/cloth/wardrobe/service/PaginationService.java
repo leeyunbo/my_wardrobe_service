@@ -8,7 +8,7 @@ import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobes;
 import com.cloth.wardrobe.dto.clothes.element.ContentForCloth;
-import com.cloth.wardrobe.dto.clothes.element.ContentForWardrobe;
+import com.cloth.wardrobe.dto.wardrobe.element.ContentForWardrobe;
 import com.cloth.wardrobe.dto.records.ResponseForRecords;
 import com.cloth.wardrobe.dto.records.element.ContentForRecord;
 import com.cloth.wardrobe.entity.community.Comment;

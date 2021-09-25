@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.web.auth;
 
-import com.cloth.wardrobe.web.auth.dto.SessionMember;
+import com.cloth.wardrobe.web.auth.dto.RequestForMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
-        boolean isMemberClass = SessionMember.class.equals(parameter.getParameterType());
+        boolean isMemberClass = RequestForMember.class.equals(parameter.getParameterType());
         return isLoginUserAnnotation && isMemberClass;
     }
 
