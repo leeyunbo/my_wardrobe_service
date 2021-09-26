@@ -43,6 +43,9 @@ var main = {
             url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() +'/cloth',
             data: formData,
             processData: false,
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             contentType: false
         }).done(function() {
             alert('옷장에 ' + $('#cloth_name').val() + '를 추가하였어요.');
@@ -63,6 +66,9 @@ var main = {
             url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
@@ -81,6 +87,9 @@ var main = {
             url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
@@ -99,6 +108,9 @@ var main = {
             url: '/api/v1/posts/' + $('#cloth_id').val() + '/like',
             dataType: 'text',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/clothes/' + $('#cloth_id').val();
@@ -122,6 +134,9 @@ var main = {
             url: '/api/v1/clothes/' + $('#cloth_id').val() + '/record',
             data: formData,
             processData: false,
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             contentType: false
         }).done(function() {
             alert('코디 기록을 등록했어요.');
@@ -141,6 +156,9 @@ var main = {
             url: '/api/v1/clothes/'+ $('#cloth_id').val() +'/records/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/clothes/' + $('#cloth_id').val();

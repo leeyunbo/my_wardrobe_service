@@ -48,6 +48,9 @@ var main = {
             url: '/api/v1/wardrobes',
             data: formData,
             processData: false,
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             contentType: false
         }).done(function() {
             alert('옷장을 만들었어요.');
@@ -87,6 +90,9 @@ var main = {
             url: '/api/v1/posts/'+ $('#wardrobe_id').val() +'/comment',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobes/' + $('#wardrobe_id').val();
@@ -105,6 +111,9 @@ var main = {
             url: '/api/v1/posts/'+ $('#wardrobe_id').val() +'/comment/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobes/' + $('#wardrobe_id').val();
@@ -123,6 +132,9 @@ var main = {
             url: '/api/v1/posts/' + $('#wardrobe_id').val() + '/like',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
+            },
             data: JSON.stringify(data)
         }).done(function() {
             window.location.href = '/wardrobes/' + $('#wardrobe_id').val();

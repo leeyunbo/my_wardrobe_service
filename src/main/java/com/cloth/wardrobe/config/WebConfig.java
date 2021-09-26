@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.config;
 
+import com.cloth.wardrobe.filter.ApiAuthFilter;
+import com.cloth.wardrobe.filter.JwtAuthFilter;
 import com.cloth.wardrobe.web.auth.LoginUserArgumentResolver;
 import com.cloth.wardrobe.filter.LogFilter;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +47,16 @@ public class WebConfig implements WebMvcConfigurer {
         filterRegistrationBean.setFilter(new LogFilter()); // 어떤 필터?
         filterRegistrationBean.setOrder(1); // 어떤 순서?
         filterRegistrationBean.addUrlPatterns("/api/v1/*"); // 어떤 url pattern?
+
+        return filterRegistrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<Filter> apiKeyFilter() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new ApiAuthFilter());
+        filterRegistrationBean.setOrder(2);
+        filterRegistrationBean.addUrlPatterns("/api/v1/*");
 
         return filterRegistrationBean;
     }
