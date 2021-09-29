@@ -1,9 +1,11 @@
 package com.cloth.wardrobe.config;
 
 import com.cloth.wardrobe.filter.ApiAuthorizationFilter;
+import com.cloth.wardrobe.filter.CustomServletWrappingFilter;
 import com.cloth.wardrobe.interceptor.LogInterceptor;
 import com.cloth.wardrobe.web.auth.LoginUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +18,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.Filter;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final LoginUserArgumentResolver loginUserArgumentResolver;
+    @Autowired
+    private LogInterceptor logInterceptor;
+    @Autowired
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Value("${resource.path}")
     private String resourcePath;
@@ -40,18 +44,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LogInterceptor())
+        registry.addInterceptor(logInterceptor)
                 .order(1)
                 .addPathPatterns("/api/v1/**");
-    }
-
-    @Bean
-    public FilterRegistrationBean<Filter> apiAuthorizationFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new ApiAuthorizationFilter());
-        filterRegistrationBean.setOrder(2);
-        filterRegistrationBean.addUrlPatterns("/api/v1/*");
-
-        return filterRegistrationBean;
     }
 }
