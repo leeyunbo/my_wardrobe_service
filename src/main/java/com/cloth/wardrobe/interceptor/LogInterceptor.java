@@ -1,36 +1,74 @@
 package com.cloth.wardrobe.interceptor;
 
+import com.cloth.wardrobe.entity.common.RequestLog;
+import com.cloth.wardrobe.repository.RequestLogRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.method.HandlerMethod;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
+@Log4j2
+@Component
+@RequiredArgsConstructor
 public class LogInterceptor implements HandlerInterceptor {
 
-    public static final String LOG_ID = "logId";
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    private RequestLogRepository requestLogRepository;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String requestURI = request.getRequestURI();
-        String method = request.getMethod();
-        String uuid = UUID.randomUUID().toString();
+        String reqId = UUID.randomUUID().toString();
+        request.setAttribute("ReqId", reqId);
 
-        request.setAttribute(LOG_ID, uuid);
+        RequestLog requestLog = new RequestLog();
 
-        /**
-         * @RequestMapping : HandlerMethod가 넘어옴
-         * 정적 리소스 : ResourceHttpRequestHandler
-         */
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler; // 호출할 컨트롤러 메서드의 모든 정보
+        requestLog.setUuid(reqId);
+        requestLog.setClientIp(request.getRemoteAddr());
+
+        String requestURL = request.getRequestURL().toString();
+        Enumeration<String> paramKeys = request.getParameterNames();
+        if(paramKeys.hasMoreElements()) requestURL += "?";
+        while(paramKeys.hasMoreElements()) {
+            String key = paramKeys.nextElement();
+            requestURL += key + "=" + request.getParameter(key);
+            if(paramKeys.hasMoreElements()) requestURL += "&";
         }
+        requestLog.setRequestUri(requestURL);
 
-        log.info("REQUEST [{}][{}: {}], [{}]", uuid, method, requestURI, handler);
+        Date now = new Date();
+        requestLog.setReqTime(Timestamp.valueOf(dateFormat.format(now)));
+
+        Enumeration headerNames = request.getHeaderNames();
+        String header = "";
+        while(headerNames.hasMoreElements()) {
+            String name = (String)headerNames.nextElement();
+            String value = request.getHeader(name);
+            header += name + ": " + value + "\n";
+        }
+        requestLog.setHeader(header);
+
+        requestLogRepository.save(requestLog);
+
         return true;
     }
 
@@ -40,13 +78,22 @@ public class LogInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        String requestURI = request.getRequestURI();
-        String method = request.getMethod();
-        String uuid = UUID.randomUUID().toString();
+        if(request.getHeader("Content-Type") != null && request.getHeader("Content-Type").equals("application/json; charset=UTF-8")) {
+            final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+            final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 
-        log.info("RESPONSE [{}][{}: {}], [{}]", uuid, method, requestURI, handler);
-        if (ex != null) {
-            log.error("afterCompletion error!!", ex);
+            Optional<RequestLog> log = requestLogRepository.findById(request.getAttribute("ReqId").toString());
+            log.ifPresent(selectLog -> {
+                try {
+                    Date now = new Date();
+                    selectLog.setResTime(Timestamp.valueOf(dateFormat.format(now)));
+                    selectLog.setBody(objectMapper.readTree(cachingRequest.getContentAsByteArray()).toString());
+                    selectLog.setResponseMsg(objectMapper.readTree(cachingResponse.getContentAsByteArray()).toString());
+                    requestLogRepository.save(selectLog);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
