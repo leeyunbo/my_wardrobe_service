@@ -24,7 +24,7 @@ public class WardrobeController {
     private final WardrobeService wardrobeService;
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
+    public ResponseEntity<?> save(@RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
                                   @RequestPart(value="file") MultipartFile file) throws IOException {
         return wardrobeService.save(requestForWardrobeSave, file);
     }

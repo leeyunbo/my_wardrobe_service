@@ -1,9 +1,5 @@
 package com.cloth.wardrobe.entity.common;
 
-import com.cloth.wardrobe.entity.BaseTimeEntity;
-import com.cloth.wardrobe.entity.clothes.Cloth;
-import com.cloth.wardrobe.entity.clothes.Record;
-import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.entity.community.PostEntity;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

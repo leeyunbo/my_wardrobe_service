@@ -1,4 +1,4 @@
-package com.cloth.wardrobe.entity;
+package com.cloth.wardrobe.entity.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

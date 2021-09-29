@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.entity.member;
 
-import com.cloth.wardrobe.entity.BaseTimeEntity;
+import com.cloth.wardrobe.entity.common.BaseTimeEntity;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Record;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;

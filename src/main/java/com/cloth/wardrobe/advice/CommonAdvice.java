@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.nio.file.AccessDeniedException;
+
 
 /**
  * 모든 데이터에 대한 공통 Exception을 관리하는 Advice
@@ -43,6 +45,12 @@ public class CommonAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> illegalArgument(Exception e) {
         Response responseForError = createResponse("잘못된 요청입니다. " + e.getMessage());
+        return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> AccessDenied(Exception e) {
+        Response responseForError = createResponse("해당 기능에 대한 권한이 없습니다." + e.getMessage());
         return new ResponseEntity<>(responseForError, HttpStatus.BAD_REQUEST);
     }
 
