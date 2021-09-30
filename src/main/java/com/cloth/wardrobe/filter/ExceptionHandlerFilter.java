@@ -27,16 +27,12 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try{
             filterChain.doFilter(request,response);
         } catch (ApiKeyInvalidException ex) {
-            log.error("exception exception handler filter");
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,response,ex);
-        }catch (RuntimeException ex) {
-            log.error("runtime exception exception handler filter");
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,response,ex);
+            setErrorResponse(HttpStatus.UNAUTHORIZED,response,ex);
         }
     }
 
     public void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex){
-        response.setStatus(200);
+        response.setStatus(status.value());
         response.setContentType("application/json");
         Response response1 = new Response();
         response1.set_message(ex.getMessage());

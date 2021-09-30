@@ -19,14 +19,16 @@ public class ApiAuthorizationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-        try {
-            if (!httpServletRequest.getHeader(authorizationProperties.getAuth_header()).equals(authorizationProperties.getAuth_value())) {
-                throw new ApiKeyInvalidException("api key is invalid");
-            }
-        } catch (NullPointerException e) {
+        String header = httpServletRequest.getHeader(authorizationProperties.getAuth_header());
+
+        if(header == null) {
             throw new ApiKeyInvalidException("api key not found");
         }
-
-        chain.doFilter(request, response);
+        else if(!header.equals(authorizationProperties.getAuth_value())){
+            throw new ApiKeyInvalidException("api key is invalid");
+        }
+        else {
+            chain.doFilter(request, response);
+        }
     }
 }
