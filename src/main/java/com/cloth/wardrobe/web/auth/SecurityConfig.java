@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.web.auth;
 
 import com.cloth.wardrobe.filter.ApiAuthorizationFilter;
+import com.cloth.wardrobe.filter.CustomServletWrappingFilter;
 import com.cloth.wardrobe.filter.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ApiAuthorizationFilter apiAuthorizationFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final CustomServletWrappingFilter customServletWrappingFilter;
     private final CustomOAuth2MemberService customOAuth2MemberService;
 
     @Override
@@ -42,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 모든 요청에 토큰을 검증하는 필터를 추가한다.
         http.addFilterBefore(apiAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(exceptionHandlerFilter, ApiAuthorizationFilter.class);
+        http.addFilterBefore(customServletWrappingFilter, ApiAuthorizationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, CustomServletWrappingFilter.class);
     }
 }
