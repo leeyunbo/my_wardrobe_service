@@ -1,6 +1,6 @@
-package com.cloth.wardrobe.web.auth;
+package com.cloth.wardrobe.config.auth;
 
-import com.cloth.wardrobe.web.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
