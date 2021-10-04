@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.member.MemberRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.log4j.Log4j2;
@@ -9,29 +11,32 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
 public class JwtService {
 
     @Autowired
-    Environment env;
+    private Environment env;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     // 토큰 발급
     public <T> String generateToken(T userDetails) {
         Map<String,Object> claim = new HashMap<>();
 
         if (userDetails instanceof DefaultOAuth2User) {
-
             claim.put("iss", env.getProperty("jwt.toekn-issuer"));  // 발급자
             claim.put("sub",  ((DefaultOAuth2User) userDetails).getName()); // subject 인증 대상(고유 ID)
-
-            claim.put("email", ((DefaultOAuth2User) userDetails).getAttributes().get("userEmail"));
-            claim.put("nickname", ((DefaultOAuth2User) userDetails).getAttributes().get("userName"));
-
+            claim.put("email", ((DefaultOAuth2User) userDetails).getAttributes().get("email"));
+            claim.put("name", ((DefaultOAuth2User) userDetails).getAttributes().get("name"));
+            claim.put("picture", ((DefaultOAuth2User) userDetails).getAttributes().get("picture"));
         }
         //TODO 다른 타입의 사용자 정보의 경우는 나중에 생각해보자.
         // else if () {}
@@ -53,7 +58,11 @@ public class JwtService {
     public boolean isValidateToken(String token) {
         log.info("isValidateToken : " + getBobyFromToken(token).toString());
         final String subject = (String) getBobyFromToken(token).get("sub");
-        return !subject.isEmpty();
+        final String email = (String) getBobyFromToken(token).get("email");
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        return member.isPresent() && !subject.isEmpty();
     }
 
     // 토큰 만료 검사
