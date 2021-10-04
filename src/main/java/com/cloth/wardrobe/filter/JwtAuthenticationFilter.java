@@ -3,6 +3,7 @@ package com.cloth.wardrobe.filter;
 import com.cloth.wardrobe.dto.common.ResponseMessage;
 import com.cloth.wardrobe.entity.member.Role;
 import com.cloth.wardrobe.exception.JwtAuthenticaitonException;
+import com.cloth.wardrobe.properties.AuthorizationProperties;
 import com.cloth.wardrobe.service.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private AuthorizationProperties authorizationProperties;
+
     private RequestMatcher requestMatcher = new AntPathRequestMatcher("/api/**");
 
     @Override
@@ -46,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //
         if (requestMatcher.matches(request)) {
 
-            String jwt = request.getHeader("Authorization").replace("Bearer ", "");
+            String jwt = request.getHeader(authorizationProperties.getAuth_header()).replace("Bearer ", "");
 
             if (jwt.isEmpty()) {
                 throw new JwtAuthenticaitonException(ResponseMessage.INVALID_AUTHENTICATION);
@@ -71,8 +75,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // JWT를 만들 때 사용자 고유 ID로 삼았던 필드명과 맞춘다.
                 String userNameAttributeName = "sub";
 
-                //TODO
-                // 권한은 JWT에 저장하지 않기로 했는데?
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(Role.USER.getKey()));
 
