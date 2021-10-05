@@ -223,7 +223,7 @@ public class WardrobeControllerTest {
     public void beanValidaiton() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         Validator validator = validatorFactory.getValidator();
-        RequestForWardrobeSave requestForWardrobeSave = new RequestForWardrobeSave("", "true", "servers1@naver.com");
+        RequestForWardrobeSave requestForWardrobeSave = new RequestForWardrobeSave("true", "servers1@naver.com");
 
         Set<ConstraintViolation<RequestForWardrobeSave>> violationSet = validator.validate(requestForWardrobeSave);
         for (ConstraintViolation<RequestForWardrobeSave> wardrobeSaveRequestDtoConstraintViolation : violationSet) {
