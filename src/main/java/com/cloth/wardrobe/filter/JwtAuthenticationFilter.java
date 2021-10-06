@@ -66,7 +66,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     throw new JwtAuthenticaitonException(ResponseMessage.EXPIRED_AUTHENTICATION);
                 }
 
-                Map<String, Object> attributes = jwtService.getBobyFromToken(jwt);
+                Map<String, Object> attributes = jwtService.getBodyFromToken(jwt);
+                log.info("jwtAuthenticationFilter.doFilterInternal() : [{}]", attributes.toString());
 
                 // JWT로부터 사용자 정보를 추출하여 인증 정보를 만든 후 SecurityContext에 넣는다.
                 // 결과적으로 처음 인증 공급자로부터 받은 정보를 JWT에 넣었고 헤더 통해 다시 받으면
@@ -83,8 +84,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 authentication.setDetails(userDetails);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
 
+                request.setAttribute("member", jwtService.getMemberInfoFromToken(attributes));
+            }
         }
 
         filterChain.doFilter(request, response);
