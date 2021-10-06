@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.web.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;

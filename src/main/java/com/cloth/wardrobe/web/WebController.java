@@ -1,7 +1,7 @@
 package com.cloth.wardrobe.web;
 
-import com.cloth.wardrobe.web.auth.LoginUser;
-import com.cloth.wardrobe.web.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.LoginUser;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.dto.community.RequestForLike;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
@@ -40,10 +40,6 @@ public class WebController {
     //== Home 관련 ==//
     @GetMapping("/")
     public String home(Model model, @LoginUser RequestForMember googleUser) {
-        if(googleUser != null) {
-            model.addAttribute("user", googleUser);
-        }
-
         return "home";
     }
 

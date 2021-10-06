@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.web.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.service.StatisticsService;
 import lombok.RequiredArgsConstructor;

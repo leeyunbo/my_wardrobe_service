@@ -1,8 +1,8 @@
 package com.cloth.wardrobe.config.auth;
 
-import com.cloth.wardrobe.filter.ApiAuthorizationFilter;
 import com.cloth.wardrobe.filter.CustomServletWrappingFilter;
 import com.cloth.wardrobe.filter.ExceptionHandlerFilter;
+import com.cloth.wardrobe.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,25 +20,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final ApiAuthorizationFilter apiAuthorizationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final CustomServletWrappingFilter customServletWrappingFilter;
     private final CustomOAuth2MemberService customOAuth2MemberService;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
                 .authorizeRequests()
-                .antMatchers("/oauth2Login").permitAll()
+                .antMatchers("/", "/css/*", "/js/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .oauth2Login()
-                .loginPage("/oauth2Login")
-                .redirectionEndpoint()
-                .baseUri("/ouath2/callback/*")
-                .and()
                 .userInfoEndpoint().userService(customOAuth2MemberService)
                 .and()
                 .successHandler(customOAuth2SuccessHandler)
@@ -47,15 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler(customLogoutSuccessHandler)
-                .and()
-                .addFilterBefore(jwtAutenticationFilter(), OAuth2AuthorizationRequestRedirectFilter.class);
+                .deleteCookies("JSESSIONID");
+//                .logoutSuccessHandler(customLogoutSuccessHandler)
 
-        // 모든 요청에 토큰을 검증하는 필터를 추가한다.
-        http.addFilterBefore(apiAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(customServletWrappingFilter, ApiAuthorizationFilter.class);
-        http.addFilterBefore(exceptionHandlerFilter, CustomServletWrappingFilter.class);
+        http
+                .addFilterBefore(jwtAuthenticationFilter, OAuth2AuthorizationRequestRedirectFilter.class)
+                .addFilterBefore(customServletWrappingFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, CustomServletWrappingFilter.class);
     }
 
 
