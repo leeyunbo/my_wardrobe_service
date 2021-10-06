@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.config.auth.LoginUser;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.clothes.RequestForClothSave;
 import com.cloth.wardrobe.dto.clothes.ResponseForClothes;
@@ -25,13 +27,14 @@ public class WardrobeController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
-                                  @RequestPart(value="file") MultipartFile file) throws IOException {
-        return wardrobeService.save(requestForWardrobeSave, file);
+                                  @RequestPart(value="file") MultipartFile file,
+                                  @LoginUser RequestForMember requestForMember) throws IOException {
+        return wardrobeService.save(requestForWardrobeSave, requestForMember, file);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RequestForWardrobeUpdate wardrobeUpdateRequestDto) {
-        return wardrobeService.update(id, wardrobeUpdateRequestDto);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RequestForWardrobeUpdate wardrobeUpdateRequestDto, @LoginUser RequestForMember requestForMember) {
+        return wardrobeService.update(id, wardrobeUpdateRequestDto, requestForMember);
     }
 
     @GetMapping("/{id}")
@@ -45,19 +48,24 @@ public class WardrobeController {
     }
 
     @GetMapping("/{id}/clothes")
-    public ResponseEntity<ResponseForClothes> getClothByWardrobeId(@RequestParam(name="page_number") int pageNumber, @RequestParam(name="page_size") int pageSize, @PathVariable Long id) {
+    public ResponseEntity<ResponseForClothes> getClothByWardrobeId(@RequestParam(name="page_number") int pageNumber,
+                                                                   @RequestParam(name="page_size") int pageSize,
+                                                                   @PathVariable Long id) {
         return wardrobeService.findClothesByWardrobeId(pageNumber, pageSize, id);
     }
 
     @PostMapping("/{id}/cloth")
     public ResponseEntity<Response> addCloth(@PathVariable Long id,
                                              @RequestPart(value="data") RequestForClothSave requestForClothSave,
-                                             @RequestPart(value="file") MultipartFile file) {
-        return wardrobeService.addCloth(id, requestForClothSave,file);
+                                             @RequestPart(value="file") MultipartFile file,
+                                             @LoginUser RequestForMember requestForMember) {
+        return wardrobeService.addCloth(id, requestForClothSave, requestForMember, file);
     }
 
     @DeleteMapping("/{wardrobe_id}/clothes/{cloth_id}")
-    public ResponseEntity<?> deleteCloth(@PathVariable(name = "wardrobe_id") Long wardrobeId, @PathVariable(name = "cloth_id") Long clothId, @RequestBody RequestForWardrobeUpdate requestForWardrobeUpdate) {
-        return wardrobeService.deleteCloth(wardrobeId, clothId, requestForWardrobeUpdate);
+    public ResponseEntity<?> deleteCloth(@PathVariable(name = "wardrobe_id") Long wardrobeId,
+                                         @PathVariable(name = "cloth_id") Long clothId,
+                                         @LoginUser RequestForMember requestForMember) {
+        return wardrobeService.deleteCloth(wardrobeId, clothId, requestForMember);
     }
 }

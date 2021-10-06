@@ -13,14 +13,12 @@ public class RequestForWardrobeSave {
 
     private String name;
     private String isPublic;
-    private String email;
     private Integer likeCnt;
 
     @Builder
-    public RequestForWardrobeSave(String name, String isPublic, String email) {
+    public RequestForWardrobeSave(String name, String isPublic) {
         this.name = name;
         this.isPublic = isPublic;
-        this.email = email;
         this.likeCnt = 0;
     }
 

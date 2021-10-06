@@ -21,10 +21,9 @@ public class RequestForClothSave {
     private String buyingWay;
     private String clothColor;
     private String clothBrand;
-    private String email;
 
     @Builder
-    public RequestForClothSave(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand, String email) {
+    public RequestForClothSave(Image image, String clothName, String clothType, String buyingDate, String buyingWay, String clothColor, String clothBrand) {
         this.image = image;
         this.clothName = clothName;
         this.clothType = clothType;
@@ -32,7 +31,6 @@ public class RequestForClothSave {
         this.buyingWay = buyingWay;
         this.clothColor = clothColor;
         this.clothBrand = clothBrand;
-        this.email = email;
     }
 
     public Cloth toEntity(Member member) {
