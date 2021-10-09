@@ -1,10 +1,12 @@
 package com.cloth.wardrobe.filter;
 
 import com.cloth.wardrobe.dto.common.Response;
-import com.cloth.wardrobe.exception.ApiKeyInvalidException;
+import com.cloth.wardrobe.exception.ApiKeyAuthenticationException;
+import com.cloth.wardrobe.exception.GoogleIdAuthenticationException;
+import com.cloth.wardrobe.exception.JwtAuthenticaitonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,19 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 @Slf4j
+@RequiredArgsConstructor
+@Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
-    @Autowired
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             filterChain.doFilter(request,response);
-        } catch (ApiKeyInvalidException ex) {
-            setErrorResponse(HttpStatus.UNAUTHORIZED,response,ex);
+        } catch (ApiKeyAuthenticationException | JwtAuthenticaitonException | GoogleIdAuthenticationException ex) {
+            setErrorResponse(HttpStatus.UNAUTHORIZED, response, ex);
         }
     }
 
@@ -40,7 +42,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
         try{
             response.getWriter().write(objectMapper.writeValueAsString(response1));
-        }catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
     }

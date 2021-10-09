@@ -1,5 +1,7 @@
 package com.cloth.wardrobe.config.auth.dto;
 
+import com.cloth.wardrobe.entity.member.Member;
+import com.cloth.wardrobe.entity.member.Role;
 import lombok.Builder;
 import lombok.Getter;
 import java.io.Serializable;
@@ -20,5 +22,9 @@ public class RequestForMember implements Serializable {
         this.name = name;
         this.email = email;
         this.picture = picture;
+    }
+
+    public Member toEntity(RequestForMember requestForMember) {
+        return new Member(requestForMember.getName(), requestForMember.getEmail(), requestForMember.getPicture(), Role.USER);
     }
 }

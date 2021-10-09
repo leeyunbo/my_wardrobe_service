@@ -5,7 +5,6 @@ import com.cloth.wardrobe.repository.RequestLogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -78,7 +77,8 @@ public class LogInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        if(request.getHeader("Content-Type") != null && request.getHeader("Content-Type").equals("application/json; charset=UTF-8")) {
+        String header = request.getHeader("Content-Type");
+        if(header != null && header.equals("application/json; charset=UTF-8")) {
             final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
             final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 
