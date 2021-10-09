@@ -29,7 +29,6 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    private final CustomOAuth2MemberService customOAuth2MemberService;
     private final PaginationService paginationService;
     private final CheckService checkService;
 

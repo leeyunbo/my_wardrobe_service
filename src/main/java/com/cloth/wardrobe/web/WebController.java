@@ -40,7 +40,7 @@ public class WebController {
     //== Home 관련 ==//
     @GetMapping("/")
     public String home(Model model, @LoginUser RequestForMember googleUser) {
-        return "home";
+        return "login";
     }
 
     //== Wardrobe 관련 ==//

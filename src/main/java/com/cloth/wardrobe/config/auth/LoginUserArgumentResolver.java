@@ -1,10 +1,7 @@
 package com.cloth.wardrobe.config.auth;
 
 import com.cloth.wardrobe.config.auth.dto.RequestForMember;
-import com.cloth.wardrobe.properties.AuthorizationProperties;
-import com.cloth.wardrobe.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -13,7 +10,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Component
