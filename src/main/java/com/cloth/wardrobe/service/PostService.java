@@ -1,6 +1,5 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.CustomOAuth2MemberService;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.entity.clothes.*;
 import com.cloth.wardrobe.entity.community.*;

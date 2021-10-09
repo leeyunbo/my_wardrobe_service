@@ -1,79 +1,101 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.dto.common.Response;
+import com.cloth.wardrobe.dto.common.ResponseMessage;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
+import com.cloth.wardrobe.properties.AuthorizationProperties;
+import com.cloth.wardrobe.properties.JwtProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class JwtService {
 
-    @Autowired
-    private Environment env;
+    private final MemberRepository memberRepository;
+    private final AuthorizationProperties authorizationProperties;
+    private final JwtProperties jwtProperties;
 
-    @Autowired
-    private MemberRepository memberRepository;
+    @Transactional
+    public ResponseEntity<Response> generateJwtToken(RequestForMember requestForMember, HttpServletResponse httpServletResponse) {
+        Member member = memberRepository.findByEmail(requestForMember.getEmail())
+                .map(entity -> entity.change(requestForMember.getName(), requestForMember.getPicture()))
+                .orElse(requestForMember.toEntity(requestForMember));
+
+        memberRepository.save(member);
+        httpServletResponse.setHeader(authorizationProperties.getAuth_header(), generateToken(requestForMember));
+
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message(ResponseMessage.OK);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     // 토큰 발급
-    public <T> String generateToken(T userDetails) {
-        Map<String,Object> claim = new HashMap<>();
+    public <T> String generateToken(RequestForMember requestForMember) {
+        Map<String, Object> claim = new HashMap<>();
 
-        if (userDetails instanceof DefaultOAuth2User) {
-            claim.put("iss", env.getProperty("jwt.toekn-issuer"));  // 발급자
-            claim.put("sub",  ((DefaultOAuth2User) userDetails).getName()); // subject 인증 대상(고유 ID)
-            claim.put("email", ((DefaultOAuth2User) userDetails).getAttributes().get("email"));
-            claim.put("name", ((DefaultOAuth2User) userDetails).getAttributes().get("name"));
-            claim.put("picture", ((DefaultOAuth2User) userDetails).getAttributes().get("picture"));
-        }
-        //TODO 다른 타입의 사용자 정보의 경우는 나중에 생각해보자.
-        // else if () {}
+        claim.put("iss", jwtProperties.getTokenIssuer());  // 발급자
+        claim.put("email", requestForMember.getEmail());
+        claim.put("name", requestForMember.getName());
+        claim.put("picture", requestForMember.getPicture());
 
 
-        String secret = env.getProperty("jwt.secret");
-        int exp = Integer.valueOf(env.getProperty("jwt.expire-time"));
+        String secretKey = jwtProperties.getSecretKey();
+        String expireTime = jwtProperties.getExpireTime();
 
         claim.put("iat", new Date(System.currentTimeMillis()));
-        claim.put("exp", new Date(System.currentTimeMillis() + (1000 * exp)));
+        claim.put("exp", new Date(System.currentTimeMillis() + (1000 * Integer.parseInt(expireTime))));
 
         return Jwts.builder()
                 .setClaims(claim)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
     // 토큰 유효성 검사
     public boolean isValidateToken(String token) {
-        log.info("isValidateToken : " + getBobyFromToken(token).toString());
-        final String subject = (String) getBobyFromToken(token).get("sub");
-        final String email = (String) getBobyFromToken(token).get("email");
+        final String name = (String) getBodyFromToken(token).get("name");
+        final String email = (String) getBodyFromToken(token).get("email");
+        final String picture = (String) getBodyFromToken(token).get("picture");
 
-        Optional<Member> member = memberRepository.findByEmail(email);
-
-        return member.isPresent() && !subject.isEmpty();
+        return !name.isEmpty() && !email.isEmpty();
     }
 
     // 토큰 만료 검사
     public boolean isTokenExpired(String token) {
-        long exp = (Long) getBobyFromToken(token).get("exp");
+        long exp = (Long) getBodyFromToken(token).get("exp");
         final Date expiration = new Date(exp);
         return expiration.before(new Date());
     }
 
-    public Map<String,Object> getBobyFromToken(String token){
-        String secret = env.getProperty("jwt.secret");
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    public Map<String,Object> getBodyFromToken(String token){
+        String secretKey = jwtProperties.getSecretKey();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    }
+
+    public RequestForMember getMemberInfoFromToken(Map<String, Object> attributes) {
+        final String email = (String) attributes.get("email");
+        final String name = (String) attributes.get("name");
+        final String picture = (String) attributes.get("picture");
+
+        return RequestForMember.builder()
+                .name(name)
+                .email(email)
+                .picture(picture)
+                .build();
     }
 }
