@@ -1,9 +1,12 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.config.auth.LoginUser;
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +42,13 @@ public class PostController {
     @DeleteMapping("/{post_id}/comment/{comment_id}")
     public ResponseEntity<Response> deleteComment(@PathVariable(name="post_id") Long postId, @PathVariable(name="comment_id") Long commentId, @RequestBody RequestForComment requestForComment) {
         return postService.deleteComment(postId, commentId, requestForComment);
+    }
+
+    @PostMapping("{id}/comment/test")
+    public ResponseEntity<Response> addTestData(@PathVariable Long id,
+                                                  @RequestBody RequestForCommentSave requestForCommentSave,
+                                                  @LoginUser RequestForMember requestForMember) {
+        return postService.writeComments(id, requestForCommentSave, requestForMember);
     }
 
 }

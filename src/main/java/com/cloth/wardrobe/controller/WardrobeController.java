@@ -10,6 +10,7 @@ import com.cloth.wardrobe.dto.wardrobe.RequestForWardrobeSave;
 import com.cloth.wardrobe.service.WardrobeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,5 +68,12 @@ public class WardrobeController {
                                          @PathVariable(name = "cloth_id") Long clothId,
                                          @LoginUser RequestForMember requestForMember) {
         return wardrobeService.deleteCloth(wardrobeId, clothId, requestForMember);
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity<Response> addTestData(@RequestPart(value="data") RequestForWardrobeSave requestForWardrobeSave,
+                                         @RequestPart(value="file") MultipartFile file,
+                                         @LoginUser RequestForMember requestForMember) {
+        return wardrobeService.saveAll(requestForWardrobeSave, requestForMember, file);
     }
 }
