@@ -14,12 +14,10 @@ import javax.validation.constraints.NotBlank;
 public class RequestForCommentSave {
 
     private String content;
-    private String email;
 
     @Builder
     public RequestForCommentSave(String content, String email) {
         this.content = content;
-        this.email = email;
     }
 
     public Comment toEntity(Member member) {

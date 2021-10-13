@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.service;
 
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.entity.clothes.*;
 import com.cloth.wardrobe.entity.community.*;
@@ -17,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -86,13 +90,38 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<Response> writeComment(Long postId, RequestForCommentSave requestForCommentSave) {
+    public ResponseEntity<Response> writeComment(Long postId, RequestForCommentSave requestForCommentSave, RequestForMember requestForMember) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
-        Member member = memberRepository.findByEmail(requestForCommentSave.getEmail())
+        Member member = memberRepository.findByEmail(requestForMember.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
         post.writeComment(requestForCommentSave.toEntity(member));
+
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message("OK");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Response> writeComments(Long postId, RequestForCommentSave requestForCommentSave, RequestForMember requestForMember) {
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+        Member member = memberRepository.findByEmail(requestForMember.getEmail())
+                .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
+
+        Comment comment = requestForCommentSave.toEntity(member);
+        comment.setPost(post);
+
+        List<Comment> comments = new ArrayList<>();
+
+        for(int i=0; i<10000; i++) {
+            comments.add(comment);
+        }
+
+        commentRepository.saveAll(comments);
 
         Response response = new Response();
         response.set_code(200);

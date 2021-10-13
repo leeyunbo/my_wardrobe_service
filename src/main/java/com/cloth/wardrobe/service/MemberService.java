@@ -3,6 +3,7 @@ package com.cloth.wardrobe.service;
 import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.common.ResponseMessage;
+import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
 import com.cloth.wardrobe.exception.GoogleIdAuthenticationException;
 import com.cloth.wardrobe.properties.AuthorizationProperties;
@@ -37,9 +38,11 @@ public class MemberService {
 
     @Transactional
     public ResponseEntity<Response> updateMemberFromIdToken(RequestForMember requestForMember) {
-        memberRepository.findByEmail(requestForMember.getEmail())
+        Member member = memberRepository.findByEmail(requestForMember.getEmail())
                 .map(entity -> entity.change(requestForMember.getName(), requestForMember.getPicture()))
                 .orElse(requestForMember.toEntity(requestForMember));
+
+        memberRepository.save(member);
 
         Response response = new Response();
         response.set_code(200);

@@ -35,8 +35,10 @@ public class PostController {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity<Response> writeComment(@PathVariable Long id, @RequestBody RequestForCommentSave requestForCommentSave) {
-        return postService.writeComment(id, requestForCommentSave);
+    public ResponseEntity<Response> writeComment(@PathVariable Long id,
+                                                 @RequestBody RequestForCommentSave requestForCommentSave,
+                                                 @LoginUser RequestForMember requestForMember) {
+        return postService.writeComment(id, requestForCommentSave, requestForMember);
     }
 
     @DeleteMapping("/{post_id}/comment/{comment_id}")
