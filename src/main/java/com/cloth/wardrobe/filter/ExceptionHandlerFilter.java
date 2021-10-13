@@ -30,6 +30,8 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
         } catch (ApiKeyAuthenticationException | JwtAuthenticaitonException | GoogleIdAuthenticationException ex) {
             setErrorResponse(HttpStatus.UNAUTHORIZED, response, ex);
+        } catch (Exception e) {
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e);
         }
     }
 

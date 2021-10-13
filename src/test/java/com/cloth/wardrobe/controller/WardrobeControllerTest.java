@@ -1,5 +1,6 @@
 package com.cloth.wardrobe.controller;
 
+import com.cloth.wardrobe.config.auth.dto.RequestForMember;
 import com.cloth.wardrobe.dto.community.RequestForComment;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.entity.clothes.Cloth;
@@ -188,7 +189,7 @@ public class WardrobeControllerTest {
                 .email(email)
                 .build();
 
-        postService.writeComment(wardrobe.getId(), requestForCommentSave);
+        postService.writeComment(wardrobe.getId(), requestForCommentSave, new RequestForMember("토리", "nodoyunbok@gmail.com", ""));
 
         ResponseForComments comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
         assertThat(comments.getContents().size()).isEqualTo(2);
