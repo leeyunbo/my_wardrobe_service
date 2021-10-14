@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -56,7 +58,7 @@ public class WardrobeService {
         response.set_code(200);
         response.set_message("OK");
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -147,7 +149,7 @@ public class WardrobeService {
         response.set_code(200);
         response.set_message("OK");
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -179,5 +181,34 @@ public class WardrobeService {
         Page<Cloth> paginatedClothes = clothRepository.findClothsByWardrobeId(pageRequest, id);
 
         return paginationService.convertToPaginatedClothes(paginatedClothes);
+    }
+
+    @Transactional
+    public ResponseEntity<Response> saveAll(RequestForWardrobeSave requestForWardrobeSave, RequestForMember requestForMember, MultipartFile file) {
+        try {
+            Member member = memberRepository.findByEmail(requestForMember.getEmail())
+                    .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
+
+            Image image = new Image().fileUpload(file, member.getEmail());
+            Wardrobe wardrobe = requestForWardrobeSave.toEntity(member, image);
+
+            List<Wardrobe> wardrobes = new ArrayList<>() {
+                {
+                    for (int i = 0; i < 100000; i++) {
+                        add(wardrobe);
+                    }
+                }
+            };
+
+            wardrobeRepository.saveAll(wardrobes);
+        } catch (IOException e) {
+            throw new BadRequestException(ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+
+        Response response = new Response();
+        response.set_code(200);
+        response.set_message(ResponseMessage.OK);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
