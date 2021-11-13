@@ -1,7 +1,7 @@
 package com.cloth.wardrobe.web;
 
 import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.clothes.*;
 import com.cloth.wardrobe.dto.community.RequestForLike;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
@@ -39,8 +39,8 @@ public class WebController {
 
     //== Home 관련 ==//
     @GetMapping("/")
-    public String home(Model model, @LoginUser RequestForMember googleUser) {
-        return "login";
+    public String home() {
+        return "home";
     }
 
     //== Wardrobe 관련 ==//
@@ -57,8 +57,8 @@ public class WebController {
     }
 
     @GetMapping("/wardrobes/{id}")
-    public String findWardrobeById(Model model, @PathVariable(name = "id") Long postId, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser RequestForMember requestForMember) {
-        RequestForLike requestForIsLike = new RequestForLike(requestForMember.getEmail());
+    public String findWardrobeById(Model model, @PathVariable(name = "id") Long postId, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
+        RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
         Boolean isLikeUser = communityService.isLikeUsers(postId, requestForIsLike).getBody().getIsLike();
 
         ResponseForWardrobe responseForWardrobe = wardrobeService.findById(postId).getBody();
@@ -71,13 +71,13 @@ public class WebController {
     }
 
     @GetMapping("/member/wardrobe")
-    public String findWardrobeByMember(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser RequestForMember requestForMember) {
+    public String findWardrobeByMember(Model model, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
         try {
-            RequestForWardrobe requestForWardrobe = new RequestForWardrobe(requestForMember.getEmail());
+            RequestForWardrobe requestForWardrobe = new RequestForWardrobe(sessionMember.getEmail());
             ResponseForWardrobe responseForWardrobe = wardrobeService.findByMember(requestForWardrobe).getBody();
             ResponseForComments responseForComments = communityService.findCommentsByPostId(responseForWardrobe.getId(), pageNumber, pageSize).getBody();
 
-            RequestForLike requestForIsLike = new RequestForLike(requestForMember.getEmail());
+            RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
             Boolean isLikeUser = communityService.isLikeUsers(responseForWardrobe.getId(), requestForIsLike).getBody().getIsLike();
 
             model.addAttribute("wardrobe", responseForWardrobe);
@@ -93,8 +93,8 @@ public class WebController {
 
     //== Cloth 관련 ==//
     @GetMapping("/clothes/{id}")
-    public String findClothById(Model model, @PathVariable(name = "id") Long id, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser RequestForMember requestForMember) {
-        RequestForLike requestForIsLike = new RequestForLike(requestForMember.getEmail());
+    public String findClothById(Model model, @PathVariable(name = "id") Long id, @RequestParam(name = "page_number", required = false,  defaultValue = "1") int pageNumber, @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize, @LoginUser SessionMember sessionMember) {
+        RequestForLike requestForIsLike = new RequestForLike(sessionMember.getEmail());
         boolean isLikeUser = communityService.isLikeUsers(id, requestForIsLike).getBody().getIsLike();
 
         ResponseForCloth responseForCloth = clothService.findById(id).getBody();
@@ -142,8 +142,8 @@ public class WebController {
     }
 
     @GetMapping("/statistics/me")
-    public String findStatisticsByLoginUser(Model model, @LoginUser RequestForMember googleUser) {
-        ResponseForStatistics responseForStatistics = statisticsService.findStatistics(Optional.ofNullable(googleUser)).getBody();
+    public String findStatisticsByLoginUser(Model model, @LoginUser SessionMember sessionMember) {
+        ResponseForStatistics responseForStatistics = statisticsService.findStatistics(Optional.ofNullable(sessionMember)).getBody();
         model.addAttribute("contents", responseForStatistics.getContent());
 
         return "statistics/statistics-me-list";

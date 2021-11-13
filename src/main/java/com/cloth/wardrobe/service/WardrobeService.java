@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.common.ResponseMessage;
 import com.cloth.wardrobe.dto.wardrobe.*;
 import com.cloth.wardrobe.entity.clothes.Cloth;
@@ -42,9 +42,9 @@ public class WardrobeService {
      * 옷장의 정보를 저장한다.
      */
     @Transactional
-    public ResponseEntity<Response> save(RequestForWardrobeSave requestForWardrobeSave, RequestForMember requestForMember, MultipartFile file) {
+    public ResponseEntity<Response> save(RequestForWardrobeSave requestForWardrobeSave, SessionMember sessionMember, MultipartFile file) {
         try {
-            Member member = memberRepository.findByEmail(requestForMember.getEmail())
+            Member member = memberRepository.findByEmail(sessionMember.getEmail())
                     .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
 
             Image image = new Image().fileUpload(file, member.getEmail());
@@ -65,11 +65,11 @@ public class WardrobeService {
      * 옷장의 정보를 수정한다.
      */
     @Transactional
-    public ResponseEntity<Response> update(Long wardrobeId, RequestForWardrobeUpdate requestForWardrobeUpdate, RequestForMember requestForMember) {
+    public ResponseEntity<Response> update(Long wardrobeId, RequestForWardrobeUpdate requestForWardrobeUpdate, SessionMember sessionMember) {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                 .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
 
-        checkService.isAppropriateEmail(requestForMember.getEmail(), wardrobe.getMember().getEmail());
+        checkService.isAppropriateEmail(sessionMember.getEmail(), wardrobe.getMember().getEmail());
 
         wardrobe.update(requestForWardrobeUpdate.getImage(), requestForWardrobeUpdate.getName(), requestForWardrobeUpdate.getIsPublic());
 
@@ -128,16 +128,16 @@ public class WardrobeService {
      * 옷을 추가한다.
      */
     @Transactional
-    public ResponseEntity<Response> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, RequestForMember requestForMember, MultipartFile file) {
+    public ResponseEntity<Response> addCloth(Long wardrobeId, RequestForClothSave requestForClothSave, SessionMember sessionMember, MultipartFile file) {
         try {
-            Member member = memberRepository.findByEmail(requestForMember.getEmail())
+            Member member = memberRepository.findByEmail(sessionMember.getEmail())
                     .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
             Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                     .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
 
-            checkService.isAppropriateEmail(requestForMember.getEmail(), wardrobe.getMember().getEmail());
+            checkService.isAppropriateEmail(sessionMember.getEmail(), wardrobe.getMember().getEmail());
 
-            Image image = new Image().fileUpload(file, requestForMember.getEmail());
+            Image image = new Image().fileUpload(file, sessionMember.getEmail());
             requestForClothSave.setImage(image);
             wardrobe.addCloth(requestForClothSave.toEntity(member));
         }
@@ -156,13 +156,13 @@ public class WardrobeService {
      * 옷을 삭제한다.
      */
     @Transactional
-    public ResponseEntity<Response> deleteCloth(Long wardrobeId, Long clothId, RequestForMember requestForMember) {
+    public ResponseEntity<Response> deleteCloth(Long wardrobeId, Long clothId, SessionMember sessionMember) {
         Wardrobe wardrobe = wardrobeRepository.findById(wardrobeId)
                 .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
         Cloth cloth = clothRepository.findById(clothId)
                 .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
 
-        checkService.isAppropriateEmail(requestForMember.getEmail(), cloth.getMember().getEmail());
+        checkService.isAppropriateEmail(sessionMember.getEmail(), cloth.getMember().getEmail());
 
         wardrobe.deleteCloth(cloth);
 
@@ -184,9 +184,9 @@ public class WardrobeService {
     }
 
     @Transactional
-    public ResponseEntity<Response> saveAll(RequestForWardrobeSave requestForWardrobeSave, RequestForMember requestForMember, MultipartFile file) {
+    public ResponseEntity<Response> saveAll(RequestForWardrobeSave requestForWardrobeSave, SessionMember sessionMember, MultipartFile file) {
         try {
-            Member member = memberRepository.findByEmail(requestForMember.getEmail())
+            Member member = memberRepository.findByEmail(sessionMember.getEmail())
                     .orElseThrow(() -> new BadRequestException(ResponseMessage.INVALID_PARAMETER));
 
             Image image = new Image().fileUpload(file, member.getEmail());

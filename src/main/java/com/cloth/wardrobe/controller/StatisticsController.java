@@ -1,6 +1,7 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.LoginUser;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.statistics.ResponseForStatistics;
 import com.cloth.wardrobe.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class StatisticsController {
     }
 
     @GetMapping("api/v1/statistics/me")
-    public ResponseEntity<ResponseForStatistics> findStatisticsByMember(RequestForMember googleUser) {
-        return statisticsService.findStatistics(Optional.ofNullable(googleUser));
+    public ResponseEntity<ResponseForStatistics> findStatisticsByMember(@LoginUser SessionMember sessionMember) {
+        return statisticsService.findStatistics(Optional.ofNullable(sessionMember));
     }
 
 }

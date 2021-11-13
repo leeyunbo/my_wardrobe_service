@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.entity.clothes.*;
 import com.cloth.wardrobe.entity.community.*;
@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.Session;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -90,10 +91,10 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<Response> writeComment(Long postId, RequestForCommentSave requestForCommentSave, RequestForMember requestForMember) {
+    public ResponseEntity<Response> writeComment(Long postId, RequestForCommentSave requestForCommentSave, SessionMember sessionMember) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
-        Member member = memberRepository.findByEmail(requestForMember.getEmail())
+        Member member = memberRepository.findByEmail(sessionMember.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
         post.writeComment(requestForCommentSave.toEntity(member));
@@ -106,10 +107,10 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<Response> writeComments(Long postId, RequestForCommentSave requestForCommentSave, RequestForMember requestForMember) {
+    public ResponseEntity<Response> writeComments(Long postId, RequestForCommentSave requestForCommentSave, SessionMember sessionMember) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
-        Member member = memberRepository.findByEmail(requestForMember.getEmail())
+        Member member = memberRepository.findByEmail(sessionMember.getEmail())
                 .orElseThrow(() -> new BadRequestException("잘못된 요청 입니다."));
 
         Comment comment = requestForCommentSave.toEntity(member);

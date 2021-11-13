@@ -1,12 +1,11 @@
 package com.cloth.wardrobe.controller;
 
 import com.cloth.wardrobe.config.auth.LoginUser;
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.common.Response;
 import com.cloth.wardrobe.dto.community.*;
 import com.cloth.wardrobe.service.PostService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +36,8 @@ public class PostController {
     @PostMapping("/{id}/comment")
     public ResponseEntity<Response> writeComment(@PathVariable Long id,
                                                  @RequestBody RequestForCommentSave requestForCommentSave,
-                                                 @LoginUser RequestForMember requestForMember) {
-        return postService.writeComment(id, requestForCommentSave, requestForMember);
+                                                 @LoginUser SessionMember sessionMember) {
+        return postService.writeComment(id, requestForCommentSave, sessionMember);
     }
 
     @DeleteMapping("/{post_id}/comment/{comment_id}")
@@ -49,8 +48,7 @@ public class PostController {
     @PostMapping("{id}/comment/test")
     public ResponseEntity<Response> addTestData(@PathVariable Long id,
                                                   @RequestBody RequestForCommentSave requestForCommentSave,
-                                                  @LoginUser RequestForMember requestForMember) {
-        return postService.writeComments(id, requestForCommentSave, requestForMember);
+                                                  @LoginUser SessionMember sessionMember) {
+        return postService.writeComments(id, requestForCommentSave, sessionMember);
     }
-
 }

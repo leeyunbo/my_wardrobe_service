@@ -1,6 +1,6 @@
 package com.cloth.wardrobe.service;
 
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.entity.member.MemberRepository;
@@ -27,7 +27,7 @@ public class StatisticsService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ResponseEntity<ResponseForStatistics> findStatistics(Optional<RequestForMember> sessionMember) {
+    public ResponseEntity<ResponseForStatistics> findStatistics(Optional<SessionMember> sessionMember) {
         HashMap<String, Integer> brandMap = new HashMap<>();
         HashMap<String, Integer> typeMap = new HashMap<>();
         HashMap<String, Integer> buyingTypeMap = new HashMap<>();
