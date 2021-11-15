@@ -3,7 +3,7 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <label class="font-weight-bolder" th:text="'✨' + ${session.user.getName()} + '님의 브랜드 선호도에요✨'"></label>
+        <label class="font-weight-bolder" th:text="'✨' + ${session.member.getName()} + '님의 브랜드 선호도에요✨'"></label>
         <div class="card">
             <table class="table">
                 <tbody>
@@ -15,7 +15,7 @@
                 </tbody>
             </table>
         </div>
-        <label class="font-weight-bolder" th:text="'🏳️‍🌈' + ${session.user.getName()} + '님의 색상 선호도에요🏳️‍🌈'" style="margin-top:30px">🌈</label>
+        <label class="font-weight-bolder" th:text="'🏳️‍🌈' + ${session.member.getName()} + '님의 색상 선호도에요🏳️‍🌈'" style="margin-top:30px">🌈</label>
         <div class="card">
             <table class="table">
                 <tbody>
@@ -28,7 +28,7 @@
                 </tbody>
             </table>
         </div>
-        <label class="font-weight-bolder" th:text="'🛍' + ${session.user.getName()} + '님의 구매 방식 선호도에요🛍'" style="margin-top:30px"></label>
+        <label class="font-weight-bolder" th:text="'🛍' + ${session.member.getName()} + '님의 구매 방식 선호도에요🛍'" style="margin-top:30px"></label>
         <div class="card">
             <table class="table">
                 <tbody>
@@ -40,7 +40,7 @@
                 </tbody>
             </table>
         </div>
-        <label class="font-weight-bolder" th:text="'👚' + ${session.user.getName()} + '님의 아이템 타입 선호도에요👚'" style="margin-top:30px"></label>
+        <label class="font-weight-bolder" th:text="'👚' + ${session.member.getName()} + '님의 아이템 타입 선호도에요👚'" style="margin-top:30px"></label>
         <div class="card">
             <table class="table">
                 <tbody>

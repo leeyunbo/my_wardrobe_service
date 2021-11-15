@@ -49,6 +49,7 @@ public class WardrobeService {
 
             Image image = new Image().fileUpload(file, member.getEmail());
             Wardrobe wardrobe = requestForWardrobeSave.toEntity(member, image);
+            member.setWardrobe(wardrobe);
             wardrobeRepository.save(wardrobe);
         } catch (IOException e) {
             throw new BadRequestException(ResponseMessage.INTERNAL_SERVER_ERROR);

@@ -61,7 +61,7 @@
                     <p th:text="${record.getContent()}" style="margin-top: 15px; font-size: 13px;"></p>
                 </td>
                 <td>
-                    <input type="button" th:if="${record.email == session.user.email}" class="btn btn-dark small" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
+                    <input type="button" th:if="${record.email == session.member.email}" class="btn btn-dark small" name="btn-record-delete" th:id="'btn-record-delete' + ${record.id}" value="삭제"/>
                 </td>
             </tr>
             </tbody>
@@ -69,7 +69,7 @@
 
         <br/>
 
-        <div class="form-group" th:if="${cloth.email == session.user.email}">
+        <div class="form-group" th:if="${cloth.email == session.member.email}">
             <label th:text="${cloth.clothName} + '에 대한 ' + ${cloth.memberName} + '님만의 코디를 보여주세요'" style="font-weight: bolder"></label> <br/>
             <!--
             <div class="mb-3">

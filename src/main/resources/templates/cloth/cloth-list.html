@@ -30,7 +30,7 @@
         </table>
 
         <div class="form-group">
-            <a class="btn btn-dark small" th:if="${wardrobe.email == session.user.email}" th:href="@{/wardrobe/{id}/clothes/add (id=${wardrobe.id})}"}>옷 등록하기</a>
+            <a class="btn btn-dark small" th:if="${wardrobe.email == session.member.email}" th:href="@{/wardrobe/{id}/clothes/add (id=${wardrobe.id})}"}>옷 등록하기</a>
         </div>
 
     </div>

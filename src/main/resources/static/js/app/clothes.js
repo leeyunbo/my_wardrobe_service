@@ -1,5 +1,5 @@
 var main = {
-    init : function () {
+    init: function () {
         const _this = this;
         $('#btn-cloth-save').on('click', function () {
             _this.save();
@@ -23,7 +23,7 @@ var main = {
         };
     },
 
-    save : function () {
+    save: function () {
         const data = {
             clothName: $('#cloth_name').val(),
             clothType: $('#cloth_type').val(),
@@ -40,67 +40,61 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() +'/cloth',
+            url: '/api/v1/wardrobes/' + $('#wardrobe_id').val() + '/cloth',
             data: formData,
             processData: false,
-            beforeSend : function(xhr) {
+            beforeSend: (xhr) => {
                 xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
             },
             contentType: false
-        }).done(function() {
+        }).done(() => {
             alert('옷장에 ' + $('#cloth_name').val() + '를 추가하였어요.');
             window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         });
     },
 
-    save_comment : function () {
-        var data = {
-            content : $('#comment-content').val(),
-            email : $('#session_email').val()
+    save_comment: function () {
+        const data = {
+            content: $('#comment-content').val(),
+            email: $('#session_email').val()
         };
 
         $.ajax({
             type: 'POST',
-            url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment',
+            url: '/api/v1/posts/' + $('#cloth_id').val() + '/comment',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
-            },
             data: JSON.stringify(data)
-        }).done(function() {
+        }).done(() => {
             window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         })
     },
 
-    delete_comment : function (id) {
-        var data = {
-            email : $('#session_email').val()
+    delete_comment: function (id) {
+        const data = {
+            email: $('#session_email').val()
         };
 
         $.ajax({
             type: 'DELETE',
-            url: '/api/v1/posts/'+ $('#cloth_id').val() +'/comment/' + id,
+            url: '/api/v1/posts/' + $('#cloth_id').val() + '/comment/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
-            },
             data: JSON.stringify(data)
-        }).done(function() {
+        }).done(() => {
             window.location.href = '/wardrobe/' + $('#wardrobe_id').val() + '/clothes';
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         })
     },
 
-    change_like : function () {
-        var data = {
-            email : $('#session_email').val()
+    change_like: function () {
+        const data = {
+            email: $('#session_email').val()
         };
 
         $.ajax({
@@ -108,20 +102,17 @@ var main = {
             url: '/api/v1/posts/' + $('#cloth_id').val() + '/like',
             dataType: 'text',
             contentType: 'application/json; charset=utf-8',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
-            },
             data: JSON.stringify(data)
-        }).done(function() {
+        }).done(() => {
             window.location.href = '/clothes/' + $('#cloth_id').val();
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         })
     },
 
-    record_save : function () {
-        var data = {
-            content : $('#record-content').val(),
+    record_save: function () {
+        const data = {
+            content: $('#record-content').val(),
             email: $('#session_email').val()
         };
 
@@ -134,43 +125,37 @@ var main = {
             url: '/api/v1/clothes/' + $('#cloth_id').val() + '/record',
             data: formData,
             processData: false,
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
-            },
             contentType: false
-        }).done(function() {
+        }).done(() => {
             alert('코디 기록을 등록했어요.');
             window.location.href = '/clothes/' + $('#cloth_id').val();
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         });
     },
 
-    delete_record : function (id) {
-        var data = {
+    delete_record: function (id) {
+        const data = {
             email: $('#session_email').val()
         };
 
         $.ajax({
             type: 'DELETE',
-            url: '/api/v1/clothes/'+ $('#cloth_id').val() +'/records/' + id,
+            url: '/api/v1/clothes/' + $('#cloth_id').val() + '/records/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader("Authorization", "fdasrv34atdzb4zeex7y")
-            },
             data: JSON.stringify(data)
-        }).done(function() {
+        }).done(() => {
             window.location.href = '/clothes/' + $('#cloth_id').val();
-        }).fail(function (error) {
+        }).fail((error) => {
             alert(JSON.stringify(error));
         })
     },
 
-    check_image : function (obj) {
+    check_image: function (obj) {
         const ext = obj.value.slice(obj.value.lastIndexOf(".") + 1).toLowerCase();
 
-        if(!(ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg")) {
+        if (!(ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg")) {
             alert('이미지파일 (.jpg, .png, .gif, .jpeg) 만 업로드 가능합니다.');
             return false;
         }

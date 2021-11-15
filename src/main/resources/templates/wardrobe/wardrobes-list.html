@@ -1,33 +1,35 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"> <head th:replace="fragments/header :: header" /> <body>
-<div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>옷장 이름</th>
-                <th>걸려있는 옷</th>
-                <th>좋아요</th>
-                <th>옷장 주인</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="wardrobe, idx : ${wardrobes}">
-                <td>
-                    <span th:if="${idx.index == 0}" style="font-size:30px;">👑</span>
-                    <a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>
-                </td>
-                <td th:text="${wardrobe.clothesCnt}"></td>
-                <td th:text="${wardrobe.likeCnt}"></td>
-                <td th:text="${wardrobe.memberName}"></td>
-            </tr>
-            </tbody>
-        </table>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+    <div class="container">
+        <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>옷장 이름</th>
+                    <th>걸려있는 옷</th>
+                    <th>좋아요</th>
+                    <th>옷장 주인</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="wardrobe, idx : ${wardrobes}">
+                    <td>
+                        <span th:if="${idx.index == 0}" style="font-size:30px;">👑</span>
+                        <a href="#" th:text="${wardrobe.name}" th:href="@{/wardrobes/{id} (id=${wardrobe.id})}"></a>
+                    </td>
+                    <td th:text="${wardrobe.clothesCnt}"></td>
+                    <td th:text="${wardrobe.likeCnt}"></td>
+                    <td th:text="${wardrobe.memberName}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-    </div>
-    <div th:replace="fragments/footer :: footer"/>
-</div> <!-- /container -->
+        </div>
+        <div th:replace="fragments/footer :: footer"/>
+    </div> <!-- /container -->
 
 </body>
 <script>

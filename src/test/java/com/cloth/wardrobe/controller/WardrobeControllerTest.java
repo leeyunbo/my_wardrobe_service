@@ -1,12 +1,13 @@
 package com.cloth.wardrobe.controller;
 
-import com.cloth.wardrobe.config.auth.dto.RequestForMember;
+import com.cloth.wardrobe.config.auth.dto.SessionMember;
 import com.cloth.wardrobe.dto.community.RequestForComment;
 import com.cloth.wardrobe.dto.community.ResponseForComments;
 import com.cloth.wardrobe.entity.clothes.Cloth;
 import com.cloth.wardrobe.entity.clothes.Wardrobe;
 import com.cloth.wardrobe.entity.member.Member;
 import com.cloth.wardrobe.dto.wardrobe.ResponseForWardrobe;
+import com.cloth.wardrobe.entity.member.Role;
 import com.cloth.wardrobe.exception.BadRequestException;
 import com.cloth.wardrobe.repository.ImageRepository;
 import com.cloth.wardrobe.dto.community.RequestForCommentSave;
@@ -189,7 +190,7 @@ public class WardrobeControllerTest {
                 .email(email)
                 .build();
 
-        postService.writeComment(wardrobe.getId(), requestForCommentSave, new RequestForMember("토리", "nodoyunbok@gmail.com", ""));
+        postService.writeComment(wardrobe.getId(), requestForCommentSave, new SessionMember(new Member("토리", "nodoyunbok@gmail.com", "", Role.USER)));
 
         ResponseForComments comments = postService.findCommentsByPostId(wardrobe.getId(), 1, 10).getBody();
         assertThat(comments.getContents().size()).isEqualTo(2);

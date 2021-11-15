@@ -36,6 +36,7 @@ public class WebController {
     private final WardrobeService wardrobeService;
     private final ClothService clothService;
     private final StatisticsService statisticsService;
+    private final String TAG = "[WebController]";
 
     //== Home 관련 ==//
     @GetMapping("/")
